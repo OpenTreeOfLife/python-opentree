@@ -78,9 +78,7 @@ setup(
     license='BSD',
     author='Emily Jane B. McTavish and Mark T. Holder',
     py_modules=['opentree'],
-    install_requires=['setuptools',
-                      'requests>=2.18',
-                     ],
+    install_requires=[],
     packages=PACKAGES,
     entry_points=ENTRY_POINTS,
     classifiers=[

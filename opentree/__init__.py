@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 __version__ = "0.0.1" # sync with setup.py
+import dendropy
 import requests
 import logging
 import json
@@ -17,11 +18,17 @@ class OTClientError(Exception):
 def debug(message):
     _LOG.debug(message)
 
+class Converter(object):
+    def tree_from_newick(self, newick, suppress_internal_node_taxa=False):
+        return dendropy.Tree.get(data=newick, schema="newick", suppress_internal_node_taxa=suppress_internal_node_taxa)
+
+
 class OTWebServiceWrapper(object):
     def __init__(self, api_endpoint, prefix=None):
         self._api_endpoint = api_endpoint
         self._api_version = 'v3'
         self.call_history = []
+        self.to_object_converter = Converter()
 
     def tree_of_life_induced_subtree(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
         d = {"label_format": label_format.lower().strip()}
@@ -32,7 +39,9 @@ class OTWebServiceWrapper(object):
                  d["node_ids"] = [str(i) for i in node_ids]
             else:
                 d["ott_ids"] = [int(i) for i in ott_ids]
-        return self._call_api('tree_of_life/induced_subtree', data=d)
+        resp_dict = self._call_api('tree_of_life/induced_subtree', data=d)
+        newick = resp_dict['newick']
+        return self.to_object_converter.tree_from_newick(newick, suppress_internal_node_taxa=True)
 
     def _call_api(self, method_url_fragment, data, http_method='POST'):
         url = self.make_url(method_url_fragment)
