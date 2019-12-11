@@ -17,7 +17,7 @@ class OTClientError(Exception):
     pass
 
 
-
+# noinspection PyMethodMayBeStatic
 class Converter(object):
     def tree_from_newick(self, newick, suppress_internal_node_taxa=False):
         return dendropy.Tree.get(data=newick, schema="newick", suppress_internal_node_taxa=suppress_internal_node_taxa)

@@ -28,7 +28,7 @@ def get_test_file_names():
     pat = re.compile(r'^test.*\.py$')
     for f in files:
         if pat.match(f):
-            rp = 'peyotl.test.' + f[:-3]  # [:-3] to strip ".py"
+            rp = 'opentree.test.' + f[:-3]  # [:-3] to strip ".py"
             t.append(rp)
     return t
 
@@ -36,7 +36,7 @@ def get_test_file_names():
 def get_test_suite(test_file_names=None):
     """
     Creates a unittest.TestSuite from all of the modules in
-    `peyotl.test`. Right now, assumes (a) no subdirectories (though
+    `opentree.test`. Right now, assumes (a) no subdirectories (though
     this can easily be accommodated) and (b) every test to be run is
     sitting in a module with a file name of 'test*.py', and, conversely,
     every file with a name of 'test*.py' has test(s) to be run.
