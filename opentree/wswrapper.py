@@ -30,10 +30,28 @@ class WebServiceWrapperRaw(object):
         self._store_api_calls = True
         self.call_history = []
 
-    def _call_api(self, method_url_fragment, data, http_method='POST'):
+    def _call_api(self, method_url_fragment, data, http_method='POST', demand_success=True, headers=None,
+                  return_raw_content=False):
         url = self.make_url(method_url_fragment)
         try:
-            return self.do_http_json(url, http_method, data=data)
+            if headers is None:
+                headers = {'content-type': 'application/json', 'accept': 'application/json', }
+            resp, call_log_object = self.http_request(url, http_method, data=data, headers=headers)
+            if demand_success and resp.status_code != 200:
+                m = 'Wrong HTTP status code from server. Expected 200. Got {}.'.format(resp.status_code)
+                raise OTWebServicesError(m)
+            if return_raw_content:
+                return resp.status_code, resp.text
+            try:
+                results = resp.json()
+            except:
+                try:
+                    results = resp.text
+                except:
+                    results = None
+            if (call_log_object is not None) and self._store_responses:
+                call_log_object['response_body'] = results
+            return resp.status_code, results
         except:
             _LOG.exception("Error in {} to {}".format(http_method, url))
             raise
@@ -93,34 +111,3 @@ class WebServiceWrapperRaw(object):
         _LOG.debug('Sent {v} to {s}'.format(v=http_method, s=resp.url))
         return resp, stored
 
-    def do_http_json(self,
-                     url,
-                     http_method='GET',
-                     data=None,
-                     headers=None,
-                     expected_status=200,
-                     return_raw_content=False):
-        """Call `url` with the http method of `http_method`.
-        If specified `data` is passed using json.dumps
-        returns True if the response:
-             has the expected status code, AND
-             has the expected content (if expected_response is not None)
-        """
-        if headers is None:
-            headers = {'content-type': 'application/json', 'accept': 'application/json', }
-        resp, call_out = self.http_request(url, http_method, data=data, headers=headers)
-        if (expected_status is not None) and (resp.status_code != expected_status):
-            m = 'Wrong HTTP status code from server. Expected {}. Got {}.'.format(expected_status, resp.status_code)
-            raise OTWebServicesError(m)
-        if return_raw_content:
-            return resp.text
-        try:
-            results = resp.json()
-        except:
-            try:
-                results = resp.text
-            except:
-                results = None
-        if (call_out is not None) and self._store_responses:
-            call_out['response_body'] = results
-        return results

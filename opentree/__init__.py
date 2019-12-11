@@ -2,6 +2,8 @@
 __version__ = "0.0.1"  # sync with setup.py
 
 import logging
+import sys
+
 from .wswrapper import WebServiceWrapperRaw
 from .object_conversion import get_object_converter
 
@@ -26,9 +28,11 @@ class OTWebServiceWrapper(WebServiceWrapperRaw):
             d["node_ids"] = [str(i) for i in node_ids]
         if ott_ids:
             d["ott_ids"] = [int(i) for i in ott_ids]
-        resp_dict = self._call_api('tree_of_life/induced_subtree', data=d)
-        newick = resp_dict['newick']
-        return self.to_object_converter.tree_from_newick(newick, suppress_internal_node_taxa=True)
+        status_code, resp_dict = self._call_api('tree_of_life/induced_subtree', data=d, demand_success=False)
+        if status_code == 200:
+            newick = resp_dict['newick']
+            return 200, self.to_object_converter.tree_from_newick(newick, suppress_internal_node_taxa=True)
+        return status_code, resp_dict
 
 
 class OpenTree(object):
@@ -48,7 +52,22 @@ class OpenTree(object):
         return self._ws
 
     def tree_for_ids(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
-        return self.ws.tree_of_life_induced_subtree(node_ids=node_ids, ott_ids=ott_ids, label_format=label_format)
+        while True:
+            status_code, tree_or_error = self.ws.tree_of_life_induced_subtree(node_ids=node_ids, ott_ids=ott_ids,
+                                                                              label_format=label_format)
+            if status_code == 200:
+                return tree_or_error
+            unknown_ids = tree_or_error['unknown']
+
+            for u in unknown_ids:
+                if node_ids and u in node_ids:
+                    node_ids.remove(u)
+                else:
+                    assert u.startswith('ott')
+                    ui = int(u[3:])
+                    if ott_ids and (ui in ott_ids):
+                        ott_ids.remove(ui)
+
 
 
 # Default-configured wrapper
