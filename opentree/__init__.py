@@ -46,8 +46,8 @@ class OpenTree(object):
             self._ws = OTWebServiceWrapper(self._api_endpoint)
         return self._ws
 
-    def tree_for_ott_ids(self, ott_ids):
-        return self.ws.tree_of_life_induced_subtree(ott_ids=ott_ids)
+    def tree_for_ids(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
+        return self.ws.tree_of_life_induced_subtree(node_ids=node_ids, ott_ids=ott_ids, label_format=label_format)
 
 
 # Default-configured wrapper
