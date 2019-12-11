@@ -26,6 +26,8 @@ class WebServiceWrapperRaw(object):
     def __init__(self, api_endpoint):
         self._api_endpoint = api_endpoint
         self._api_version = 'v3'
+        self._store_responses = False
+        self._store_api_calls = True
         self.call_history = []
 
     def _call_api(self, method_url_fragment, data, http_method='POST'):
@@ -70,8 +72,11 @@ class WebServiceWrapperRaw(object):
         raise OTClientError('api_endpoint = "{}" is not supported'.format(self._api_endpoint))
 
     def http_request(self, url, http_method="GET", data=None, headers=None):
-        stored = {'url': url, 'http_method': http_method, 'headers': headers, 'data': data}
-        self.call_history.append(stored)
+        if self._store_api_calls:
+            stored = {'url': url, 'http_method': http_method, 'headers': headers, 'data': data}
+            self.call_history.append(stored)
+        else:
+            stored = None
         if data:
             resp = requests.request(http_method,
                                     url,
@@ -83,8 +88,8 @@ class WebServiceWrapperRaw(object):
                                     url,
                                     headers=headers,
                                     allow_redirects=True)
-
-        stored['status_code'] = resp.status_code
+        if stored is not None:
+            stored['status_code'] = resp.status_code
         _LOG.debug('Sent {v} to {s}'.format(v=http_method, s=resp.url))
         return resp, stored
 
@@ -104,7 +109,6 @@ class WebServiceWrapperRaw(object):
         if headers is None:
             headers = {'content-type': 'application/json', 'accept': 'application/json', }
         resp, call_out = self.http_request(url, http_method, data=data, headers=headers)
-        call_out['expected_status_code'] = expected_status
         if (expected_status is not None) and (resp.status_code != expected_status):
             m = 'Wrong HTTP status code from server. Expected {}. Got {}.'.format(expected_status, resp.status_code)
             raise OTWebServicesError(m)
@@ -117,5 +121,6 @@ class WebServiceWrapperRaw(object):
                 results = resp.text
             except:
                 results = None
-        call_out['response_body'] = results
+        if (call_out is not None) and self._store_responses:
+            call_out['response_body'] = results
         return results
