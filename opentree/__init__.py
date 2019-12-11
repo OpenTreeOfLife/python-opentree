@@ -2,9 +2,8 @@
 __version__ = "0.0.1"  # sync with setup.py
 
 import logging
-
-import dendropy
 from .wswrapper import WebServiceWrapperRaw
+from .object_conversion import get_object_converter
 
 _LOG = logging.getLogger('opentree')
 
@@ -17,16 +16,10 @@ class OTClientError(Exception):
     pass
 
 
-# noinspection PyMethodMayBeStatic
-class Converter(object):
-    def tree_from_newick(self, newick, suppress_internal_node_taxa=False):
-        return dendropy.Tree.get(data=newick, schema="newick", suppress_internal_node_taxa=suppress_internal_node_taxa)
-
-
 class OTWebServiceWrapper(WebServiceWrapperRaw):
     def __init__(self, api_endpoint):
         WebServiceWrapperRaw.__init__(self, api_endpoint)
-        self.to_object_converter = Converter()
+        self.to_object_converter = get_object_converter('dendropy')
 
     def tree_of_life_induced_subtree(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
         d = {"label_format": label_format.lower().strip()}

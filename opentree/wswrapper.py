@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-__version__ = "0.0.1"  # sync with setup.py
 
 import json
 import logging
@@ -101,7 +100,7 @@ class WebServiceWrapperRaw(object):
             headers = {'content-type': 'application/json', 'accept': 'application/json', }
         resp, call_out = self.http_request(url, http_method, data=data, headers=headers)
         call_out['expected_status_code'] = expected_status
-        if resp.status_code != expected_status:
+        if (expected_status is not None) and (resp.status_code != expected_status):
             m = 'Wrong HTTP status code from server. Expected {}. Got {}.'.format(expected_status, resp.status_code)
             raise OTWebServicesError(m)
         if return_raw_content:
