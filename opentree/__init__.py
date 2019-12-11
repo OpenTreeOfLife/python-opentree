@@ -8,14 +8,6 @@ from .object_conversion import get_object_converter
 _LOG = logging.getLogger('opentree')
 
 
-class OTWebServicesError(Exception):
-    pass
-
-
-class OTClientError(Exception):
-    pass
-
-
 class OTWebServiceWrapper(WebServiceWrapperRaw):
     """This class provides a wrapper to the Open Tree of Life web service methods.
     Actual HTTP calls are handled by methods implemented in the base class for clarity of this code.

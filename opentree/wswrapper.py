@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+# Implementation file for the calling of HTTP methods and deserializing from JSON.
+#   This file is intended as a low-level wrapper that most users would never call directly, but which handles
+#   peforming the calls (and if requested) keeping a log of methods called or a curl representation of the
+#   calls that were performed.
+#
 
 import json
 import logging
