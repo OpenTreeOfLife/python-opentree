@@ -9,6 +9,7 @@ import os
 ###############################################################################
 # setuptools/distutils/etc. import and configuration
 try:
+    # noinspection PyPackageRequirements
     import ez_setup
     try:
         ez_setup_path = " ('" + os.path.abspath(ez_setup.__file__) + "')"

@@ -36,7 +36,7 @@ class WebServiceWrapperRaw(object):
         try:
             if headers is None:
                 headers = {'content-type': 'application/json', 'accept': 'application/json', }
-            resp, call_log_object = self.http_request(url, http_method, data=data, headers=headers)
+            resp, call_log_object = self._http_request(url, http_method, data=data, headers=headers)
             if demand_success and resp.status_code != 200:
                 m = 'Wrong HTTP status code from server. Expected 200. Got {}.'.format(resp.status_code)
                 raise OTWebServicesError(m)
@@ -89,7 +89,10 @@ class WebServiceWrapperRaw(object):
             return 'http://{}/{}/{}'.format(self._api_endpoint, self._api_version, frag)
         raise OTClientError('api_endpoint = "{}" is not supported'.format(self._api_endpoint))
 
-    def http_request(self, url, http_method="GET", data=None, headers=None):
+    def _http_request(self, url, http_method="GET", data=None, headers=None):
+        """Performs an HTTP call and returns a tuple of (the request's response, call storage dict)
+        the call storage dict will be None if this wrapper is not storing calls.
+        """
         if self._store_api_calls:
             stored = {'url': url, 'http_method': http_method, 'headers': headers, 'data': data}
             self.call_history.append(stored)

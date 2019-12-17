@@ -2,10 +2,9 @@
 __version__ = "0.0.1"  # sync with setup.py
 
 import logging
-import sys
 
-from .wswrapper import WebServiceWrapperRaw
 from .object_conversion import get_object_converter
+from .wswrapper import WebServiceWrapperRaw, OTWebServicesError, OTClientError
 
 _LOG = logging.getLogger('opentree')
 
@@ -16,6 +15,7 @@ class OTWebServiceWrapper(WebServiceWrapperRaw):
     API method calls will be mappable to methods in this class. The methods implemented here do argument checking
     and conversion of the returned JSON to more usable objects.
     """
+
     def __init__(self, api_endpoint):
         WebServiceWrapperRaw.__init__(self, api_endpoint)
         self.to_object_converter = get_object_converter('dendropy')
@@ -41,6 +41,7 @@ class OpenTree(object):
     the API calls directly.
 
     """
+
     def __init__(self):
         self._api_endpoint = 'production'
         self._ws = None
@@ -51,12 +52,15 @@ class OpenTree(object):
             self._ws = OTWebServiceWrapper(self._api_endpoint)
         return self._ws
 
-    def tree_for_ids(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
+    def tree_for_ids(self, node_ids=None, ott_ids=None, label_format="name_and_id", ignore_unknown_ids=True):
         while True:
             status_code, tree_or_error = self.ws.tree_of_life_induced_subtree(node_ids=node_ids, ott_ids=ott_ids,
                                                                               label_format=label_format)
             if status_code == 200:
                 return tree_or_error
+            if not ignore_unknown_ids:
+                m = 'Call to induced_subtree failed with the message "{}"'.format(tree_or_error['message'])
+                raise OTWebServicesError(m)
             unknown_ids = tree_or_error['unknown']
 
             for u in unknown_ids:
@@ -67,7 +71,6 @@ class OpenTree(object):
                     ui = int(u[3:])
                     if ott_ids and (ui in ott_ids):
                         ott_ids.remove(ui)
-
 
 
 # Default-configured wrapper
