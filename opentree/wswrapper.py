@@ -15,11 +15,76 @@ _LOG = logging.getLogger(__file__)
 
 
 class OTWebServicesError(Exception):
-    pass
+    """This type of error is raised when a web-service call fails for a reason that is
+    impossible or difficult to diagnose. The string representation of the error should contain
+    some helpful information.
+    """
+
+    def __init__(self, message, call_record=None):
+        super().__init__(message)
+        self.call_record = call_record
 
 
-class OTClientError(Exception):
-    pass
+class OTClientError(OTWebServicesError):
+    """This type of error is raised when the calling code does not make a legitimate request
+    based on the Open Tree of Life API's (see https://opentreeoflife.github.io/develop/api).
+    """
+
+    def __init__(self, message, call_record=None):
+        super().__init__(message, call_record=call_record)
+
+
+class WebServiceCallRecord(object):
+    def __init__(self, service_wrapper, url, http_method, headers, data):
+        self._request_url = url
+        self._request_headers = headers
+        self._request_http_method = http_method
+        self._request_data = data
+        self._response_obj = None
+        self._response_dict = None
+        self._tree = None
+        try:
+            self._to_object_converter = service_wrapper.to_object_converter
+        except:
+            self._to_object_converter = None
+
+    @property
+    def url(self):
+        return self._request_url
+
+    @property
+    def response(self):
+        return self._response_obj
+
+    @property
+    def status_code(self):
+        return None if self._response_obj is None else self._response_obj.status_code
+
+    @property
+    def response_dict(self):
+        if self._response_dict is None:
+            if self._response_obj is None:
+                return None
+            self._response_dict = self._response_obj.json()
+        return self._response_dict
+
+    def __bool__(self):
+        sc = self.status_code
+        return sc is not None and sc == 200
+
+    @property
+    def tree(self):
+        if self._tree is None:
+            if not self:
+                return None
+            newick = self.response_dict['newick']
+            if self._to_object_converter is None:
+                self._tree = newick
+            else:
+                t = self._to_object_converter.tree_from_newick(newick,
+                                                               suppress_internal_node_taxa=True)
+                self._tree = t
+        return self._tree
 
 
 class WebServiceWrapperRaw(object):
@@ -29,29 +94,20 @@ class WebServiceWrapperRaw(object):
         self._store_responses = False
         self._store_api_calls = True
         self.call_history = []
+        self.to_object_converter = None
 
-    def _call_api(self, method_url_fragment, data, http_method='POST', demand_success=True, headers=None,
-                  return_raw_content=False):
+    def _call_api(self, method_url_fragment, data,
+                  http_method='POST', demand_success=True, headers=None):
         url = self.make_url(method_url_fragment)
         try:
             if headers is None:
                 headers = {'content-type': 'application/json', 'accept': 'application/json', }
-            resp, call_log_object = self._http_request(url, http_method, data=data, headers=headers)
-            if demand_success and resp.status_code != 200:
-                m = 'Wrong HTTP status code from server. Expected 200. Got {}.'.format(resp.status_code)
-                raise OTWebServicesError(m)
-            if return_raw_content:
-                return resp.status_code, resp.text
-            try:
-                results = resp.json()
-            except:
-                try:
-                    results = resp.text
-                except:
-                    results = None
-            if (call_log_object is not None) and self._store_responses:
-                call_log_object['response_body'] = results
-            return resp.status_code, results
+            call_obj = self._http_request(url, http_method, data=data, headers=headers)
+            if demand_success and not call_obj:
+                m = 'Wrong HTTP status code from server. Expected 200. Got {}.'
+                m = m.format(call_obj.status_code)
+                raise OTWebServicesError(m, call_obj)
+            return call_obj
         except:
             _LOG.exception("Error in {} to {}".format(http_method, url))
             raise
@@ -93,11 +149,9 @@ class WebServiceWrapperRaw(object):
         """Performs an HTTP call and returns a tuple of (the request's response, call storage dict)
         the call storage dict will be None if this wrapper is not storing calls.
         """
+        rec = WebServiceCallRecord(self, url, http_method, headers, data)
         if self._store_api_calls:
-            stored = {'url': url, 'http_method': http_method, 'headers': headers, 'data': data}
-            self.call_history.append(stored)
-        else:
-            stored = None
+            self.call_history.append(rec)
         if data:
             resp = requests.request(http_method,
                                     url,
@@ -109,8 +163,6 @@ class WebServiceWrapperRaw(object):
                                     url,
                                     headers=headers,
                                     allow_redirects=True)
-        if stored is not None:
-            stored['status_code'] = resp.status_code
+        rec._response_obj = resp
         _LOG.debug('Sent {v} to {s}'.format(v=http_method, s=resp.url))
-        return resp, stored
-
+        return rec
