@@ -30,6 +30,11 @@ class OTWebServiceWrapper(WebServiceWrapperRaw):
             d["ott_ids"] = [int(i) for i in ott_ids]
         return self._call_api('tree_of_life/induced_subtree', data=d, demand_success=False)
 
+    def taxonomy_about(self):
+        return self._call_api('taxonomy/about')
+
+    def tree_of_life_about(self):
+        return self._call_api('tree_of_life/about')
 
 class OpenTree(object):
     """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
@@ -48,11 +53,19 @@ class OpenTree(object):
             self._ws = OTWebServiceWrapper(self._api_endpoint)
         return self._ws
 
+    def about(self):
+        tax_about = self.ws.taxonomy_about()
+        tree_about = self.ws.tree_of_life_about()
+        return {'taxonomy_about': tax_about,
+                'synth_tree_about': tree_about
+               }
+
     def induced_synth_tree(self, node_ids=None, ott_ids=None, label_format="name_and_id",
                            ignore_unknown_ids=True):
         while True:
-            call_record = self.ws.tree_of_life_induced_subtree(node_ids=node_ids, ott_ids=ott_ids,
-                                                                              label_format=label_format)
+            call_record = self.ws.tree_of_life_induced_subtree(node_ids=node_ids,
+                                                               ott_ids=ott_ids,
+                                                               label_format=label_format)
             if call_record:
                 return call_record
             if not ignore_unknown_ids:

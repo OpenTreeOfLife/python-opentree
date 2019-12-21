@@ -48,6 +48,14 @@ class WebServiceCallRecord(object):
         except:
             self._to_object_converter = None
 
+    def __str__(self):
+        prefix = "Web-service call to {}".format(self._request_url)
+        if self:
+            return '{} succeeded.'.format(prefix)
+        elif self._response_obj is None:
+            return '{} has not been completed (in progress or has not been triggered yet).'.format(prefix)
+        return '{} failed with http_status_code={}'.format(prefix, self.status_code)
+
     @property
     def url(self):
         return self._request_url
@@ -96,7 +104,7 @@ class WebServiceWrapperRaw(object):
         self.call_history = []
         self.to_object_converter = None
 
-    def _call_api(self, method_url_fragment, data,
+    def _call_api(self, method_url_fragment, data=None,
                   http_method='POST', demand_success=True, headers=None):
         url = self.make_url(method_url_fragment)
         try:
