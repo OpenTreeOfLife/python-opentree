@@ -5,7 +5,7 @@ from .object_conversion import get_object_converter
 from .wswrapper import (OTWebServicesError,
                         OTClientError,
                         WebServiceRunMode,
-                        WebServiceWrapperRaw,
+                        WebServiceWrapper,
                         )
 import logging
 import argparse
@@ -14,8 +14,7 @@ import sys
 import os
 
 
-
-class OTWebServiceWrapper(WebServiceWrapperRaw):
+class OTWebServiceWrapper(WebServiceWrapper):
     """This class provides a wrapper to the Open Tree of Life web service methods.
     Actual HTTP calls are handled by methods implemented in the base class for clarity of this code.
     API method calls will be mappable to methods in this class. The methods implemented here do argument checking
@@ -23,7 +22,7 @@ class OTWebServiceWrapper(WebServiceWrapperRaw):
     """
 
     def __init__(self, api_endpoint, run_mode=WebServiceRunMode.RUN):
-        WebServiceWrapperRaw.__init__(self, api_endpoint, run_mode=run_mode)
+        WebServiceWrapper.__init__(self, api_endpoint, run_mode=run_mode)
         self.to_object_converter = get_object_converter('dendropy')
 
     def tree_of_life_induced_subtree(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
@@ -94,13 +93,15 @@ class OpenTree(object):
 
 
 def _write_calls_as_curl(ws_wrapper_obj):
-    for line in ws_wrapper_obj._curl_strings:
+    for line in ws_wrapper_obj.curl_strings:
         sys.stderr.write('{}\n'.format(line))
 
 
 class OTCommandLineTool(object):
     """Helper class for writing a script that uses a common set of Open Tree command line
     options.
+
+
     """
 
     def __init__(self, usage, name=None):

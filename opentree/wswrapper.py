@@ -66,8 +66,7 @@ class WebServiceCallRecord(object):
     def generate_curl_string(self):
         """Returns a string that is a curl representation of the call
         """
-        # may want to revisit this. See https://stackoverflow.com/questions/17936555/how-to-construct-the-curl-command-from-python-requests-module/17936634
-        # for an alternative...
+        # may want to revisit this implementation
 
         v = self._request_http_method
         headers = self._request_headers
@@ -145,7 +144,7 @@ class WebServiceRunMode(Enum):
     CURL_ON_EXIT = 3
 
 
-class WebServiceWrapperRaw(object):
+class WebServiceWrapper(object):
     def __init__(self, api_endpoint, run_mode=WebServiceRunMode.RUN):
         self._run_mode = run_mode
         self._generate_curl = run_mode in [WebServiceRunMode.CURL, WebServiceRunMode.CURL_ON_EXIT]
@@ -154,7 +153,7 @@ class WebServiceWrapperRaw(object):
         self._api_version = 'v3'
         self._store_responses = False
         self._store_api_calls = True
-        self._curl_strings = []
+        self.curl_strings = []
         self.call_history = []
         self.to_object_converter = None
 
@@ -219,10 +218,10 @@ class WebServiceWrapperRaw(object):
         if self._store_api_calls:
             self.call_history.append(rec)
         if self._generate_curl:
-            self._curl_strings.append(rec.generate_curl_string())
+            self.curl_strings.append(rec.generate_curl_string())
         if not self._perform_ws_calls:
             if self._run_mode == WebServiceRunMode.CURL:
-                sys.stderr.write('{}\n'.format(self._curl_strings[-1]))
+                sys.stderr.write('{}\n'.format(self.curl_strings[-1]))
             return rec
         if data:
             resp = requests.request(http_method,
