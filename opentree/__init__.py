@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 __version__ = "0.0.1"  # sync with setup.py
 
-import logging
-
 from .object_conversion import get_object_converter
 from .wswrapper import WebServiceWrapperRaw, OTWebServicesError, OTClientError
-
-_LOG = logging.getLogger('opentree')
-
+import logging
+import argparse
+import sys
+import os
 
 class OTWebServiceWrapper(WebServiceWrapperRaw):
     """This class provides a wrapper to the Open Tree of Life web service methods.
@@ -36,6 +35,7 @@ class OTWebServiceWrapper(WebServiceWrapperRaw):
     def tree_of_life_about(self):
         return self._call_api('tree_of_life/about')
 
+
 class OpenTree(object):
     """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
     The method names are intended to be clear to a wide variety of users, rather than (necessarily matching
@@ -43,8 +43,8 @@ class OpenTree(object):
 
     """
 
-    def __init__(self):
-        self._api_endpoint = 'production'
+    def __init__(self, api_endpoint='production'):
+        self._api_endpoint = api_endpoint
         self._ws = None
 
     @property
@@ -58,7 +58,7 @@ class OpenTree(object):
         tree_about = self.ws.tree_of_life_about()
         return {'taxonomy_about': tax_about,
                 'synth_tree_about': tree_about
-               }
+                }
 
     def induced_synth_tree(self, node_ids=None, ott_ids=None, label_format="name_and_id",
                            ignore_unknown_ids=True):
@@ -69,8 +69,9 @@ class OpenTree(object):
             if call_record:
                 return call_record
             if not ignore_unknown_ids:
-                m = 'Call to induced_subtree failed with the message "{}"'.format(tree_or_error['message'])
-                raise OTWebServicesError(m)
+                msgtemplate = 'Call to induced_subtree failed with the message "{}"'
+                message = call_record.response_dict['message']
+                raise OTWebServicesError(msgtemplate.format(message))
             unknown_ids = call_record.response_dict['unknown']
 
             for u in unknown_ids:
@@ -82,6 +83,58 @@ class OpenTree(object):
                     if ott_ids and (ui in ott_ids):
                         ott_ids.remove(ui)
 
+class OTCommandLineTool(object):
+    """Helper class for writing a script that uses a common set of Open Tree command line
+    options.
+    """
+    def __init__(self, usage, name=None):
+        script_path = 'unknown' if not sys.argv else sys.argv[0]
+        if name is None:
+            name = os.path.split(script_path)[-1]
+        self.name = name
+        self.usage = usage
+        self.parser = argparse.ArgumentParser(usage)
+        self.api_endpoint = None
+        self._add_default_open_tree_arguments()
+
+    def _add_default_open_tree_arguments(self):
+        """Adds several standard command line arguments to the command line parser"""
+        self.parser.add_argument('--version', action='store_true', help='request version information and exit')
+        self.parser.add_argument('--logging-level', default='info', type=str,
+                                 help='sets the logging level. Should be one of: '
+                                      '"debug", "info", "warning", "error", or "critical"')
+        self.parser.add_argument('--api-endpoint', default="production",
+                                 help='Advanced option: specifies which server to contact of api calls.'
+                                 'choices are "production", "dev", "local", "ot" + # or an IP address.')
+
+    def parse_cli(self, arg_list=None):
+        """Parses `arg_list` or sys.argv (if None), handles basic options, returns OpenTree and args.
+
+        May call sys.exit - if the user requested an option like --version to display info and exit.
+
+        Returns an OpenTree instance configured with the specified api_endpoint and the args
+            object returned by the argparse object's parse_args method"""
+        if arg_list is None:
+            arg_list = sys.argv[1:]
+        args = self.parser.parse_args(arg_list)
+        console = logging.StreamHandler()
+        logging_level_dict = {"debug": logging.DEBUG,
+                              "info": logging.INFO,
+                              "warning": logging.WARNING,
+                              "error": logging.ERROR,
+                              "critical": logging.CRITICAL,
+                             }
+        log_lev = logging_level_dict.get(args.logging_level.lower())
+        if log_lev is None:
+            logging.critical('logging_level="{}" not understood'.format(args.logging_level))
+            sys.exit(1)
+        console.setLevel(log_lev)
+        if args.version:
+            m = '{} using opentree python lib version {}\n'
+            sys.stderr.write(m.format(self.name, __version__))
+            sys.exit(0)
+        self.api_endpoint = args.api_endpoint.lower()
+        return OpenTree(self.api_endpoint), args
 
 # Default-configured wrapper
 OT = OpenTree()

@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import dendropy
-import logging
-
-_LOG = logging.getLogger(__file__)
 
 
 def get_object_converter(object_conversion_schema):

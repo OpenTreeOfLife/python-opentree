@@ -11,8 +11,6 @@ import re
 
 import requests
 
-_LOG = logging.getLogger(__file__)
-
 
 class OTWebServicesError(Exception):
     """This type of error is raised when a web-service call fails for a reason that is
@@ -55,6 +53,16 @@ class WebServiceCallRecord(object):
         elif self._response_obj is None:
             return '{} has not been completed (in progress or has not been triggered yet).'.format(prefix)
         return '{} failed with http_status_code={}'.format(prefix, self.status_code)
+
+    def write_response(self, out):
+        out.write(str(self))
+        if self._response_obj is None:
+            out.write('\n')
+            return
+        out.write(' Response:\n')
+        rdict = self.response_dict
+        sf = json.dumps(rdict, sort_keys=True, indent=2, separators=(',', ': '), ensure_ascii=True)
+        out.write('{}\n'.format(sf))
 
     @property
     def url(self):
@@ -117,7 +125,7 @@ class WebServiceWrapperRaw(object):
                 raise OTWebServicesError(m, call_obj)
             return call_obj
         except:
-            _LOG.exception("Error in {} to {}".format(http_method, url))
+            logging.exception("Error in {} to {}".format(http_method, url))
             raise
 
     def make_url(self, frag, front_end=False):
@@ -135,6 +143,8 @@ class WebServiceWrapperRaw(object):
             if front_end:
                 return 'https://devtree.opentreeoflife.org/{}/{}'.format(self._api_version, frag)
             return 'https://devapi.opentreeoflife.org/{}/{}'.format(self._api_version, frag)
+        if self._api_endpoint == 'next':
+            return 'https://nexttree.opentreeoflife.org/{}/{}'.format(self._api_version, frag)
         if self._api_endpoint == 'local':
             tax_pat = re.compile(r'^(v[0-9.]+)/([a-z_]+)/(.+)$')
             m = tax_pat.match(frag)
@@ -172,5 +182,5 @@ class WebServiceWrapperRaw(object):
                                     headers=headers,
                                     allow_redirects=True)
         rec._response_obj = resp
-        _LOG.debug('Sent {v} to {s}'.format(v=http_method, s=resp.url))
+        logging.debug('Sent {v} to {s}'.format(v=http_method, s=resp.url))
         return rec

@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 
-from opentree import OT
+import sys
+from opentree import OTCommandLineTool
 
-
+cli = OTCommandLineTool(usage='Display taxonomy and synthetic tree information ' \
+                              'returned by the "about" API calls.')
+OT = cli.parse_cli()[0]
 about = OT.about()
 
 for k in about.keys():
-    print('{}:\n{}\n'.format(k, about[k]))
+    print(k)
+    about[k].write_response(sys.stdout)
+    print('')
