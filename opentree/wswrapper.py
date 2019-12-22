@@ -7,9 +7,25 @@
 
 import json
 import logging
+import sys
 import re
+from enum import Enum
 
 import requests
+
+
+def _escape_dq(s):
+    """Lightweight escaping function used in writing curl calls...
+
+    """
+    if not isinstance(s, str):
+        if isinstance(s, bool):
+            return 'true' if s else 'false'
+        return s
+    if '"' in s:
+        ss = s.split('"')
+        return '"{}"'.format('\\"'.join(ss))
+    return '"{}"'.format(s)
 
 
 class OTWebServicesError(Exception):
@@ -45,6 +61,26 @@ class WebServiceCallRecord(object):
             self._to_object_converter = service_wrapper.to_object_converter
         except:
             self._to_object_converter = None
+
+    # noinspection PyPep8
+    def generate_curl_string(self):
+        """Returns a string that is a curl representation of the call
+        """
+        # may want to revisit this. See https://stackoverflow.com/questions/17936555/how-to-construct-the-curl-command-from-python-requests-module/17936634
+        # for an alternative...
+
+        v = self._request_http_method
+        headers = self._request_headers
+        data = self._request_data
+        url = self._request_url
+        varg = '' if v == 'GET' else '-X {} '.format(v)
+        if headers:
+            hal = ['-H {}:{}'.format(_escape_dq(k), _escape_dq(v)) for k, v in headers.items()]
+            hargs = ' '.join(hal)
+        else:
+            hargs = ''
+        dargs = " --data '{}'".format(json.dumps(data)) if data else ''
+        return 'curl {v} {h} {u}{d}'.format(v=varg, u=url, h=hargs, d=dargs)
 
     def __str__(self):
         prefix = "Web-service call to {}".format(self._request_url)
@@ -103,12 +139,22 @@ class WebServiceCallRecord(object):
         return self._tree
 
 
+class WebServiceRunMode(Enum):
+    RUN = 1
+    CURL = 2
+    CURL_ON_EXIT = 3
+
+
 class WebServiceWrapperRaw(object):
-    def __init__(self, api_endpoint):
+    def __init__(self, api_endpoint, run_mode=WebServiceRunMode.RUN):
+        self._run_mode = run_mode
+        self._generate_curl = run_mode in [WebServiceRunMode.CURL, WebServiceRunMode.CURL_ON_EXIT]
+        self._perform_ws_calls = run_mode != WebServiceRunMode.CURL
         self._api_endpoint = api_endpoint
         self._api_version = 'v3'
         self._store_responses = False
         self._store_api_calls = True
+        self._curl_strings = []
         self.call_history = []
         self.to_object_converter = None
 
@@ -120,6 +166,8 @@ class WebServiceWrapperRaw(object):
                 headers = {'content-type': 'application/json', 'accept': 'application/json', }
             call_obj = self._http_request(url, http_method, data=data, headers=headers)
             if demand_success and not call_obj:
+                if not self._perform_ws_calls:
+                    return None
                 m = 'Wrong HTTP status code from server. Expected 200. Got {}.'
                 m = m.format(call_obj.status_code)
                 raise OTWebServicesError(m, call_obj)
@@ -170,6 +218,12 @@ class WebServiceWrapperRaw(object):
         rec = WebServiceCallRecord(self, url, http_method, headers, data)
         if self._store_api_calls:
             self.call_history.append(rec)
+        if self._generate_curl:
+            self._curl_strings.append(rec.generate_curl_string())
+        if not self._perform_ws_calls:
+            if self._run_mode == WebServiceRunMode.CURL:
+                sys.stderr.write('{}\n'.format(self._curl_strings[-1]))
+            return rec
         if data:
             resp = requests.request(http_method,
                                     url,
