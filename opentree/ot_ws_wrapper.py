@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Class for direct mapping between Open Tree API -> python object
 
 from .object_conversion import get_object_converter
 from .ws_wrapper import (WebServiceRunMode,
