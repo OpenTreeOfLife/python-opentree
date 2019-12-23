@@ -5,7 +5,7 @@ from .object_conversion import get_object_converter
 from .ws_wrapper import (WebServiceRunMode,
                          WebServiceWrapper,
                          )
-
+from datetime import datetime
 
 class OTWebServiceWrapper(WebServiceWrapper):
     """This class provides a wrapper to the Open Tree of Life web service methods.
@@ -31,5 +31,10 @@ class OTWebServiceWrapper(WebServiceWrapper):
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
 
+
     def tree_of_life_about(self):
         return self._call_api('tree_of_life/about')
+
+def ot_datetime_str_to_object(xdatestr):
+    return datetime.strptime(xdatestr, '%Y-%m-%d %H:%M:%S')
+
