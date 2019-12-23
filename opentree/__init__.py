@@ -2,11 +2,11 @@
 __version__ = "0.0.1"  # sync with setup.py
 
 from .object_conversion import get_object_converter
-from .wswrapper import (OTWebServicesError,
-                        OTClientError,
-                        WebServiceRunMode,
-                        WebServiceWrapper,
-                        )
+from .ws_wrapper import (OTWebServicesError,
+                         OTClientError,
+                         WebServiceRunMode,
+                         WebServiceWrapper,
+                         )
 import logging
 import argparse
 import atexit
@@ -100,8 +100,6 @@ def _write_calls_as_curl(ws_wrapper_obj):
 class OTCommandLineTool(object):
     """Helper class for writing a script that uses a common set of Open Tree command line
     options.
-
-
     """
 
     def __init__(self, usage, name=None):
