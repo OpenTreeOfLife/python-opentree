@@ -15,13 +15,30 @@ def _write_calls_as_curl(ws_wrapper_obj):
     for line in ws_wrapper_obj.curl_strings:
         sys.stderr.write('{}\n'.format(line))
 
+def process_ott_id_and_node_id_args(args):
+    ott_id_list, node_id_list = [], []
+    x = [i.strip().lower() for i in args.ott_ids.split(',')]
+    for el in x:
+        unaltered_el = el
+        if el.startswith('ott'):
+            el = el[3:]
+        try:
+            ott_id_list.append(int(el))
+        except:
+            sys.exit('Expecting each ott ID to be an integer or a string starting with "ott". '
+                     'Found "{}"\n'.format(unaltered_el))
+    if args.node_ids:
+        node_id_list = [i.strip().lower() for i in args.node_ids.split(',')]
+    return ott_id_list, node_id_list
+
 
 class OTCommandLineTool(object):
     """Helper class for writing a script that uses a common set of Open Tree command line
     options.
     """
 
-    def __init__(self, usage, name=None):
+    def __init__(self, usage, name=None,
+                 add_ott_ids_arg=False, add_node_ids_arg=False):
         script_path = 'unknown' if not sys.argv else sys.argv[0]
         if name is None:
             name = os.path.split(script_path)[-1]
@@ -29,27 +46,36 @@ class OTCommandLineTool(object):
         self.usage = usage
         self.parser = argparse.ArgumentParser(usage)
         self.api_endpoint = None
-        self._add_default_open_tree_arguments()
+        self._add_default_open_tree_arguments(add_ott_ids_arg=add_ott_ids_arg,
+                                              add_node_ids_arg=add_node_ids_arg)
         self.ot_factory = None
 
-    def _add_default_open_tree_arguments(self):
+    def _add_default_open_tree_arguments(self,
+                                         add_ott_ids_arg=False,
+                                         add_node_ids_arg=False):
 
         """Adds several standard command line arguments to the command line parser"""
-        self.parser.add_argument('--version', action='store_true', help='request version information and exit')
-        self.parser.add_argument('--logging-level', default='info', type=str,
-                                 help='sets the logging level. Should be one of: '
-                                      '"debug", "info", "warning", "error", or "critical"')
-        self.parser.add_argument('--api-endpoint', default="production",
-                                 help='Advanced option: specifies which server to contact of api calls.'
-                                      'choices are "production", "dev", "local", "ot" + # or an IP address.')
-        self.parser.add_argument('--run-mode', default='run', type=str,
-                                 help='Sets the action to take when interacting with the Open Tree API. '
-                                      '"run" is the normal mode. '
-                                      '"curl" will emit a curl call to standard error instead of performing the '
-                                      'web-service call; this usually causes the script to terminate in an error, but'
-                                      ' the curl call can be helpful for debugging. "curl-on-exit" will perform the'
-                                      ' web-service calls, and then write the curl calls used to stderr on exit.')
-
+        cli = self.parser
+        cli.add_argument('--version', action='store_true', help='request version information and exit')
+        cli.add_argument('--logging-level', default='info', type=str,
+                         help='sets the logging level. Should be one of: '
+                              '"debug", "info", "warning", "error", or "critical"')
+        cli.add_argument('--api-endpoint', default="production",
+                        help='Advanced option: specifies which server to contact of api calls.'
+                             'choices are "production", "dev", "local", "ot" + # or an IP address.')
+        cli.add_argument('--run-mode', default='run', type=str,
+                         help='Sets the action to take when interacting with the Open Tree API. '
+                              '"run" is the normal mode. '
+                              '"curl" will emit a curl call to standard error instead of performing the '
+                              'web-service call; this usually causes the script to terminate in an error, but'
+                              ' the curl call can be helpful for debugging. "curl-on-exit" will perform the'
+                              ' web-service calls, and then write the curl calls used to stderr on exit.')
+        if add_ott_ids_arg:
+            cli.add_argument('--ott-ids', default=None, type=str,
+                             help='a comma separated list of OTT ids')
+        if add_node_ids_arg:
+            cli.add_argument('--node-ids', default=None, type=str,
+                                help='a comma separated list of node ids')
     def parse_cli(self, arg_list=None):
         """Parses `arg_list` or sys.argv (if None), handles basic options, returns OpenTree and args.
 

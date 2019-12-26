@@ -36,7 +36,8 @@ class OpenTree(object):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)
 
-    def synth_induced_tree(self, node_ids=None, ott_ids=None, label_format="name_and_id",
+    def synth_induced_tree(self, node_ids=None,
+                           ott_ids=None, label_format="name_and_id",
                            ignore_unknown_ids=True):
         while True:
             call_record = self.ws.tree_of_life_induced_subtree(node_ids=node_ids,
