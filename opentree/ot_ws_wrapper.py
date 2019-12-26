@@ -39,7 +39,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
             d["ott_ids"] = [int(i) for i in ott_ids]
         return self._call_api('tree_of_life/induced_subtree', data=d, demand_success=False)
 
-    def tree_of_life_mrca(self, node_ids=None, ott_ids=None, ):
+    def tree_of_life_mrca(self, node_ids=None, ott_ids=None):
         d = {}
         if not (node_ids or ott_ids):
             raise ValueError("Either node_ids or ott_ids must be provided")

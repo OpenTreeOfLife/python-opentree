@@ -36,7 +36,7 @@ class OpenTree(object):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)
 
-    def induced_synth_tree(self, node_ids=None, ott_ids=None, label_format="name_and_id",
+    def synth_induced_tree(self, node_ids=None, ott_ids=None, label_format="name_and_id",
                            ignore_unknown_ids=True):
         while True:
             call_record = self.ws.tree_of_life_induced_subtree(node_ids=node_ids,
@@ -45,16 +45,31 @@ class OpenTree(object):
             if call_record:
                 return call_record
             if not ignore_unknown_ids:
-                msgtemplate = 'Call to induced_subtree failed with the message "{}"'
+                msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
                 message = call_record.response_dict['message']
                 raise OTWebServicesError(msgtemplate.format(message))
-            unknown_ids = call_record.response_dict['unknown']
+            self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
 
-            for u in unknown_ids:
-                if node_ids and u in node_ids:
-                    node_ids.remove(u)
-                else:
-                    assert u.startswith('ott')
-                    ui = int(u[3:])
-                    if ott_ids and (ui in ott_ids):
-                        ott_ids.remove(ui)
+    def synth_mrca(self, node_ids=None, ott_ids=None, label_format="name_and_id",
+                           ignore_unknown_ids=True):
+        while True:
+            call_record = self.ws.tree_of_life_mrca(node_ids=node_ids,
+                                                    ott_ids=ott_ids)
+            if call_record:
+                return call_record
+            if not ignore_unknown_ids:
+                msgtemplate = 'Call to tree_of_life/mrca failed with the message "{}"'
+                message = call_record.response_dict['message']
+                raise OTWebServicesError(msgtemplate.format(message))
+            self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
+
+    def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
+        unknown_ids = call_record.response_dict['unknown']
+        for u in unknown_ids:
+            if node_ids and u in node_ids:
+                node_ids.remove(u)
+            else:
+                assert u.startswith('ott')
+                ui = int(u[3:])
+                if ott_ids and (ui in ott_ids):
+                    ott_ids.remove(ui)
