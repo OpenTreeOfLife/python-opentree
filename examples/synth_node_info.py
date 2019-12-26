@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import json
-from opentree import OTCommandLineTool
+from opentree import OTCommandLineTool, process_ott_id_and_node_id_args
 
 
 cli = OTCommandLineTool(usage='Display node info for the synthetic tree node(s) requested',
@@ -17,7 +17,7 @@ ott_id_list, node_id_list = process_ott_id_and_node_id_args(args)
 if (not node_id_list) and (not ott_id_list):
     sys.exit('Either --node-ids or --ott-ids must be provided.\n')
 if len(ott_id_list) > 1 or (node_id_list and ott_id_list):
-    node_id_list.['ott{}'.format(i) for i in ott_id_list]
+    node_id_list.extend(['ott{}'.format(i) for i in ott_id_list])
     ott_id_list.clear()
 
 
@@ -26,7 +26,7 @@ if len(node_id_list) == 1:
 elif len(node_id_list) > 1:
     output = OT.synth_node_info(node_ids=node_id_list, include_lineage=args.include_lineage)
 else:
-    assert len(ott_id_list) == 0
+    assert len(ott_id_list) == 1
     ott_id = ott_id_list[0]
     assert ott_id is not None
     output = OT.synth_node_info(ott_id=ott_id, include_lineage=args.include_lineage)

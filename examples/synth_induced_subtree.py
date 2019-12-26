@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 from opentree import OTCommandLineTool, process_ott_id_and_node_id_args
 
 cli = OTCommandLineTool(usage='Display taxonomy and synthetic tree information '

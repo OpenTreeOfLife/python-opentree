@@ -7,6 +7,8 @@ from .ws_wrapper import (WebServiceRunMode,
                          )
 from datetime import datetime
 
+
+# noinspection PyMethodMayBeStatic
 class OTWebServiceWrapper(WebServiceWrapper):
     """This class provides a wrapper to the Open Tree of Life web service methods.
     Actual HTTP calls are handled by methods implemented in the base class for clarity of this code.
@@ -51,7 +53,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
 
     def tree_of_life_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         d = {"include_lineage": bool(include_lineage)}
-        cdict = {"node_ids": node_ids, "node_id":node_id, "ott_id": ott_id}
+        cdict = {"node_ids": node_ids, "node_id": node_id, "ott_id": ott_id}
         name, value = self._one_and_only_one('tree_of_life/node_info', cdict)
         if name == "node_ids":
             d["node_ids"] = [str(i) for i in value]
@@ -65,10 +67,9 @@ class OTWebServiceWrapper(WebServiceWrapper):
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
 
-
     def tree_of_life_about(self):
         return self._call_api('tree_of_life/about')
 
+
 def ot_datetime_str_to_object(xdatestr):
     return datetime.strptime(xdatestr, '%Y-%m-%d %H:%M:%S')
-

@@ -15,6 +15,7 @@ def _write_calls_as_curl(ws_wrapper_obj):
     for line in ws_wrapper_obj.curl_strings:
         sys.stderr.write('{}\n'.format(line))
 
+
 def process_ott_id_and_node_id_args(args):
     ott_id_list, node_id_list = [], []
     x = [i.strip().lower() for i in args.ott_ids.split(',')]
@@ -61,8 +62,8 @@ class OTCommandLineTool(object):
                          help='sets the logging level. Should be one of: '
                               '"debug", "info", "warning", "error", or "critical"')
         cli.add_argument('--api-endpoint', default="production",
-                        help='Advanced option: specifies which server to contact of api calls.'
-                             'choices are "production", "dev", "local", "ot" + # or an IP address.')
+                         help='Advanced option: specifies which server to contact of api calls.'
+                              'choices are "production", "dev", "local", "ot" + # or an IP address.')
         cli.add_argument('--run-mode', default='run', type=str,
                          help='Sets the action to take when interacting with the Open Tree API. '
                               '"run" is the normal mode. '
@@ -75,7 +76,8 @@ class OTCommandLineTool(object):
                              help='a comma separated list of OTT ids')
         if add_node_ids_arg:
             cli.add_argument('--node-ids', default=None, type=str,
-                                help='a comma separated list of node ids')
+                             help='a comma separated list of node ids')
+
     def parse_cli(self, arg_list=None):
         """Parses `arg_list` or sys.argv (if None), handles basic options, returns OpenTree and args.
 

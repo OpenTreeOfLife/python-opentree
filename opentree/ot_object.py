@@ -51,8 +51,7 @@ class OpenTree(object):
                 raise OTWebServicesError(msgtemplate.format(message))
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
 
-    def synth_mrca(self, node_ids=None, ott_ids=None, label_format="name_and_id",
-                           ignore_unknown_ids=True):
+    def synth_mrca(self, node_ids=None, ott_ids=None, ignore_unknown_ids=True):
         while True:
             call_record = self.ws.tree_of_life_mrca(node_ids=node_ids,
                                                     ott_ids=ott_ids)
@@ -64,6 +63,7 @@ class OpenTree(object):
                 raise OTWebServicesError(msgtemplate.format(message))
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
 
+    # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
         unknown_ids = call_record.response_dict['unknown']
         for u in unknown_ids:
