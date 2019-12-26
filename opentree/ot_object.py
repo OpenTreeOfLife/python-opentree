@@ -32,6 +32,10 @@ class OpenTree(object):
                 'synth_tree_about': tree_about
                 }
 
+    def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
+        return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
+                                              include_lineage=include_lineage)
+
     def induced_synth_tree(self, node_ids=None, ott_ids=None, label_format="name_and_id",
                            ignore_unknown_ids=True):
         while True:

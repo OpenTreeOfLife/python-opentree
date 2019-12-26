@@ -18,6 +18,17 @@ class OTWebServiceWrapper(WebServiceWrapper):
         WebServiceWrapper.__init__(self, api_endpoint, run_mode=run_mode)
         self.to_object_converter = get_object_converter('dendropy')
 
+    def _one_and_only_one(self, api_method, param_dict):
+        num = sum([1 if bool(v) else 0 for v in param_dict.values()])
+        if num == 1:
+            for k, v in param_dict.items():
+                if v:
+                    return k, v
+        sl = list(param_dict.keys())
+        sl.sort()
+        c = '", "'.join(sl)
+        raise ValueError('Exactly 1 of "{}" must be provided for a call to {}'.format(c, api_method))
+
     def tree_of_life_induced_subtree(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
         d = {"label_format": label_format.lower().strip()}
         if not (node_ids or ott_ids):
@@ -27,6 +38,19 @@ class OTWebServiceWrapper(WebServiceWrapper):
         if ott_ids:
             d["ott_ids"] = [int(i) for i in ott_ids]
         return self._call_api('tree_of_life/induced_subtree', data=d, demand_success=False)
+
+    def tree_of_life_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
+        d = {"include_lineage": bool(include_lineage)}
+        cdict = {"node_ids": node_ids, "node_id":node_id, "ott_id": ott_id}
+        name, value = self._one_and_only_one('tree_of_life/node_info', cdict)
+        if name == "node_ids":
+            d["node_ids"] = [str(i) for i in value]
+        elif name == "ott_id":
+            d["ott_id"] = int(value)
+        else:
+            assert name == "node_id"
+            d["node_id"] = str(value)
+        return self._call_api('tree_of_life/node_info', data=d, demand_success=False)
 
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
