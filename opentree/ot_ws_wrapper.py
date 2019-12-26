@@ -39,6 +39,16 @@ class OTWebServiceWrapper(WebServiceWrapper):
             d["ott_ids"] = [int(i) for i in ott_ids]
         return self._call_api('tree_of_life/induced_subtree', data=d, demand_success=False)
 
+    def tree_of_life_mrca(self, node_ids=None, ott_ids=None, ):
+        d = {}
+        if not (node_ids or ott_ids):
+            raise ValueError("Either node_ids or ott_ids must be provided")
+        if node_ids:
+            d["node_ids"] = [str(i) for i in node_ids]
+        if ott_ids:
+            d["ott_ids"] = [int(i) for i in ott_ids]
+        return self._call_api('tree_of_life/mrca', data=d, demand_success=False)
+
     def tree_of_life_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         d = {"include_lineage": bool(include_lineage)}
         cdict = {"node_ids": node_ids, "node_id":node_id, "ott_id": ott_id}
@@ -50,7 +60,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
         else:
             assert name == "node_id"
             d["node_id"] = str(value)
-        return self._call_api('tree_of_life/node_info', data=d, demand_success=False)
+        return self._call_api('tree_of_life/node_info', data=d, demand_success=True)
 
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
