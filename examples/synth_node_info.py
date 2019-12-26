@@ -5,8 +5,7 @@ from opentree import OTCommandLineTool, process_ott_id_and_node_id_args
 
 
 cli = OTCommandLineTool(usage='Display node info for the synthetic tree node(s) requested',
-                        add_ott_ids_arg=True,
-                        add_node_ids_arg=True)
+                        common_args=("ott-ids", "node-ids"))
 cli.parser.add_argument('--include-lineage', action='store_true',
                         help='Return the lineage of nodes back to the root of the tree')
 OT, args = cli.parse_cli()

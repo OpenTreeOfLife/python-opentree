@@ -38,8 +38,7 @@ class OTCommandLineTool(object):
     options.
     """
 
-    def __init__(self, usage, name=None,
-                 add_ott_ids_arg=False, add_node_ids_arg=False):
+    def __init__(self, usage, name=None, common_args=None):
         script_path = 'unknown' if not sys.argv else sys.argv[0]
         if name is None:
             name = os.path.split(script_path)[-1]
@@ -47,13 +46,10 @@ class OTCommandLineTool(object):
         self.usage = usage
         self.parser = argparse.ArgumentParser(usage)
         self.api_endpoint = None
-        self._add_default_open_tree_arguments(add_ott_ids_arg=add_ott_ids_arg,
-                                              add_node_ids_arg=add_node_ids_arg)
+        self._add_default_open_tree_arguments(common_args=common_args)
         self.ot_factory = None
 
-    def _add_default_open_tree_arguments(self,
-                                         add_ott_ids_arg=False,
-                                         add_node_ids_arg=False):
+    def _add_default_open_tree_arguments(self, common_args=None):
 
         """Adds several standard command line arguments to the command line parser"""
         cli = self.parser
@@ -71,10 +67,10 @@ class OTCommandLineTool(object):
                               'web-service call; this usually causes the script to terminate in an error, but'
                               ' the curl call can be helpful for debugging. "curl-on-exit" will perform the'
                               ' web-service calls, and then write the curl calls used to stderr on exit.')
-        if add_ott_ids_arg:
+        if common_args and "ott-ids" in common_args:
             cli.add_argument('--ott-ids', default=None, type=str,
                              help='a comma separated list of OTT ids')
-        if add_node_ids_arg:
+        if common_args and "node-ids" in common_args:
             cli.add_argument('--node-ids', default=None, type=str,
                              help='a comma separated list of node ids')
 
