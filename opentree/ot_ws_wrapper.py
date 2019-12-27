@@ -38,9 +38,8 @@ class OTWebServiceWrapper(WebServiceWrapper):
     def taxonomy_mrca(self, ott_ids):
         if not ott_ids:
             raise ValueError("ott_ids must be provided to a taxonomy/mrca call")
-        d ={"ott_ids": [int(i) for i in ott_ids]}
+        d = {"ott_ids": [int(i) for i in ott_ids]}
         return self._call_api('taxonomy/mrca', data=d, demand_success=False)
-
 
     def taxonomy_taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
                             include_children=False, include_terminal_descendants=False):

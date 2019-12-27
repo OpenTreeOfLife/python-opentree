@@ -47,6 +47,7 @@ def process_ott_and_node_id_list_args(args):
                 sys.exit('Expecting each ott ID to be an integer or a string starting with "ott". '
                          'Found "{}"\n'.format(unaltered_el))
     try:
+        # noinspection PyUnusedLocal
         nia = args.node_ids
     except AttributeError:
         pass
