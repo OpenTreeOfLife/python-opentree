@@ -31,6 +31,12 @@ class OTWebServiceWrapper(WebServiceWrapper):
         c = '", "'.join(sl)
         raise ValueError('Exactly 1 of "{}" must be provided for a call to {}'.format(c, api_method))
 
+    def taxonomy_about(self):
+        return self._call_api('taxonomy/about')
+
+    def tree_of_life_about(self):
+        return self._call_api('tree_of_life/about')
+
     def tree_of_life_induced_subtree(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
         d = {"label_format": label_format.lower().strip()}
         if not (node_ids or ott_ids):
@@ -69,7 +75,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
                          height_limit=None):
         d = {"format": str(tree_format), "label_format": str(label_format)}
         if height_limit is not None:
-            d["height_limit"] = height_limit
+            d["height_limit"] = int(height_limit)
         if node_id is not None:
             d['node_id'] = str(node_id)
         elif ott_id is not None:
@@ -77,12 +83,6 @@ class OTWebServiceWrapper(WebServiceWrapper):
         else:
             raise ValueError("Either node_id or ott_id must be given to tree_of_life/subtree")
         return self._call_api('tree_of_life/subtree', data=d, demand_success=True)
-
-    def taxonomy_about(self):
-        return self._call_api('taxonomy/about')
-
-    def tree_of_life_about(self):
-        return self._call_api('tree_of_life/about')
 
 
 def ot_datetime_str_to_object(xdatestr):
