@@ -6,7 +6,8 @@ from .ws_wrapper import (WebServiceRunMode,
                          WebServiceWrapper,
                          )
 from datetime import datetime
-import urllib
+import urllib.parse
+
 
 # noinspection PyMethodMayBeStatic
 class OTWebServiceWrapper(WebServiceWrapper):

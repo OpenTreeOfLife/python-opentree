@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
 
-from opentree import OTCommandLineTool, get_suppressed_taxon_flag_expl_url
+from opentree import OTCommandLineTool
 
 cli = OTCommandLineTool(usage='Fetch a tree by its phylesystem study ID and tree ID')
 cli.parser.add_argument(dest='study_id', help="The ID of the study to retrieve")

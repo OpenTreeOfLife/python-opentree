@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
 
-from opentree import OTCommandLineTool, get_suppressed_taxon_flag_expl_url
+from opentree import OTCommandLineTool
 
 cli = OTCommandLineTool(usage='Look up studies in the "phylesystem" set of phylogenetic studies that are in the Open '
                         'system')
