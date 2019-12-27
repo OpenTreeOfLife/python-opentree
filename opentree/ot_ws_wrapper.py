@@ -64,6 +64,20 @@ class OTWebServiceWrapper(WebServiceWrapper):
             d["node_id"] = str(value)
         return self._call_api('tree_of_life/node_info', data=d, demand_success=True)
 
+    def tree_of_life_subtree(self, node_id=None, ott_id=None,
+                         tree_format="newick", label_format="name_and_id",
+                         height_limit=None):
+        d = {"format": str(tree_format), "label_format": str(label_format)}
+        if height_limit is not None:
+            d["height_limit"] = height_limit
+        if node_id is not None:
+            d['node_id'] = str(node_id)
+        elif ott_id is not None:
+            d['ott_id'] = int(ott_id)
+        else:
+            raise ValueError("Either node_id or ott_id must be given to tree_of_life/subtree")
+        return self._call_api('tree_of_life/subtree', data=d, demand_success=True)
+
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
 

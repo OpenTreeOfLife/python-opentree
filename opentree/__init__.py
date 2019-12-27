@@ -9,7 +9,8 @@ from .ws_wrapper import (OTWebServicesError,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
 from .ot_command_line_tool import (OTCommandLineTool,
-                                   process_ott_id_and_node_id_args)
+                                   process_ott_and_node_id_list_args,
+                                   process_ott_or_node_id_arg)
 from .ot_object import OpenTree
 
 # Default-configured wrapper

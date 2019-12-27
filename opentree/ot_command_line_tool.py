@@ -16,7 +16,24 @@ def _write_calls_as_curl(ws_wrapper_obj):
         sys.stderr.write('{}\n'.format(line))
 
 
-def process_ott_id_and_node_id_args(args):
+def process_ott_or_node_id_arg(args):
+    ott_id, node_id = None, None
+    if args.ott_id:
+        unaltered_el = args.ott_id.strip()
+        el = unaltered_el[3:] if unaltered_el.startswith('ott') else unaltered_el
+        try:
+            ott_id = int(el)
+        except:
+            sys.exit('Expecting each ott ID to be an integer or a string starting with "ott". '
+                     'Found "{}"\n'.format(unaltered_el))
+    if args.node_id:
+        node_id = str(args.node_id).strip()
+    if node_id and ott_id:
+        sys.exit('Expecting either ott-id or node-id, but not both\n')
+    return ott_id, node_id
+
+
+def process_ott_and_node_id_list_args(args):
     ott_id_list, node_id_list = [], []
     x = [i.strip().lower() for i in args.ott_ids.split(',')]
     for el in x:
@@ -73,6 +90,12 @@ class OTCommandLineTool(object):
         if common_args and "node-ids" in common_args:
             cli.add_argument('--node-ids', default=None, type=str,
                              help='a comma separated list of node ids')
+        if common_args and "ott-id" in common_args:
+            cli.add_argument('--ott-id', default=None, type=str,
+                             help='An OTT ids (integer or string starting with ott')
+        if common_args and "node-id" in common_args:
+            cli.add_argument('--node-id', default=None, type=str,
+                             help='A node id (starting with "mrca" or "ott)')
 
     def parse_cli(self, arg_list=None):
         """Parses `arg_list` or sys.argv (if None), handles basic options, returns OpenTree and args.

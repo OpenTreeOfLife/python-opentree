@@ -36,6 +36,14 @@ class OpenTree(object):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)
 
+    def synth_subtree(self, node_id=None, ott_id=None,
+                      tree_format="newick", label_format="name_and_id",
+                      height_limit=None):
+        return self.ws.tree_of_life_subtree(node_id=node_id, ott_id=ott_id,
+                                              tree_format=tree_format,
+                                              label_format=label_format,
+                                              height_limit=height_limit)
+
     def synth_induced_tree(self, node_ids=None,
                            ott_ids=None, label_format="name_and_id",
                            ignore_unknown_ids=True):

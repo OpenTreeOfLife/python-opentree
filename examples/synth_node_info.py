@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import json
-from opentree import OTCommandLineTool, process_ott_id_and_node_id_args
+from opentree import OTCommandLineTool, process_ott_and_node_id_list_args
 
 
 cli = OTCommandLineTool(usage='Display node info for the synthetic tree node(s) requested',
@@ -11,7 +11,7 @@ cli.parser.add_argument('--include-lineage', action='store_true',
 OT, args = cli.parse_cli()
 
 
-ott_id_list, node_id_list = process_ott_id_and_node_id_args(args)
+ott_id_list, node_id_list = process_ott_and_node_id_list_args(args)
 # use node_id_list if there are multiple. This is an odd call in the API
 if (not node_id_list) and (not ott_id_list):
     sys.exit('Either --node-ids or --ott-ids must be provided.\n')
