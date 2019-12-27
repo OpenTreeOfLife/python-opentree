@@ -32,6 +32,9 @@ class OpenTree(object):
                 'synth_tree_about': tree_about
                 }
 
+    def get_study(self, study_id):
+        return self.ws.study(study_id)
+
     def studies_properties(self):
         return self.ws.studies_properties()
 

@@ -6,7 +6,7 @@ from .ws_wrapper import (WebServiceRunMode,
                          WebServiceWrapper,
                          )
 from datetime import datetime
-
+import urllib
 
 # noinspection PyMethodMayBeStatic
 class OTWebServiceWrapper(WebServiceWrapper):
@@ -34,6 +34,10 @@ class OTWebServiceWrapper(WebServiceWrapper):
 
     def studies_properties(self):
         return self._call_api('studies/properties')
+
+    def study(self, study_id):
+        url = 'study/{}'.format(urllib.parse.quote(study_id))
+        return self._call_api(url, http_method='GET')
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
