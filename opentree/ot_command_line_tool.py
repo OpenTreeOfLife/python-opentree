@@ -26,8 +26,12 @@ def process_ott_or_node_id_arg(args):
         except:
             sys.exit('Expecting each ott ID to be an integer or a string starting with "ott". '
                      'Found "{}"\n'.format(unaltered_el))
-    if args.node_id:
-        node_id = str(args.node_id).strip()
+    try:
+        nia = args.node_id
+    except AttributeError:
+        nia = None
+    if nia:
+        node_id = str(nia).strip()
     if node_id and ott_id:
         sys.exit('Expecting either ott-id or node-id, but not both\n')
     return ott_id, node_id

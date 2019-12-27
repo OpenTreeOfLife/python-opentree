@@ -50,6 +50,9 @@ class OpenTree(object):
                 raise OTWebServicesError(msgtemplate.format(message))
             self._cull_unknown_ids_from_args(call_record, [], ott_ids)
 
+    def taxon_subtree(self, ott_id=None, label_format="name_and_id"):
+        return self.ws.taxonomy_subtree(ott_id=ott_id, label_format=label_format)
+
     def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)

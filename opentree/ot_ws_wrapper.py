@@ -51,6 +51,12 @@ class OTWebServiceWrapper(WebServiceWrapper):
              "include_terminal_descendants": include_terminal_descendants, }
         return self._call_api('taxonomy/taxon_info', data=d, demand_success=True)
 
+    def taxonomy_subtree(self, ott_id, label_format=None):
+        d = {"ott_id": int(ott_id)}
+        if label_format:
+            d["label_format"] = str(label_format)
+        return self._call_api('taxonomy/subtree', data=d, demand_success=True)
+
     def tree_of_life_about(self):
         return self._call_api('tree_of_life/about')
 
