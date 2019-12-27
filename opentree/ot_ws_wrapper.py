@@ -32,6 +32,9 @@ class OTWebServiceWrapper(WebServiceWrapper):
         print(param_dict)
         raise ValueError('Exactly 1 of "{}" must be provided for a call to {}'.format(c, api_method))
 
+    def studies_properties(self):
+        return self._call_api('studies/properties')
+
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
         return self._call_api('studies/find_studies', data=d, demand_success=True)

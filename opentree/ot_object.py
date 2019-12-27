@@ -32,6 +32,9 @@ class OpenTree(object):
                 'synth_tree_about': tree_about
                 }
 
+    def studies_properties(self):
+        return self.ws.studies_properties()
+
     def find_studies(self, value, search_property, exact=False, verbose=False):
         return self.ws.studies_find_studies(value, search_property=search_property, exact=exact, verbose=verbose)
 
