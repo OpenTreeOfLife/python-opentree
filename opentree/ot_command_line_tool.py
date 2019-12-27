@@ -35,18 +35,24 @@ def process_ott_or_node_id_arg(args):
 
 def process_ott_and_node_id_list_args(args):
     ott_id_list, node_id_list = [], []
-    x = [i.strip().lower() for i in args.ott_ids.split(',')]
-    for el in x:
-        unaltered_el = el
-        if el.startswith('ott'):
-            el = el[3:]
-        try:
-            ott_id_list.append(int(el))
-        except:
-            sys.exit('Expecting each ott ID to be an integer or a string starting with "ott". '
-                     'Found "{}"\n'.format(unaltered_el))
-    if args.node_ids:
-        node_id_list = [i.strip().lower() for i in args.node_ids.split(',')]
+    if args.ott_ids:
+        x = [i.strip().lower() for i in args.ott_ids.split(',')]
+        for el in x:
+            unaltered_el = el
+            if el.startswith('ott'):
+                el = el[3:]
+            try:
+                ott_id_list.append(int(el))
+            except:
+                sys.exit('Expecting each ott ID to be an integer or a string starting with "ott". '
+                         'Found "{}"\n'.format(unaltered_el))
+    try:
+        nia = args.node_ids
+    except AttributeError:
+        pass
+    else:
+        if args.node_ids:
+            node_id_list = [i.strip().lower() for i in args.node_ids.split(',')]
     return ott_id_list, node_id_list
 
 

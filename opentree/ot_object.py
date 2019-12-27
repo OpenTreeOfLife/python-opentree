@@ -39,6 +39,17 @@ class OpenTree(object):
                                            include_children=include_children,
                                            include_terminal_descendants=include_terminal_descendants)
 
+    def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
+        while True:
+            call_record = self.ws.taxonomy_mrca(ott_ids=ott_ids)
+            if call_record:
+                return call_record
+            if not ignore_unknown_ids:
+                msgtemplate = 'Call to taxonomy/mrca failed with the message "{}"'
+                message = call_record.response_dict['message']
+                raise OTWebServicesError(msgtemplate.format(message))
+            self._cull_unknown_ids_from_args(call_record, [], ott_ids)
+
     def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)

@@ -3,7 +3,7 @@ import json
 
 from opentree import OTCommandLineTool, process_ott_and_node_id_list_args
 
-cli = OTCommandLineTool(usage='Display node information about the Most Recent Common Ancestor of a sete of IDs',
+cli = OTCommandLineTool(usage='Display node information about the Most Recent Common Ancestor of a set of IDs',
                         common_args=("ott-ids", "node-ids"))
 OT, args = cli.parse_cli()
 ott_id_list, node_id_list = process_ott_and_node_id_list_args(args)
