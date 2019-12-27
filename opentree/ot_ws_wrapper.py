@@ -39,6 +39,10 @@ class OTWebServiceWrapper(WebServiceWrapper):
         url = 'study/{}'.format(urllib.parse.quote(study_id))
         return self._call_api(url, http_method='GET')
 
+    def tree(self, study_id, tree_id):
+        url = 'study/{}/tree/'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id))
+        return self._call_api(url, http_method='GET')
+
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
         return self._call_api('studies/find_studies', data=d, demand_success=True)
