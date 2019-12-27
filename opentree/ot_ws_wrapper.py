@@ -63,6 +63,13 @@ class OTWebServiceWrapper(WebServiceWrapper):
             d['context_name'] = str(context_name)
         return self._call_api('tnrs/autocomplete_name', data=d, demand_success=True)
 
+    def tnrs_contexts(self):
+        return self._call_api('tnrs/contexts', data=None, demand_success=True)
+
+    def tnrs_infer_context(self, names):
+        d = {"names": [str(i) for i in names]}
+        return self._call_api('tnrs/infer_context', data=d, demand_success=True)
+
     def tnrs_match_names(self, names, context_name=None, do_approximate_matching=False, include_suppressed=False):
         d = {"names": [str(i) for i in names],
              "do_approximate_matching": bool(do_approximate_matching),

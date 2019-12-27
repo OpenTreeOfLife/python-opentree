@@ -53,16 +53,19 @@ class OpenTree(object):
     def taxon_subtree(self, ott_id=None, label_format="name_and_id"):
         return self.ws.taxonomy_subtree(ott_id=ott_id, label_format=label_format)
 
+    def tnrs_contexts(self):
+        return self.ws.tnrs_contexts()
+
+    def tnrs_infer_context(self, names):
+        return self.ws.tnrs_infer_context(names)
 
     def tnrs_match(self, names, context_name=None, do_approximate_matching=False, include_suppressed=False):
         return self.ws.tnrs_match_names(names, context_name=context_name,
                                         do_approximate_matching=do_approximate_matching,
                                         include_suppressed=include_suppressed)
 
-
     def tnrs_autocomplete(self, name, context_name=None, include_suppressed=False):
         return self.ws.tnrs_autocomplete_name(name, context_name=context_name, include_suppressed=include_suppressed)
-
 
     def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
