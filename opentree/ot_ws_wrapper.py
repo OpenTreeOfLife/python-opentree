@@ -29,10 +29,21 @@ class OTWebServiceWrapper(WebServiceWrapper):
         sl = list(param_dict.keys())
         sl.sort()
         c = '", "'.join(sl)
+        print(param_dict)
         raise ValueError('Exactly 1 of "{}" must be provided for a call to {}'.format(c, api_method))
 
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
+
+    def taxonomy_taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
+                            include_children=False, include_terminal_descendants=False):
+        cdict = {"source_id": source_id, "ott_id": ott_id}
+        id_spec, id_arg = self._one_and_only_one("taxonomy/taxon_info", cdict)
+        d = {id_spec: id_arg,
+             "include_lineage": include_lineage,
+             "include_children": include_children,
+             "include_terminal_descendants": include_terminal_descendants, }
+        return self._call_api('taxonomy/taxon_info', data=d, demand_success=True)
 
     def tree_of_life_about(self):
         return self._call_api('tree_of_life/about')
@@ -71,8 +82,8 @@ class OTWebServiceWrapper(WebServiceWrapper):
         return self._call_api('tree_of_life/node_info', data=d, demand_success=True)
 
     def tree_of_life_subtree(self, node_id=None, ott_id=None,
-                         tree_format="newick", label_format="name_and_id",
-                         height_limit=None):
+                             tree_format="newick", label_format="name_and_id",
+                             height_limit=None):
         d = {"format": str(tree_format), "label_format": str(label_format)}
         if height_limit is not None:
             d["height_limit"] = int(height_limit)

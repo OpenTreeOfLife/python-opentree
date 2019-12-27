@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import json
-from opentree import OTCommandLineTool, process_ott_or_node_id_arg
 
+from opentree import OTCommandLineTool, process_ott_or_node_id_arg
 
 cli = OTCommandLineTool(usage='Gets a subtree of the synthetic tree rooted at the node requested',
                         common_args=("ott-id", "node-id"))

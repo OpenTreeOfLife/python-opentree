@@ -32,6 +32,13 @@ class OpenTree(object):
                 'synth_tree_about': tree_about
                 }
 
+    def taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
+                   include_children=False, include_terminal_descendants=False):
+        return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
+                                           include_lineage=include_lineage,
+                                           include_children=include_children,
+                                           include_terminal_descendants=include_terminal_descendants)
+
     def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)
@@ -40,9 +47,9 @@ class OpenTree(object):
                       tree_format="newick", label_format="name_and_id",
                       height_limit=None):
         return self.ws.tree_of_life_subtree(node_id=node_id, ott_id=ott_id,
-                                              tree_format=tree_format,
-                                              label_format=label_format,
-                                              height_limit=height_limit)
+                                            tree_format=tree_format,
+                                            label_format=label_format,
+                                            height_limit=height_limit)
 
     def synth_induced_tree(self, node_ids=None,
                            ott_ids=None, label_format="name_and_id",
