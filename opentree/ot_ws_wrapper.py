@@ -36,6 +36,10 @@ class OTWebServiceWrapper(WebServiceWrapper):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
         return self._call_api('studies/find_studies', data=d, demand_success=True)
 
+    def studies_find_trees(self, value, search_property, exact=False, verbose=False):
+        d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
+        return self._call_api('studies/find_trees', data=d, demand_success=True)
+
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
 

@@ -35,6 +35,11 @@ class OpenTree(object):
     def find_studies(self, value, search_property, exact=False, verbose=False):
         return self.ws.studies_find_studies(value, search_property=search_property, exact=exact, verbose=verbose)
 
+
+    def find_trees(self, value, search_property, exact=False, verbose=False):
+        return self.ws.studies_find_trees(value, search_property=search_property, exact=exact, verbose=verbose)
+
+
     def taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
                    include_children=False, include_terminal_descendants=False):
         return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
