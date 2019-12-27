@@ -57,6 +57,12 @@ class OTWebServiceWrapper(WebServiceWrapper):
             d["label_format"] = str(label_format)
         return self._call_api('taxonomy/subtree', data=d, demand_success=True)
 
+    def tnrs_autocomplete_name(self, name, context_name=None, include_suppressed=False):
+        d = {"name": str(name), "include_suppressed": bool(include_suppressed), }
+        if context_name is not None:
+            d['context_name'] = str(context_name)
+        return self._call_api('tnrs/autocomplete_name', data=d, demand_success=True)
+
     def tnrs_match_names(self, names, context_name=None, do_approximate_matching=False, include_suppressed=False):
         d = {"names": [str(i) for i in names],
              "do_approximate_matching": bool(do_approximate_matching),
