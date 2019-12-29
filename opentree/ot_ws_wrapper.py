@@ -46,11 +46,11 @@ class OTWebServiceWrapper(WebServiceWrapper):
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
-        return self._call_api('studies/find_studies', data=d, demand_success=True)
+        return self._call_api('studies/find_studies', data=d, demand_success=False)
 
     def studies_find_trees(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
-        return self._call_api('studies/find_trees', data=d, demand_success=True)
+        return self._call_api('studies/find_trees', data=d, demand_success=False)
 
     def taxonomy_about(self):
         return self._call_api('taxonomy/about')
@@ -69,26 +69,26 @@ class OTWebServiceWrapper(WebServiceWrapper):
              "include_lineage": include_lineage,
              "include_children": include_children,
              "include_terminal_descendants": include_terminal_descendants, }
-        return self._call_api('taxonomy/taxon_info', data=d, demand_success=True)
+        return self._call_api('taxonomy/taxon_info', data=d, demand_success=False)
 
     def taxonomy_subtree(self, ott_id, label_format=None):
         d = {"ott_id": int(ott_id)}
         if label_format:
             d["label_format"] = str(label_format)
-        return self._call_api('taxonomy/subtree', data=d, demand_success=True)
+        return self._call_api('taxonomy/subtree', data=d, demand_success=False)
 
     def tnrs_autocomplete_name(self, name, context_name=None, include_suppressed=False):
         d = {"name": str(name), "include_suppressed": bool(include_suppressed), }
         if context_name is not None:
             d['context_name'] = str(context_name)
-        return self._call_api('tnrs/autocomplete_name', data=d, demand_success=True)
+        return self._call_api('tnrs/autocomplete_name', data=d, demand_success=False)
 
     def tnrs_contexts(self):
-        return self._call_api('tnrs/contexts', data=None, demand_success=True)
+        return self._call_api('tnrs/contexts', data=None, demand_success=False)
 
     def tnrs_infer_context(self, names):
         d = {"names": [str(i) for i in names]}
-        return self._call_api('tnrs/infer_context', data=d, demand_success=True)
+        return self._call_api('tnrs/infer_context', data=d, demand_success=False)
 
     def tnrs_match_names(self, names, context_name=None, do_approximate_matching=False, include_suppressed=False):
         d = {"names": [str(i) for i in names],
@@ -97,7 +97,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
              }
         if context_name is not None:
             d['context_name'] = str(context_name)
-        return self._call_api('tnrs/match_names', data=d, demand_success=True)
+        return self._call_api('tnrs/match_names', data=d, demand_success=False)
 
     def tree_of_life_about(self):
         return self._call_api('tree_of_life/about')
@@ -133,7 +133,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
         else:
             assert name == "node_id"
             d["node_id"] = str(value)
-        return self._call_api('tree_of_life/node_info', data=d, demand_success=True)
+        return self._call_api('tree_of_life/node_info', data=d, demand_success=False)
 
     def tree_of_life_subtree(self, node_id=None, ott_id=None,
                              tree_format="newick", label_format="name_and_id",
@@ -147,7 +147,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
             d['ott_id'] = int(ott_id)
         else:
             raise ValueError("Either node_id or ott_id must be given to tree_of_life/subtree")
-        return self._call_api('tree_of_life/subtree', data=d, demand_success=True)
+        return self._call_api('tree_of_life/subtree', data=d, demand_success=False)
 
 
 def ot_datetime_str_to_object(xdatestr):
