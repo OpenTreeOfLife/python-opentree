@@ -156,12 +156,15 @@ class OpenTree(object):
         for study in studies:
             if '@' in study:
                 studyid = study.split('@')[0]
+                treeid = study.split('@')[1]
+                opentree_url = "https://tree.opentreeoflife.org/curator/study/view/{}?tab=trees&tree={}".format(studyid, treeid)
             else:
                 study_id = study
+                opentree_url = "https://tree.opentreeoflife.org/curator/study/view/{}".format(studyId)
             studyres = self.find_studies(studyid, search_property = 'ot:studyId', verbose="True")
             new_cite = studyres.response_dict.get('matched_studies', None)
             if new_cite:
-                cites.append(study + '\n' + new_cite[0].get('ot:studyPublicationReference', '') + '\n' + new_cite[0].get('ot:studyPublication', '') + '\n')
+                cites.append(opentree_url + '\n' + new_cite[0].get('ot:studyPublicationReference', '') + '\n' + new_cite[0].get('ot:studyPublication', '') + '\n')
         return "\n".join(cites)
 
     def get_ottid_from_name(self, spp_name, exact = True):
