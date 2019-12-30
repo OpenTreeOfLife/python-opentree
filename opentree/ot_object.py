@@ -132,3 +132,51 @@ class OpenTree(object):
                 ui = int(u[3:])
                 if ott_ids and (ui in ott_ids):
                     ott_ids.remove(ui)
+
+    def get_ottid_from_gbifid(self, gbif_id):
+        """Returns an ott id for a gbif id
+        ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
+        """
+        assert int(gbif_id)
+        gbiftax = "gbif:{}".format(int(gbif_id))
+        res = self.taxon_info(source_id=gbiftax)
+        if res.status_code == 200:
+            ott_id = int(res.response_dict['ott_id'])
+            return ott_id
+        elif res.status_code == 400:
+            return None
+        else:
+            msgtemplate = 'Call to taxon_info failed with the message "{}"'
+            message = call_record.response_dict['message']
+            raise OTWebServicesError(msgtemplate.format(message))
+
+    def get_citations(self, studies):
+        """Returns a string with citation info for list of study or Tree Ids"""
+        cites = []
+        for study in studies:
+            if '@' in study:
+                studyid = study.split('@')[0]
+            else:
+                study_id = study
+            studyres = self.find_studies(studyid, search_property = 'ot:studyId', verbose="True")
+            new_cite = studyres.response_dict.get('matched_studies', None)
+            if new_cite:
+                cites.append(study + '\n' + new_cite[0].get('ot:studyPublicationReference', '') + '\n' + new_cite[0].get('ot:studyPublication', '') + '\n')
+        return "\n".join(cites)
+
+    def get_ottid_from_name(self, spp_name, exact = True):
+        """Returns an ott id for a string
+        ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
+        """
+        res = self.tnrs_match([spp_name])
+        if res.status_code == 200:
+            if len(res.response_dict['results']) > 0:
+                ott_id = int(res.response_dict['results'][0]['matches'][0]['taxon']['ott_id'])
+                return ott_id
+            else:
+                return None
+        else:
+            msgtemplate = 'Call to tnrs_match failed with the message "{}"'
+            message = call_record.response_dict['message']
+            raise OTWebServicesError(msgtemplate.format(message))
+
