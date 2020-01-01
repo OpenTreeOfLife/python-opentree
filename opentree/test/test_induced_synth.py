@@ -13,17 +13,14 @@ class TestInducedSynth(unittest.TestCase):
             OT.synth_induced_tree(ott_ids=["hi"])
 
     def test_success_ott_ids(self):
-        call_record = OT.synth_induced_tree(ott_ids=[417950, 770315])
-        print(call_record.tree)
-
+        OT.synth_induced_tree(ott_ids=[417950, 770315])
+    
     def test_success_node_ids(self):
-        call_record = OT.synth_induced_tree(node_ids=['ott417950', 'ott770315'])
-        print(call_record.tree)
-
+        OT.synth_induced_tree(node_ids=['ott417950', 'ott770315'])
+    
     def test_success_mixed_ids(self):
-        call_record = OT.synth_induced_tree(node_ids=['ott770315'], ott_ids=[417950])
-        print(call_record.tree)
-
+        OT.synth_induced_tree(node_ids=['ott770315'], ott_ids=[417950])
+    
 
 if __name__ == '__main__':
     unittest.main()

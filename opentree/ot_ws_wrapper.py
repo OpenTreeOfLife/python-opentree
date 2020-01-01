@@ -30,7 +30,6 @@ class OTWebServiceWrapper(WebServiceWrapper):
         sl = list(param_dict.keys())
         sl.sort()
         c = '", "'.join(sl)
-        print(param_dict)
         raise ValueError('Exactly 1 of "{}" must be provided for a call to {}'.format(c, api_method))
 
     def studies_properties(self):
