@@ -79,7 +79,8 @@ setup(
     license='BSD',
     author='Emily Jane B. McTavish and Mark T. Holder',
     py_modules=['opentree'],
-    install_requires=[],
+    install_requires=['setuptools', 'requests>=2.18', 'DendroPy>=4.4.0'],
+    download_url='https://github.com/OpenTreeOfLife/python-opentree/archive/v_0.0.1.tar.gz'
     packages=PACKAGES,
     entry_points=ENTRY_POINTS,
     classifiers=[
