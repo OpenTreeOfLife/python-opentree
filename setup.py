@@ -72,7 +72,7 @@ else:
 
 setup(
     name='opentree',
-    version='0.0.2',  # sync with __version__ in opentree/__init__.py
+    version='0.0.3',  # sync with __version__ in opentree/__init__.py
     description='Library for interacting with Open Tree of Life resources',
     long_description=(open('README.md').read()),
     url='https://github.com/OpenTreeOfLife/python-opentree',
@@ -80,7 +80,7 @@ setup(
     author='Emily Jane B. McTavish and Mark T. Holder',
     py_modules=['opentree'],
     install_requires=['setuptools', 'requests>=2.18', 'DendroPy>=4.4.0'],
-    download_url='https://github.com/OpenTreeOfLife/python-opentree/archive/v_0.0.2.tar.gz',
+    download_url='https://github.com/OpenTreeOfLife/python-opentree/archive/v_0.0.3.tar.gz',
     packages=PACKAGES,
     entry_points=ENTRY_POINTS,
     classifiers=[

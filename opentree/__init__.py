@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-__version__ = "0.0.2"  # sync with setup.py
+__version__ = "0.0.3"  # sync with setup.py
 
 from .object_conversion import get_object_converter
 from .ws_wrapper import (OTWebServicesError,

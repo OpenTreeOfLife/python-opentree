@@ -1,11 +1,14 @@
-# python-opentree
+python-opentree
+===============
 
 This package is a python library designed to make it easier to work with web services and
 data resources associated with the [Open Tree of Life](https://opentreeoflife.github.io)
 project.
 
 
-# Prior work / design / road map
+Prior work / design / road map
+==============================
+
 This package will use supersede [peyotl](http://opentreeoflife.github.io/peyotl/) at
     some point.
 
