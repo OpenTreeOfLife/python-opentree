@@ -2,17 +2,9 @@
 import logging
 import json
 import sys
+import re
 from opentree import OTCommandLineTool, ott_str_as_int
 
-cli = OTCommandLineTool(usage='Display node info for the synthetic tree node(s) requested',
-                        common_args=("ott-id", ))
-
-OT, args = cli.parse_cli()
-ott_id = 189136 if not args.ott_id else args.ott_id
-
-output = OT.synth_node_info(ott_id=ott_id, include_lineage=True)
-if not output:
-    sys.exit('Call to synth_node for {} failed.\n'.format(ott_id))
 
 
 def _create_link_from_node_info_conf_key_value_pair(key, value):
@@ -84,11 +76,41 @@ def format_node_info_links_to_input_trees(blob, out=sys.stdout):
         for n, line in enumerate(_format_link_to_input_tree(x)):
             out.write("  {c}: {l}\n".format(c=n+1, l=line))
 
+
+def scaffold_tree_to_ott_id_set(tree):
+    return frozenset([nd.ott_id for nd in tree.postorder_node_iter() if nd.ott_id is not None])
+
+
+_name_ott_id_pat = re.compile('^(.+)[ _]ott(\d+)')
+def augment_nodes_with_ot_properties(tree):
+    for nd in tree.postorder_node_iter():
+        label = nd.taxon.label
+        m = _name_ott_id_pat.match(label)
+        nd.ott_name, nd.ott_id = None, None
+        if m:
+            nd.ott_name = m.group(1).strip()
+            nd.ott_id = int(m.group(2))
+
 if __name__ == '__main__':
-    print(json.dumps(output.response_dict, indent=2, sort_keys=True))
-    format_node_info_links_to_input_trees(output.response_dict)
-    about_info = OT.about()
-    synth_tree_about = about_info['synth_tree_about']
-    synth_id = synth_tree_about.response_dict['synth_id']
-    subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
-    print(subproblem_scaffold.response.text)
+    cli = OTCommandLineTool(usage='Display node info for the synthetic tree node(s) requested',
+                            common_args=("ott-id",))
+
+    OT, args = cli.parse_cli()
+    ott_id = 189136 if not args.ott_id else args.ott_id
+    MOCK_RUN = True
+    if not MOCK_RUN:
+        output = OT.synth_node_info(ott_id=ott_id, include_lineage=True)
+        if not output:
+            sys.exit('Call to synth_node for {} failed.\n'.format(ott_id))
+        print(json.dumps(output.response_dict, indent=2, sort_keys=True))
+        format_node_info_links_to_input_trees(output.response_dict)
+        about_info = OT.about()
+        synth_tree_about = about_info['synth_tree_about']
+        synth_id = synth_tree_about.response_dict['synth_id']
+        subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
+        scaf_newick = subproblem_scaffold.response.text
+    else:
+        scaf_newick = open('./cruft/subproblems-scaffold-only.tre', 'r', encoding='utf-8').read().strip()
+    tree = OT.ws.to_object_converter.tree_from_newick(scaf_newick)
+    augment_nodes_with_ot_properties(tree)
+    print(len(scaffold_tree_to_ott_id_set(tree)))
