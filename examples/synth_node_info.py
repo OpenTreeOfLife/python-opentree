@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import json
-from opentree import OTCommandLineTool, process_ott_and_node_id_list_args
+from opentree import (OTCommandLineTool, process_ott_and_node_id_list_args)
 
 
 cli = OTCommandLineTool(usage='Display node info for the synthetic tree node(s) requested',
