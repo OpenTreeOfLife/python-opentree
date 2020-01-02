@@ -163,6 +163,8 @@ class WebServiceWrapper(object):
         try:
             if headers is None:
                 headers = {'content-type': 'application/json', 'accept': 'application/json', }
+            elif isinstance(headers, str) and headers.lower() == 'text':
+                headers = {'content-type': 'text/plain', 'accept': 'text/plain', }
             call_obj = self._http_request(url, http_method, data=data, headers=headers)
             if demand_success and not call_obj:
                 if not self._perform_ws_calls:
@@ -186,6 +188,8 @@ class WebServiceWrapper(object):
             if front_end:
                 return 'https://tree.opentreeoflife.org/{}/{}'.format(self._api_version, frag)
             return 'https://api.opentreeoflife.org/{}/{}'.format(self._api_version, frag)
+        if self._api_endpoint == 'files':
+            return 'https://files.opentreeoflife.org/{}'.format(frag)
         if self._api_endpoint == 'dev':
             if front_end:
                 return 'https://devtree.opentreeoflife.org/{}/{}'.format(self._api_version, frag)

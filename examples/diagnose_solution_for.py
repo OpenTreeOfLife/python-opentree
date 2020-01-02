@@ -84,5 +84,11 @@ def format_node_info_links_to_input_trees(blob, out=sys.stdout):
         for n, line in enumerate(_format_link_to_input_tree(x)):
             out.write("  {c}: {l}\n".format(c=n+1, l=line))
 
-print(json.dumps(output.response_dict, indent=2, sort_keys=True))
-format_node_info_links_to_input_trees(output.response_dict)
+if __name__ == '__main__':
+    print(json.dumps(output.response_dict, indent=2, sort_keys=True))
+    format_node_info_links_to_input_trees(output.response_dict)
+    about_info = OT.about()
+    synth_tree_about = about_info['synth_tree_about']
+    synth_id = synth_tree_about.response_dict['synth_id']
+    subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
+    print(subproblem_scaffold.response.text)
