@@ -103,6 +103,7 @@ if __name__ == '__main__':
         if not output:
             sys.exit('Call to synth_node for {} failed.\n'.format(ott_id))
         print(json.dumps(output.response_dict, indent=2, sort_keys=True))
+        tip_synth_node_info = output.response_dict
         format_node_info_links_to_input_trees(output.response_dict)
         about_info = OT.about()
         synth_tree_about = about_info['synth_tree_about']
@@ -110,7 +111,15 @@ if __name__ == '__main__':
         subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
         scaf_newick = subproblem_scaffold.response.text
     else:
+        tip_synth_node_info = json.load(open('./cruft/synth_node_id_response.json', 'r', encoding='utf-8'))
+        synth_id = 'opentree12.3'
         scaf_newick = open('./cruft/subproblems-scaffold-only.tre', 'r', encoding='utf-8').read().strip()
     tree = OT.ws.to_object_converter.tree_from_newick(scaf_newick)
     augment_nodes_with_ot_properties(tree)
-    print(len(scaffold_tree_to_ott_id_set(tree)))
+    scaffold_id_set = scaffold_tree_to_ott_id_set(tree)
+    for synth_nd in tip_synth_node_info["lineage"]:
+        snid = synth_nd["node_id"]
+        if snid.startswith('ott'):
+            sn_ott_id = ott_str_as_int(snid)
+            if sn_ott_id in scaffold_id_set:
+                print("subproblem: OTT={} unique_name={}".format(sn_ott_id, synth_nd["taxon"]["unique_name"]))
