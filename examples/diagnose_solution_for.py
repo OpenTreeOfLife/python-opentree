@@ -96,7 +96,7 @@ def augment_nodes_with_ot_properties(tree):
             nd.ott_id = int(m.group(2))
 
 def explore_subproblem(synth_id, ott_id, synth_node_info):
-    print('Subproblem OTT={} name={}'.format(ott_id, synth_node_info["taxon"]["unique_name"]))
+    print('\n\nSubproblem OTT={} name={}'.format(ott_id, synth_node_info["taxon"]["unique_name"]))
     ssds, ssdti = subprob_size_dict['subproblems'], subprob_size_dict['tree_ids']
     num_leaves, num_leaves_in_synth, tree_info_list = ssds['ott{}'.format(ott_id)]
     print('{} leaves in the exemplified subproblem\n'.format(num_leaves))
@@ -132,6 +132,22 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
     tree_obj_list = OT.ws.to_object_converter.tree_list_from_newicks(newick_list, rooting='force-rooted')
     tree1, tree2 = tree_obj_list[-2:]
     rf = dendropy.calculate.treecompare.symmetric_difference(tree1, tree2, is_bipartitions_updated=False)
+
+    ott_id_strings = [i.label for i in tree_obj_list.taxon_namespace]
+    ott_id_list = [ott_str_as_int(i) for i in ott_id_strings]
+    induced = OT.synth_induced_tree(ott_ids=ott_id_list)
+    o2n = {}
+    for nd in induced.tree.leaf_iter():
+        m = _name_ott_id_pat.match(nd.taxon.label)
+        if m:
+            name = m.group(1)
+            ott_str = 'ott{}'.format(m.group(2))
+            o2n[ott_str] = name
+    for i in tree_obj_list.taxon_namespace:
+        n = o2n.get(i.label)
+        if n:
+            i.label = '{} {}'.format(n, str(i.label))
+
     print("Synthetic tree's subproblem solution:")
     print(tree1.as_ascii_plot())
     print("Synthetic tree's subproblem solution if tree ranks were reversed:")
@@ -145,7 +161,7 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
 
 def prompt_for_subproblem_exploration(synth_id, subproblem_list):
     while True:
-        print("This taxon's position is determined by the resolution of the following subproblems:")
+        print("\nThis taxon's position is determined by the resolution of the following subproblems:")
         for index, group in enumerate(subproblem_list):
             print('  #{}: {}'.format(1+index, group[0]))
         resp = input("Enter a number to explore a subproblem (return to exit): ")
@@ -167,7 +183,7 @@ if __name__ == '__main__':
 
     OT, args = cli.parse_cli()
     ott_id = 189136 if not args.ott_id else args.ott_idsynth_id
-    MOCK_RUN = True
+    MOCK_RUN = False
     if not MOCK_RUN:
         output = OT.synth_node_info(ott_id=ott_id, include_lineage=True)
         if not output:
