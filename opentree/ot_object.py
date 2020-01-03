@@ -15,6 +15,11 @@ class FilesServerWrapper(OTWebServiceWrapper):
         url_frag = 'synthesis/{s}/{s}/subproblems/subproblems-scaffold-only.tre'.format(s=synth_id)
         return self._call_api(url_frag, http_method='GET', headers='text')
 
+    def get_subproblem_size_info(self, synth_id):
+        url_frag = 'synthesis/{s}/{s}/subproblems/subproblem_size_summary.json'.format(s=synth_id)
+        return self._call_api(url_frag, http_method='GET')
+
+
 class OpenTree(object):
     """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
     The method names are intended to be clear to a wide variety of users, rather than (necessarily matching
@@ -43,6 +48,9 @@ class OpenTree(object):
 
     def get_subproblem_scaffold_tree(self, synth_id):
         return self.files_server.get_subproblem_scaffold_tree(synth_id)
+
+    def get_subproblem_size_info(self, synth_id):
+        return self.files_server.get_subproblem_size_info(synth_id)
 
     def about(self):
         tax_about = self.ws.taxonomy_about()

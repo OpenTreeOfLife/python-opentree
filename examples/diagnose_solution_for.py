@@ -93,6 +93,25 @@ def augment_nodes_with_ot_properties(tree):
 
 def explore_subproblem(ott_id, synth_node_info):
     print('Subproblem OTT={} name={}'.format(ott_id, synth_node_info["taxon"]["unique_name"]))
+    ssds, ssdti = subprob_size_dict['subproblems'], subprob_size_dict['tree_ids']
+    num_leaves, num_leaves_in_synth, tree_info_list = ssds['ott{}'.format(ott_id)]
+    print('{} leaves in the exemplified subproblem\n'.format(num_leaves))
+    print('{} leaves descended from this subproblem in the synthetic tree\n'.format(num_leaves_in_synth))
+    print('Ranked input trees:\n')
+    nontriv_templ = ' #{i}: NONTRIVIAL with {l} tips, and {c} splits, tree: "https://tree.opentreeoflife.org/curator/study/view/{s}?tab=trees&tree={t}'
+    triv_templ = ' #{i}: trivial with {l} tips, and {c} splits, tree: "https://tree.opentreeoflife.org/curator/study/view/{s}?tab=trees&tree={t}'
+    tax_templ =  ' #{i}: with {l} tips, and {c} splits: the OTT taxonomy'
+    for n, el in enumerate(tree_info_list):
+        num_tips, num_splits, tree_id_idx = el
+        study_at_tree_dot_tree = ssdti[tree_id_idx]
+        if study_at_tree_dot_tree != 'TAXONOMY':
+            assert study_at_tree_dot_tree.endswith('.tre')
+            study_at_tree = study_at_tree_dot_tree[:-4]
+            study_id, tree_id = study_at_tree.split('@')
+            templ = nontriv_templ if num_splits > 0 else triv_templ
+            print(templ.format(i=1+n, l=num_tips, c=num_splits, s=study_id, t=tree_id))
+        else:
+            print(tax_templ.format(i=1+n, l=num_tips, c=num_splits))
 
 def prompt_for_subproblem_exploration(subproblem_list):
     while True:
@@ -131,10 +150,13 @@ if __name__ == '__main__':
         synth_id = synth_tree_about.response_dict['synth_id']
         subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
         scaf_newick = subproblem_scaffold.response.text
+        subproblem_scaffold = OT.get_subproblem_size_info(synth_id).response_dict
+
     else:
         tip_synth_node_info = json.load(open('./cruft/synth_node_id_response.json', 'r', encoding='utf-8'))
         synth_id = 'opentree12.3'
         scaf_newick = open('./cruft/subproblems-scaffold-only.tre', 'r', encoding='utf-8').read().strip()
+        subprob_size_dict = json.load(open('./cruft/subproblem_size_summary.json', 'r', encoding='utf-8'))
     tree = OT.ws.to_object_converter.tree_from_newick(scaf_newick)
     augment_nodes_with_ot_properties(tree)
     scaffold_id_set = scaffold_tree_to_ott_id_set(tree)
