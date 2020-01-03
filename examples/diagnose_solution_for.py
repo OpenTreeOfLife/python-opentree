@@ -4,6 +4,7 @@ import json
 import sys
 import re
 from opentree import OTCommandLineTool, ott_str_as_int
+import dendropy
 
 
 
@@ -91,7 +92,7 @@ def augment_nodes_with_ot_properties(tree):
             nd.ott_name = m.group(1).strip()
             nd.ott_id = int(m.group(2))
 
-def explore_subproblem(ott_id, synth_node_info):
+def explore_subproblem(synth_id, ott_id, synth_node_info):
     print('Subproblem OTT={} name={}'.format(ott_id, synth_node_info["taxon"]["unique_name"]))
     ssds, ssdti = subprob_size_dict['subproblems'], subprob_size_dict['tree_ids']
     num_leaves, num_leaves_in_synth, tree_info_list = ssds['ott{}'.format(ott_id)]
@@ -112,8 +113,23 @@ def explore_subproblem(ott_id, synth_node_info):
             print(templ.format(i=1+n, l=num_tips, c=num_splits, s=study_id, t=tree_id))
         else:
             print(tax_templ.format(i=1+n, l=num_tips, c=num_splits))
+    soln_newick = OT.get_subproblem_solution(synth_id, ott_id).response.text
+    rev_soln_newick = OT.get_reversed_subproblem_solution(synth_id, ott_id).response.text
+    tree_obj_list = OT.ws.to_object_converter.tree_list_from_newicks([soln_newick, rev_soln_newick])
+    tree1, tree2 = tree_obj_list
+    rf = dendropy.calculate.treecompare.symmetric_difference(tree1, tree2, is_bipartitions_updated=False)
+    print("Synthetic tree's subproblem solution:")
+    print(tree1.as_ascii_plot())
+    print("Synthetic tree's subproblem solution if tree ranks were reversed:")
+    print(tree2.as_ascii_plot())
+    print('RF symmetric distance between OT backbone and the tree from reversing phylo rankings = {}'.format(rf))
+    if rf > 0:
+        contree = tree_obj_list.consensus()
+        print("Majority-rule consensus of those 2 trees:")
+        print(contree.as_ascii_plot())
 
-def prompt_for_subproblem_exploration(subproblem_list):
+
+def prompt_for_subproblem_exploration(synth_id, subproblem_list):
     while True:
         print("This taxon's position is determined by the resolution of the following subproblems:")
         for index, group in enumerate(subproblem_list):
@@ -127,7 +143,7 @@ def prompt_for_subproblem_exploration(subproblem_list):
         except:
             sys.stderr.write('Expected a number enter control-D or simply Return to exit.\n')
         else:
-            explore_subproblem(chosen_el[1], chosen_el[2])
+            explore_subproblem(synth_id, chosen_el[1], chosen_el[2])
 
 
 
@@ -136,8 +152,8 @@ if __name__ == '__main__':
                             common_args=("ott-id",))
 
     OT, args = cli.parse_cli()
-    ott_id = 189136 if not args.ott_id else args.ott_id
-    MOCK_RUN = False
+    ott_id = 189136 if not args.ott_id else args.ott_idsynth_id
+    MOCK_RUN = True
     if not MOCK_RUN:
         output = OT.synth_node_info(ott_id=ott_id, include_lineage=True)
         if not output:
@@ -169,4 +185,4 @@ if __name__ == '__main__':
                 m = "subproblem: OTT={} unique_name={}".format(sn_ott_id, synth_nd["taxon"]["unique_name"])
                 subproblem_list.append((m, sn_ott_id, synth_nd))
     subproblem_list.reverse()
-    prompt_for_subproblem_exploration(subproblem_list)
+    prompt_for_subproblem_exploration(synth_id, subproblem_list)

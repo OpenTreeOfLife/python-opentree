@@ -19,6 +19,13 @@ class FilesServerWrapper(OTWebServiceWrapper):
         url_frag = 'synthesis/{s}/{s}/subproblems/subproblem_size_summary.json'.format(s=synth_id)
         return self._call_api(url_frag, http_method='GET')
 
+    def get_subproblem_solution(self, synth_id, ott_id):
+        url_frag = 'synthesis/{s}/{s}/subproblem_solutions/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        return self._call_api(url_frag, http_method='GET', headers='text')
+
+    def get_reversed_subproblem_solution(self, synth_id, ott_id):
+        url_frag = 'synthesis/{s}/{s}/reversed_subproblem_solutions/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        return self._call_api(url_frag, http_method='GET', headers='text')
 
 class OpenTree(object):
     """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
@@ -51,6 +58,12 @@ class OpenTree(object):
 
     def get_subproblem_size_info(self, synth_id):
         return self.files_server.get_subproblem_size_info(synth_id)
+
+    def get_subproblem_solution(self, synth_id, ott_id):
+        return self.files_server.get_subproblem_solution(synth_id, ott_id)
+
+    def get_reversed_subproblem_solution(self, synth_id, ott_id):
+        return self.files_server.get_reversed_subproblem_solution(synth_id, ott_id)
 
     def about(self):
         tax_about = self.ws.taxonomy_about()
