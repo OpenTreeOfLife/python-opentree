@@ -152,8 +152,8 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
             i.label = '{} {}'.format(n, str(i.label))
 
     print("There are {} inputs that inform this subproblem:".format(len(nontriv_indices)))
-    for ind in nontriv_indices:
-        print('Informative input #{} is tree ranked {}'.format(1 + ind, tree_labels[ind]))
+    for ntn, ind in enumerate(nontriv_indices):
+        print('Informative input #{} is tree ranked {}'.format(1 + ntn, tree_labels[ind]))
         prompt = 'Would you like to see the tree? (y/n)'
         ans = input(prompt)
         if ans.lower().startswith('y'):
@@ -164,7 +164,7 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
     print(tree2.as_ascii_plot())
     print('RF symmetric distance between OT backbone and the tree from reversing phylo rankings = {}'.format(rf))
     if rf > 0:
-        contree = tree_obj_list.consensus()
+        contree = tree_obj_list.consensus(min_freq=.3)
         print("Majority-rule consensus of those 2 trees:")
         print(contree.as_ascii_plot())
 
@@ -192,7 +192,7 @@ if __name__ == '__main__':
                             common_args=("ott-id",))
 
     OT, args = cli.parse_cli()
-    ott_id = 189136 if not args.ott_id else args.ott_idsynth_id
+    ott_id = 189136 if not args.ott_id else args.ott_id
     MOCK_RUN = False
     if not MOCK_RUN:
         output = OT.synth_node_info(ott_id=ott_id, include_lineage=True)
