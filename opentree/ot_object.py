@@ -27,6 +27,10 @@ class FilesServerWrapper(OTWebServiceWrapper):
         url_frag = 'synthesis/{s}/{s}/reversed_subproblem_solutions/ott{o}.tre'.format(s=synth_id, o=ott_id)
         return self._call_api(url_frag, http_method='GET', headers='text')
 
+    def get_subproblem_trees(self, synth_id, ott_id):
+        url_frag = 'synthesis/{s}/{s}/subproblems/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        return self._call_api(url_frag, http_method='GET', headers='text')
+
 class OpenTree(object):
     """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
     The method names are intended to be clear to a wide variety of users, rather than (necessarily matching
@@ -61,6 +65,9 @@ class OpenTree(object):
 
     def get_subproblem_solution(self, synth_id, ott_id):
         return self.files_server.get_subproblem_solution(synth_id, ott_id)
+
+    def get_subproblem_trees(self, synth_id, ott_id):
+        return self.files_server.get_subproblem_trees(synth_id, ott_id)
 
     def get_reversed_subproblem_solution(self, synth_id, ott_id):
         return self.files_server.get_reversed_subproblem_solution(synth_id, ott_id)

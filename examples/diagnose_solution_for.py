@@ -85,6 +85,9 @@ def scaffold_tree_to_ott_id_set(tree):
 _name_ott_id_pat = re.compile('^(.+)[ _]ott(\d+)')
 def augment_nodes_with_ot_properties(tree):
     for nd in tree.postorder_node_iter():
+        if not nd.taxon:
+            nd.ott_name, nd.ott_id = None, None
+            continue
         label = nd.taxon.label
         m = _name_ott_id_pat.match(label)
         nd.ott_name, nd.ott_id = None, None
@@ -101,10 +104,14 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
     print('Ranked input trees:\n')
     nontriv_templ = ' #{i}: NONTRIVIAL with {l} tips, and {c} splits, tree: "https://tree.opentreeoflife.org/curator/study/view/{s}?tab=trees&tree={t}'
     triv_templ = ' #{i}: trivial with {l} tips, and {c} splits, tree: "https://tree.opentreeoflife.org/curator/study/view/{s}?tab=trees&tree={t}'
-    tax_templ =  ' #{i}: with {l} tips, and {c} splits: the OTT taxonomy'
+    triv_tax_templ = ' #{i}: with {l} tips, and {c} splits: the OTT taxonomy provides no structure to this subproblem'
+    nontriv_tax_templ = ' #{i}: with {l} tips, and {c} splits: the OTT taxonomy'
+    nontriv_indices = []
     for n, el in enumerate(tree_info_list):
         num_tips, num_splits, tree_id_idx = el
         study_at_tree_dot_tree = ssdti[tree_id_idx]
+        if num_splits > 0:
+            nontriv_indices.append(n)
         if study_at_tree_dot_tree != 'TAXONOMY':
             assert study_at_tree_dot_tree.endswith('.tre')
             study_at_tree = study_at_tree_dot_tree[:-4]
@@ -112,11 +119,18 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
             templ = nontriv_templ if num_splits > 0 else triv_templ
             print(templ.format(i=1+n, l=num_tips, c=num_splits, s=study_id, t=tree_id))
         else:
-            print(tax_templ.format(i=1+n, l=num_tips, c=num_splits))
+            templ = nontriv_tax_templ if num_splits > 0 else triv_tax_templ
+            print(templ.format(i=1+n, l=num_tips, c=num_splits))
+    concat_newick = OT.get_subproblem_trees(synth_id, ott_id).response.text
+    newick_list = [i for i in concat_newick.split('\n') if i.strip()]
+    if len(newick_list) != len(tree_info_list):
+        x = "Subproblem had {} newicks, when only {} were expected. Tree indices may be off!"
+        logging.warning(x.format(len(newick_list), len(tree_info_list)))
     soln_newick = OT.get_subproblem_solution(synth_id, ott_id).response.text
     rev_soln_newick = OT.get_reversed_subproblem_solution(synth_id, ott_id).response.text
-    tree_obj_list = OT.ws.to_object_converter.tree_list_from_newicks([soln_newick, rev_soln_newick])
-    tree1, tree2 = tree_obj_list
+    newick_list.extend([soln_newick, rev_soln_newick])
+    tree_obj_list = OT.ws.to_object_converter.tree_list_from_newicks(newick_list, rooting='force-rooted')
+    tree1, tree2 = tree_obj_list[-2:]
     rf = dendropy.calculate.treecompare.symmetric_difference(tree1, tree2, is_bipartitions_updated=False)
     print("Synthetic tree's subproblem solution:")
     print(tree1.as_ascii_plot())
@@ -167,7 +181,6 @@ if __name__ == '__main__':
         subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
         scaf_newick = subproblem_scaffold.response.text
         subprob_size_dict = OT.get_subproblem_size_info(synth_id).response_dict
-
     else:
         tip_synth_node_info = json.load(open('./cruft/synth_node_id_response.json', 'r', encoding='utf-8'))
         synth_id = 'opentree12.3'
