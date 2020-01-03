@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
     OT, args = cli.parse_cli()
     ott_id = 189136 if not args.ott_id else args.ott_id
-    MOCK_RUN = True
+    MOCK_RUN = False
     if not MOCK_RUN:
         output = OT.synth_node_info(ott_id=ott_id, include_lineage=True)
         if not output:
@@ -150,7 +150,7 @@ if __name__ == '__main__':
         synth_id = synth_tree_about.response_dict['synth_id']
         subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
         scaf_newick = subproblem_scaffold.response.text
-        subproblem_scaffold = OT.get_subproblem_size_info(synth_id).response_dict
+        subprob_size_dict = OT.get_subproblem_size_info(synth_id).response_dict
 
     else:
         tip_synth_node_info = json.load(open('./cruft/synth_node_id_response.json', 'r', encoding='utf-8'))
