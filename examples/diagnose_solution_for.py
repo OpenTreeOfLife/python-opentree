@@ -91,6 +91,27 @@ def augment_nodes_with_ot_properties(tree):
             nd.ott_name = m.group(1).strip()
             nd.ott_id = int(m.group(2))
 
+def explore_subproblem(ott_id, synth_node_info):
+    print('Subproblem OTT={} name={}'.format(ott_id, synth_node_info["taxon"]["unique_name"]))
+
+def prompt_for_subproblem_exploration(subproblem_list):
+    while True:
+        print("This taxon's position is determined by the resolution of the following subproblems:")
+        for index, group in enumerate(subproblem_list):
+            print('  #{}: {}'.format(1+index, group[0]))
+        resp = input("Enter a number to explore a subproblem (return to exit): ")
+        if not resp.strip():
+            return
+        try:
+            choice = int(resp.strip()) - 1
+            chosen_el = subproblem_list[choice]
+        except:
+            sys.stderr.write('Expected a number enter control-D or simply Return to exit.\n')
+        else:
+            explore_subproblem(chosen_el[1], chosen_el[2])
+
+
+
 if __name__ == '__main__':
     cli = OTCommandLineTool(usage='Display node info for the synthetic tree node(s) requested',
                             common_args=("ott-id",))
@@ -117,9 +138,13 @@ if __name__ == '__main__':
     tree = OT.ws.to_object_converter.tree_from_newick(scaf_newick)
     augment_nodes_with_ot_properties(tree)
     scaffold_id_set = scaffold_tree_to_ott_id_set(tree)
+    subproblem_list = []
     for synth_nd in tip_synth_node_info["lineage"]:
         snid = synth_nd["node_id"]
         if snid.startswith('ott'):
             sn_ott_id = ott_str_as_int(snid)
             if sn_ott_id in scaffold_id_set:
-                print("subproblem: OTT={} unique_name={}".format(sn_ott_id, synth_nd["taxon"]["unique_name"]))
+                m = "subproblem: OTT={} unique_name={}".format(sn_ott_id, synth_nd["taxon"]["unique_name"])
+                subproblem_list.append((m, sn_ott_id, synth_nd))
+    subproblem_list.reverse()
+    prompt_for_subproblem_exploration(subproblem_list)
