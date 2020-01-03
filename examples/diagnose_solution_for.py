@@ -107,6 +107,7 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
     triv_tax_templ = ' #{i}: with {l} tips, and {c} splits: the OTT taxonomy provides no structure to this subproblem'
     nontriv_tax_templ = ' #{i}: with {l} tips, and {c} splits: the OTT taxonomy'
     nontriv_indices = []
+    tree_labels = []
     for n, el in enumerate(tree_info_list):
         num_tips, num_splits, tree_id_idx = el
         study_at_tree_dot_tree = ssdti[tree_id_idx]
@@ -117,10 +118,12 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
             study_at_tree = study_at_tree_dot_tree[:-4]
             study_id, tree_id = study_at_tree.split('@')
             templ = nontriv_templ if num_splits > 0 else triv_templ
-            print(templ.format(i=1+n, l=num_tips, c=num_splits, s=study_id, t=tree_id))
+            ltp = templ.format(i=1+n, l=num_tips, c=num_splits, s=study_id, t=tree_id)
         else:
             templ = nontriv_tax_templ if num_splits > 0 else triv_tax_templ
-            print(templ.format(i=1+n, l=num_tips, c=num_splits))
+            ltp = templ.format(i=1+n, l=num_tips, c=num_splits)
+        tree_labels.append(ltp)
+        print(ltp)
     concat_newick = OT.get_subproblem_trees(synth_id, ott_id).response.text
     newick_list = [i for i in concat_newick.split('\n') if i.strip()]
     if len(newick_list) != len(tree_info_list):
@@ -148,6 +151,13 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
         if n:
             i.label = '{} {}'.format(n, str(i.label))
 
+    print("There are {} inputs that inform this subproblem:".format(len(nontriv_indices)))
+    for ind in nontriv_indices:
+        print('Informative input #{} is tree ranked {}'.format(1 + ind, tree_labels[ind]))
+        prompt = 'Would you like to see the tree? (y/n)'
+        ans = input(prompt)
+        if ans.lower().startswith('y'):
+            print(tree_obj_list[ind].as_ascii_plot())
     print("Synthetic tree's subproblem solution:")
     print(tree1.as_ascii_plot())
     print("Synthetic tree's subproblem solution if tree ranks were reversed:")
@@ -164,7 +174,7 @@ def prompt_for_subproblem_exploration(synth_id, subproblem_list):
         print("\nThis taxon's position is determined by the resolution of the following subproblems:")
         for index, group in enumerate(subproblem_list):
             print('  #{}: {}'.format(1+index, group[0]))
-        resp = input("Enter a number to explore a subproblem (return to exit): ")
+        resp = input("\nEnter a number to explore a subproblem (return to exit): ")
         if not resp.strip():
             return
         try:
@@ -188,7 +198,6 @@ if __name__ == '__main__':
         output = OT.synth_node_info(ott_id=ott_id, include_lineage=True)
         if not output:
             sys.exit('Call to synth_node for {} failed.\n'.format(ott_id))
-        print(json.dumps(output.response_dict, indent=2, sort_keys=True))
         tip_synth_node_info = output.response_dict
         format_node_info_links_to_input_trees(output.response_dict)
         about_info = OT.about()
