@@ -24,7 +24,7 @@ def _create_link_from_node_info_conf_key_value_pair(key, value):
             tax_lineage = OT.taxon_info(ott_id=ott_str_as_int(node_id), include_lineage=True)
             anc_ids = [i.ott_id for i in tax_lineage.tree.postorder_node_iter()]
             matches = []
-            for leaf in inp_tree_nexson.tree.leaf_iter():
+            for leaf in inp_tree_nexson.tree.leaf_node_iter():
                 if leaf.otu.ott_id and leaf.otu.ott_id in anc_ids:
                     matches.append((anc_ids.index, id(leaf), leaf))
             matches.sort()
@@ -140,7 +140,7 @@ def explore_subproblem(synth_id, ott_id, synth_node_info):
     ott_id_list = [ott_str_as_int(i) for i in ott_id_strings]
     induced = OT.synth_induced_tree(ott_ids=ott_id_list)
     o2n = {}
-    for nd in induced.tree.leaf_iter():
+    for nd in induced.tree.leaf_node_iter():
         m = _name_ott_id_pat.match(nd.taxon.label)
         if m:
             name = m.group(1)
