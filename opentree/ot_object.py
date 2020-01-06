@@ -5,6 +5,31 @@ from .ws_wrapper import (OTWebServicesError,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
 
+FILES_SERVER_URL = 'files'
+
+class FilesServerWrapper(OTWebServiceWrapper):
+    def __init__(self, api_endpoint=FILES_SERVER_URL, run_mode=WebServiceRunMode.RUN):
+        super(FilesServerWrapper, self).__init__(api_endpoint=api_endpoint, run_mode=run_mode)
+
+    def get_subproblem_scaffold_tree(self, synth_id):
+        url_frag = 'synthesis/{s}/{s}/subproblems/subproblems-scaffold-only.tre'.format(s=synth_id)
+        return self._call_api(url_frag, http_method='GET', headers='text')
+
+    def get_subproblem_size_info(self, synth_id):
+        url_frag = 'synthesis/{s}/{s}/subproblems/subproblem_size_summary.json'.format(s=synth_id)
+        return self._call_api(url_frag, http_method='GET')
+
+    def get_subproblem_solution(self, synth_id, ott_id):
+        url_frag = 'synthesis/{s}/{s}/subproblem_solutions/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        return self._call_api(url_frag, http_method='GET', headers='text')
+
+    def get_reversed_subproblem_solution(self, synth_id, ott_id):
+        url_frag = 'synthesis/{s}/{s}/reversed_subproblem_solutions/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        return self._call_api(url_frag, http_method='GET', headers='text')
+
+    def get_subproblem_trees(self, synth_id, ott_id):
+        url_frag = 'synthesis/{s}/{s}/subproblems/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        return self._call_api(url_frag, http_method='GET', headers='text')
 
 class OpenTree(object):
     """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
@@ -17,6 +42,13 @@ class OpenTree(object):
         self._api_endpoint = api_endpoint
         self._run_mode = run_mode
         self._ws = None
+        self._files_server = None
+
+    @property
+    def files_server(self):
+        if self._files_server is None:
+            self._files_server = FilesServerWrapper(run_mode=self._run_mode)
+        return self._files_server
 
     @property
     def ws(self):
@@ -24,6 +56,21 @@ class OpenTree(object):
             self._ws = OTWebServiceWrapper(api_endpoint=self._api_endpoint,
                                            run_mode=self._run_mode)
         return self._ws
+
+    def get_subproblem_scaffold_tree(self, synth_id):
+        return self.files_server.get_subproblem_scaffold_tree(synth_id)
+
+    def get_subproblem_size_info(self, synth_id):
+        return self.files_server.get_subproblem_size_info(synth_id)
+
+    def get_subproblem_solution(self, synth_id, ott_id):
+        return self.files_server.get_subproblem_solution(synth_id, ott_id)
+
+    def get_subproblem_trees(self, synth_id, ott_id):
+        return self.files_server.get_subproblem_trees(synth_id, ott_id)
+
+    def get_reversed_subproblem_solution(self, synth_id, ott_id):
+        return self.files_server.get_reversed_subproblem_solution(synth_id, ott_id)
 
     def about(self):
         tax_about = self.ws.taxonomy_about()
@@ -185,3 +232,4 @@ class OpenTree(object):
             msgtemplate = 'Call to tnrs_match failed with the message "{}"'
             message = res.response_dict['message']
             raise OTWebServicesError(msgtemplate.format(message))
+

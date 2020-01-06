@@ -19,5 +19,17 @@ def get_suppressed_taxon_flag_expl_url():
             '#flags-leading-to-taxa-being-unavailable-for-tnrs')
 
 
+def ott_str_as_int(o):
+    if isinstance(o, int):
+        return o
+    if o.startswith('ott'):
+        return int(o[3:])
+    try:
+        return int(o)
+    except:
+        if o.lower().startswith('ott'):
+            return int(o[3:])
+        raise
+
 # Default-configured wrapper
 OT = OpenTree()
