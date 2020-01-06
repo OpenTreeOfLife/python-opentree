@@ -12,24 +12,9 @@ from .ot_command_line_tool import (OTCommandLineTool,
                                    process_ott_and_node_id_list_args,
                                    process_ott_or_node_id_arg)
 from .ot_object import OpenTree
-
-
-def get_suppressed_taxon_flag_expl_url():
-    return ('https://github.com/OpenTreeOfLife/reference-taxonomy/wiki/Taxon-flags'
-            '#flags-leading-to-taxa-being-unavailable-for-tnrs')
-
-
-def ott_str_as_int(o):
-    if isinstance(o, int):
-        return o
-    if o.startswith('ott'):
-        return int(o[3:])
-    try:
-        return int(o)
-    except:
-        if o.lower().startswith('ott'):
-            return int(o[3:])
-        raise
+from .util import (get_suppressed_taxon_flag_expl_url,
+                   ott_str_as_int,
+                   write_node_info_links_to_input_trees)
 
 # Default-configured wrapper
 OT = OpenTree()

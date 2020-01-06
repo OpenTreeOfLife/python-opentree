@@ -7,6 +7,7 @@ from .ot_ws_wrapper import OTWebServiceWrapper
 
 FILES_SERVER_URL = 'files'
 
+
 class FilesServerWrapper(OTWebServiceWrapper):
     def __init__(self, api_endpoint=FILES_SERVER_URL, run_mode=WebServiceRunMode.RUN):
         super(FilesServerWrapper, self).__init__(api_endpoint=api_endpoint, run_mode=run_mode)
@@ -30,6 +31,7 @@ class FilesServerWrapper(OTWebServiceWrapper):
     def get_subproblem_trees(self, synth_id, ott_id):
         url_frag = 'synthesis/{s}/{s}/subproblems/ott{o}.tre'.format(s=synth_id, o=ott_id)
         return self._call_api(url_frag, http_method='GET', headers='text')
+
 
 class OpenTree(object):
     """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
@@ -232,4 +234,3 @@ class OpenTree(object):
             msgtemplate = 'Call to tnrs_match failed with the message "{}"'
             message = res.response_dict['message']
             raise OTWebServicesError(msgtemplate.format(message))
-
