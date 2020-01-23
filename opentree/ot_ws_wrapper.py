@@ -39,8 +39,9 @@ class OTWebServiceWrapper(WebServiceWrapper):
         url = 'study/{}'.format(urllib.parse.quote(study_id))
         return self._call_api(url, http_method='GET')
 
-    def tree(self, study_id, tree_id):
-        url = 'study/{}/tree/'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id))
+    def tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel"):
+        url = 'study/{}/tree/{}{}/?tip_label={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id), tree_format, label_format)
+        print(url)
         return self._call_api(url, http_method='GET')
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):

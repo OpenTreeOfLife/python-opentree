@@ -84,8 +84,8 @@ class OpenTree(object):
     def get_study(self, study_id):
         return self.ws.study(study_id)
 
-    def get_tree(self, study_id, tree_id):
-        return self.ws.tree(study_id, tree_id)
+    def get_tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel"):
+        return self.ws.tree(study_id, tree_id, tree_format, label_format)
 
     def studies_properties(self):
         return self.ws.studies_properties()
