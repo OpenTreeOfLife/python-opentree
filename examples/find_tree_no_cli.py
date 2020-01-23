@@ -8,7 +8,7 @@ print(json.dumps(output.response_dict, indent=2, sort_keys=True))
 
 study_id = "ot_864"
 tree_id = "tree1"
-output = OT.get_tree(study_id, tree_id, tree_format=".new", label_format="ot:ottid")
+output = OT.get_tree(study_id, tree_id, tree_format=".tre", label_format="ot:ottid")
 tre = output.response_dict[tree_id]
 print(tre)
 
