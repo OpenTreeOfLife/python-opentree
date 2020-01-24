@@ -16,6 +16,12 @@ sys.stdout.write("This tree returns fine, but isn't very meaningful due to lack 
 
 
 output = OT.get_tree(study_id, tree_id, tree_format=".tre", label_format="ot:ottid")
-sys.stdout.write("The url looks fine, but the response dict can't be decoded\n")
+
+tre2 = output._response_obj.text
+sys.stdout.write("ahhh is issue converting from byte string, works if you get as text \n{}\n".format(tre2))
+
+
+
+sys.stdout.write("The response dict can't be decoded as json\n")
 tre = output.response_dict[tree_id]
 
