@@ -20,8 +20,8 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Python-OpenTree'
-copyright = u'2020, OPenTreeOfLife'
-author = u'OPenTreeOfLife'
+copyright = u'2020, OpenTreeOfLife'
+author = u'OenTreeOfLife'
 
 # The short X.Y version
 version = u''
@@ -39,6 +39,7 @@ release = u'0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'm2r',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
@@ -50,8 +51,8 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+#source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
