@@ -24,7 +24,3 @@ API Documentation
 
 .. automodule:: opentree.ws_wrapper
    :members:
-
-
-
-
