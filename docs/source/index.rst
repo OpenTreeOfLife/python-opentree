@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Python-OpenTree's documentation!
-===========================================
+Welcome to Python-OpenTree's documentation. It is new!
+======================================================
 
 .. toctree::
    :maxdepth: 2
