@@ -39,10 +39,14 @@ class OTWebServiceWrapper(WebServiceWrapper):
         url = 'study/{}'.format(urllib.parse.quote(study_id))
         return self._call_api(url, http_method='GET')
 
-    def tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel"):
-        url = 'study/{}/tree/{}{}/?tip_label={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id), tree_format, label_format)
-        print(url)
-        return self._call_api(url, http_method='GET')
+    def tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel", demand_success=False):
+        ext_dict = {'nexus':'.nex','newick':'.tre', 'nexson':''}
+        url = 'study/{}/tree/{}{}/?tip_label={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id), ext_dict[tree_format], label_format)
+        return self._call_api(url, http_method='GET', demand_success=demand_success)
+
+    def otus(self, study_id, demand_success=False):
+        url = 'study/{}/otus'.format(urllib.parse.quote(study_id))
+        return self._call_api(url, http_method='GET', demand_success=demand_success)
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}

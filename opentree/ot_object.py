@@ -84,8 +84,22 @@ class OpenTree(object):
     def get_study(self, study_id):
         return self.ws.study(study_id)
 
-    def get_tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel"):
-        return self.ws.tree(study_id, tree_id, tree_format, label_format)
+    def get_tree(self, study_id, tree_id, tree_format="nexson", label_format="ot:originallabel", demand_success = False):
+        """ Gets a tree from phylesystem.
+        tree_format must be in  ["newick", "nexson", "nexus"]
+        If tree format is newick or nexus, returns tree as string.
+        If nexson returns semi-useless tree nexson w/o OTUS.
+        """
+        assert tree_format in ["newick", "nexson", "nexus"]
+        output = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
+        if tree_format != "nexson":
+            return output.response_dict["content"].decode()
+
+        else:
+            return output
+
+    def get_otus(self, study_id):
+        return self.ws.otus(study_id)
 
     def studies_properties(self):
         return self.ws.studies_properties()

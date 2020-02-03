@@ -116,7 +116,11 @@ class WebServiceCallRecord(object):
         if self._response_dict is None:
             if self._response_obj is None:
                 return None
-            self._response_dict = self._response_obj.json()
+            try:
+                self._response_dict = self._response_obj.json() #NOTE: if response is not JSON this will fail
+            except json.decoder.JSONDecodeError:
+                self._response_dict = {'content':self._response_obj.content}
+            #TODO make this not fail on Newick/NEXUS responses
         return self._response_dict
 
     def __bool__(self):
