@@ -1,5 +1,6 @@
 python-opentree
 ===============
+[![Build Status](https://travis-ci.org/OpenTreeOfLife/python-opentree.svg?branch=master)](https://travis-ci.org/OpenTreeOfLife/python-opentree)[![Documentation](https://readthedocs.org/projects/opentree/badge/?version=latest&style=flat)](https://opentree.readthedocs.io/en/latest/)
 
 This package is a python library designed to make it easier to work with web services and
 data resources associated with the [Open Tree of Life](https://opentreeoflife.github.io)
