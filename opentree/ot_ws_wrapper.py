@@ -32,6 +32,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
         c = '", "'.join(sl)
         raise ValueError('Exactly 1 of "{}" must be provided for a call to {}'.format(c, api_method))
 
+
     def studies_properties(self):
         return self._call_api('studies/properties')
 
@@ -47,6 +48,11 @@ class OTWebServiceWrapper(WebServiceWrapper):
     def otus(self, study_id, demand_success=False):
         url = 'study/{}/otus'.format(urllib.parse.quote(study_id))
         return self._call_api(url, http_method='GET', demand_success=demand_success)
+
+#TODO for Luna :)
+#    def conflict(self, study_id, tree_id, comp="synth"):
+#        https://api.opentreeoflife.org/v3/conflict/conflict-status?tree1={}%23{}&tree2=synth
+#        return self._call_api(url, http_method='GET', demand_success=demand_success)
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
