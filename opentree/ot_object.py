@@ -101,8 +101,10 @@ class OpenTree(object):
     def get_otus(self, study_id):
         return self.ws.otus(study_id)
 
-    #def get_conflict_results???
-    
+#TODO for Luna :)
+    def conflict_info(self, study_id, tree_id, compare_to = 'synth'):
+        return self.ws.conflict(study_id, tree_id, compare_to, demand_success = False)
+
     def studies_properties(self):
         return self.ws.studies_properties()
 

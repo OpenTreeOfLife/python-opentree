@@ -50,9 +50,9 @@ class OTWebServiceWrapper(WebServiceWrapper):
         return self._call_api(url, http_method='GET', demand_success=demand_success)
 
 #TODO for Luna :)
-#    def conflict(self, study_id, tree_id, comp="synth"):
-#        https://api.opentreeoflife.org/v3/conflict/conflict-status?tree1={}%23{}&tree2=synth
-#        return self._call_api(url, http_method='GET', demand_success=demand_success)
+    def conflict(self, study_id, tree_id, compare_to="synth", demand_success=False):
+        url = 'conflict/conflict-status?tree1={}%23{}&tree2={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id), compare_to)
+        return self._call_api(url, http_method='GET', demand_success=demand_success)
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
