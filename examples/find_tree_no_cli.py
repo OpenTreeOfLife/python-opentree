@@ -22,6 +22,27 @@ print(output_newick)
 output_conflict = OT.conflict_info(study_id = 'ot_1877', tree_id= 'tree3')
 output_conflict.__dict__
 output_conflict.response_dict.keys()
-output_conflict.response_dict["node100"]
+print(output_conflict.response_dict["node100"])
 
-# for keys in output_conflict.response_dict
+conf_info = output_conflict.response_dict
+
+# possible stausues are {'resolved_by', 'conflicts_with', 'supported_by', 'terminal', 'partial_path_of'}
+#>>> statuses = set()
+#>>> for node in conf_info:
+#...     statuses.add(conf_info[node]['status'])
+
+
+#step 1 
+for node in conf_info:
+    status = conf_info[node]['status']
+    witness = conf_info[node].get('witness', None)
+    if status == 'supported_by':
+        print("{}{}{} maps to {}".format(study_id, tree_id, node, witness))
+
+# step 2
+# Ages for those nodes??
+## Maybe via Dendropy traversal of nexml/nexson tree
+
+
+# step 3
+# put it on the internet
