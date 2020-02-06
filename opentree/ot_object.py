@@ -34,10 +34,10 @@ class FilesServerWrapper(OTWebServiceWrapper):
 
 
 class OpenTree(object):
-    """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
-    The method names are intended to be clear to a wide variety of users, rather than (necessarily matching
+    """
+    This class provides a high-level wrapper for interaction with OT web services and data.
+    The method names are intended to be clear to a wide variety of users, rather than necessarily matching
     the API calls directly.
-
     """
 
     def __init__(self, api_endpoint='production', run_mode=WebServiceRunMode.RUN):
@@ -85,10 +85,23 @@ class OpenTree(object):
         return self.ws.study(study_id)
 
     def get_tree(self, study_id, tree_id, tree_format="nexson", label_format="ot:originallabel", demand_success = False):
-        """ Gets a tree from phylesystem.
-        tree_format must be in  ["newick", "nexson", "nexus"]
-        If tree format is newick or nexus, returns tree as string.
-        If nexson returns semi-useless tree nexson w/o OTUS.
+        """
+        Gets a tree from phylesystem.
+
+        Parameters
+        ----------
+
+        study_id : single character value.
+            The study id from Open Tree of Life.
+        tree_id : single character value.
+            The tree id of a tree within the study id provided.
+        tree_format : single character value.
+            Must be one of "newick", "nexson", or "nexus".
+            If tree format is newick or nexus, returns tree as string in that format.
+            If "nexson", returns semi-useless tree nexson w/o OTUS.
+        label_format : single character value.
+        demand_success : boolean.
+            Wether to return an error or return an error message silently.
         """
         assert tree_format in ["newick", "nexson", "nexus"]
         output = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
