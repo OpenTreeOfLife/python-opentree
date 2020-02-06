@@ -86,21 +86,24 @@ class OpenTree(object):
 
     def get_tree(self, study_id, tree_id, tree_format="nexson", label_format="ot:originallabel", demand_success = False):
         """
-        Gets a tree from phylesystem.
+        Gets a source tree from phylesystem.
 
         Parameters
         ----------
-
-        study_id : single character value.
+        study_id : single character value
             The study id from Open Tree of Life.
-        tree_id : single character value.
+        tree_id : single character value
             The tree id of a tree within the study id provided.
-        tree_format : single character value.
+        tree_format : single character value
             Must be one of "newick", "nexson", or "nexus".
             If tree format is newick or nexus, returns tree as string in that format.
             If "nexson", returns semi-useless tree nexson w/o OTUS.
-        label_format : single character value.
-        demand_success : boolean.
+        label_format : single character value
+            Must be one of "ot:originallabel", "ot:ottid", or "ot:otttaxonname".
+            "ot:originallabel" returns the tree with tip labels as it was originally submitted to phylesystem by a curator.
+            "ot:ottid" returns a tree with tip labels corresponding to the matching ott id.
+            "ot:otttaxonname" returns a tree with tip labels corresponding to the matching ott taxon name.
+        demand_success : boolean
             Wether to return an error or return an error message silently.
         """
         assert tree_format in ["newick", "nexson", "nexus"]
