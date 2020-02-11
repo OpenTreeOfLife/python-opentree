@@ -198,7 +198,7 @@ class OpenTree(object):
         ----------
         ott_id : single character value
             The OTT id of a taxon.
-        source_id :
+        source_id : maybe single character value
         include_lineage : boolean
         include_children : boolean
         include_terminal_descendants : boolean
@@ -217,7 +217,7 @@ class OpenTree(object):
 
         Parameters
         ----------
-        ott_ids :
+        ott_ids : maybe single character value
         ignore_unknown_ids : boolean
             Default to TRUE.
         """
