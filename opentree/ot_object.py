@@ -170,6 +170,7 @@ class OpenTree(object):
         search_property : single character value
             Any value from studies_properties.
         exact : boolean
+        
         verbose : boolean
         """
         return self.ws.studies_find_studies(value, search_property=search_property, exact=exact, verbose=verbose)
@@ -185,6 +186,7 @@ class OpenTree(object):
         search_property : single character value
             Any value from studies_properties.
         exact : boolean
+
         verbose : boolean
         """
         return self.ws.studies_find_trees(value, search_property=search_property, exact=exact, verbose=verbose)
@@ -199,8 +201,11 @@ class OpenTree(object):
         ott_id : single character value
             The OTT id of a taxon.
         source_id : maybe single character value
+
         include_lineage : boolean
+
         include_children : boolean
+
         include_terminal_descendants : boolean
         """
         return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
