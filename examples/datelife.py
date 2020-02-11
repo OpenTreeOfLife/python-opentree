@@ -26,23 +26,44 @@ print(output_conflict.response_dict["node100"])
 
 conf_info = output_conflict.response_dict
 
-# possible stausues are {'resolved_by', 'conflicts_with', 'supported_by', 'terminal', 'partial_path_of'}
+# possible statuses are {'resolved_by', 'conflicts_with', 'supported_by', 'terminal', 'partial_path_of'}
 #>>> statuses = set()
 #>>> for node in conf_info:
 #...     statuses.add(conf_info[node]['status'])
 
 
-#step 1 
+# step 1
+# get the source nodes supporting syntethetic tree nodes:
 for node in conf_info:
-    status = conf_info[node]['status']
-    witness = conf_info[node].get('witness', None)
+    status = conf_info[node]['status'] # gets the status of each node, see possibilities above
+    witness = conf_info[node].get('witness', None) # gets the synthetic node id that is related to the source node
     if status == 'supported_by':
-        print("{}{}{} maps to {}".format(study_id, tree_id, node, witness))
+        print("{} {} {} maps to {}".format(study_id, tree_id, node, witness))
 
 # step 2
-# Ages for those nodes??
+# Get ages for those nodes
+
+# We need either:
+# - a newick tree with branch lengths whose node labels match node ids from nexson schema.
+## Do peyotl schemas go from nexson tree with branch lengths to newick with branch lengths?
+## Would this process retain node labels from nexson into newick?
+
+# - a way to get node height from a nexson object.
 ## Maybe via Dendropy traversal of nexml/nexson tree
+## this might work:
+## https://dendropy.org/library/treemodel.html?highlight=ages#dendropy.datamodel.treemodel.Tree.internal_node_ages
+##
+import dendropy
+dendropy.datamodel.treemodel.Tree.internal_node_ages
+
+t1 = dendropy.datamodel.treemodel.Tree()
+t1.__dict__
+s = t1.as_string("nexml")
+s.__dict__ # has no attribute __dict__
+
+## seems that we need to go from nexson to nexml first in order to use dendropy for tree traversal.
 
 
 # step 3
-# put it on the internet
+# make an API
+# expose this info on the otol website
