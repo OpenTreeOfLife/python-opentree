@@ -11,6 +11,9 @@ def get_object_converter(object_conversion_schema):
 
 # noinspection PyMethodMayBeStatic
 class DendropyConvert(object):
+    """
+    Class to convert newicks to dendropy objects
+    """
     def tree_from_newick(self, newick, suppress_internal_node_taxa=False, **kwargs):
         return dendropy.Tree.get(data=newick, schema="newick",
                                  suppress_internal_node_taxa=suppress_internal_node_taxa, **kwargs)
@@ -19,3 +22,8 @@ class DendropyConvert(object):
         concat = '\n'.join(newick_list)
         return dendropy.TreeList.get(data=concat, schema="newick",
                                      suppress_internal_node_taxa=suppress_internal_node_taxa, **kwargs)
+
+# todo Luna
+# """
+# Class to convert nexml/nexson to dendropy objects
+# """

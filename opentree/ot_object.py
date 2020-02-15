@@ -34,10 +34,10 @@ class FilesServerWrapper(OTWebServiceWrapper):
 
 
 class OpenTree(object):
-    """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
-    The method names are intended to be clear to a wide variety of users, rather than (necessarily matching
+    """
+    This class provides a high-level wrapper for interaction with OT web services and data.
+    The method names are intended to be clear to a wide variety of users, rather than necessarily matching
     the API calls directly.
-
     """
 
     def __init__(self, api_endpoint='production', run_mode=WebServiceRunMode.RUN):
@@ -75,6 +75,9 @@ class OpenTree(object):
         return self.files_server.get_reversed_subproblem_solution(synth_id, ott_id)
 
     def about(self):
+        """
+        Gets information about the Open Tree of Life taxonomy and the synthetic tree.
+        """
         tax_about = self.ws.taxonomy_about()
         tree_about = self.ws.tree_of_life_about()
         return {'taxonomy_about': tax_about,
@@ -82,13 +85,37 @@ class OpenTree(object):
                 }
 
     def get_study(self, study_id):
+        """
+        Gets the citation of a study and its associated metadata.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        """
         return self.ws.study(study_id)
 
     def get_tree(self, study_id, tree_id, tree_format="nexson", label_format="ot:originallabel", demand_success = False):
-        """ Gets a tree from phylesystem.
-        tree_format must be in  ["newick", "nexson", "nexus"]
-        If tree format is newick or nexus, returns tree as string.
-        If nexson returns semi-useless tree nexson w/o OTUS.
+        """
+        Gets a source tree from phylesystem and its associated metadata.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        tree_id : single character value
+            The tree id of a tree within the study id provided.
+        tree_format : single character value
+            Must be one of "newick", "nexson", or "nexus".
+            If tree format is newick or nexus, returns tree as string in that format.
+            If "nexson", returns semi-useless tree nexson w/o OTUS.
+        label_format : single character value
+            Must be one of "ot:originallabel", "ot:ottid", or "ot:otttaxonname".
+            "ot:originallabel" returns the tree with tip labels as it was originally submitted to phylesystem by a curator.
+            "ot:ottid" returns a tree with tip labels corresponding to the matching ott id.
+            "ot:otttaxonname" returns a tree with tip labels corresponding to the matching ott taxon name.
+        demand_success : boolean
+            Wether to return an error or return a somewhat failed output silently.
         """
         assert tree_format in ["newick", "nexson", "nexus"]
         output = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
@@ -99,29 +126,106 @@ class OpenTree(object):
             return output
 
     def get_otus(self, study_id):
+        """
+        Gets OTUs from a study in the Open Tree of Life store.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        """
         return self.ws.otus(study_id)
 
 #TODO for Luna :)
     def conflict_info(self, study_id, tree_id, compare_to = 'synth'):
+        """
+        Gets node status data from any tree in the Open Tree of Life store.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        tree_id : single character value
+            The tree id of a tree within the study id provided.
+        compare_to : a single character value
+            Usually, you want this to be 'synth', to compare to the synthetic tree.
+            Alternatively, you can compare your tree to any other tree in phylesystem.
+        """
         return self.ws.conflict(study_id, tree_id, compare_to, demand_success = False)
 
     def studies_properties(self):
+        """
+        Returns a list of properties that can be used to search across studies and trees in phylesystem.
+        """
         return self.ws.studies_properties()
 
     def find_studies(self, value, search_property, exact=False, verbose=False):
+        """
+        Gets study ids that match a certain value of a given search property.
+
+        Parameters
+        ----------
+        value : single character value
+            The study id from Open Tree of Life.
+        search_property : single character value
+            Any value from studies_properties.
+        exact : boolean
+        
+        verbose : boolean
+        """
         return self.ws.studies_find_studies(value, search_property=search_property, exact=exact, verbose=verbose)
 
     def find_trees(self, value, search_property, exact=False, verbose=False):
+        """
+        Gets trees that match a certain value of a given search property.
+
+        Parameters
+        ----------
+        value : single character value
+            The study id from Open Tree of Life.
+        search_property : single character value
+            Any value from studies_properties.
+        exact : boolean
+
+        verbose : boolean
+        """
         return self.ws.studies_find_trees(value, search_property=search_property, exact=exact, verbose=verbose)
 
     def taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
                    include_children=False, include_terminal_descendants=False):
+        """
+        Gets taxonomic information for a given taxon in the Open Tree taxonomy.
+
+        Parameters
+        ----------
+        ott_id : single character value
+            The OTT id of a taxon.
+        source_id : maybe single character value
+
+        include_lineage : boolean
+
+        include_children : boolean
+
+        include_terminal_descendants : boolean
+        """
         return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
                                            include_lineage=include_lineage,
                                            include_children=include_children,
                                            include_terminal_descendants=include_terminal_descendants)
 
     def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
+        """
+        Gets the node corresponding to the most recent commom ancestor (mrca) of a taxon in the synthetic Open Tree of Life tree.
+        Notes from Luna:
+            Does it work with just one id?
+            Since it is not always a taxon mrca, should it be called get_mrca?
+
+        Parameters
+        ----------
+        ott_ids : maybe single character value
+        ignore_unknown_ids : boolean
+            Default to TRUE.
+        """
         while True:
             call_record = self.ws.taxonomy_mrca(ott_ids=ott_ids)
             if call_record:
