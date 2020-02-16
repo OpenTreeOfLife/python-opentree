@@ -33,7 +33,7 @@ for fam in fam_dict:
     else:
         maybe_fams.add(fam)
 
-logfi.write("Fam_dict_len {}".format(len(fam_dict)))
+logfi.write("Maybe_fams_len {}".format(len(maybe_fams_dict)))
 
 fams_in_tree = {}
 rev_node_ids = {}
