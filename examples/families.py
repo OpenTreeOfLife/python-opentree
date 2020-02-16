@@ -3,13 +3,14 @@
 
 
 from opentree import OT
+import sys
 import json
 import os
 
 
 logfi = open("fam_search.log", 'w')
 
-taxonomy_file = "../ott3.2/taxonomy.tsv"
+taxonomy_file = sys.argv[1]
 assert os.path.exists(taxonomy_file)
 
 
@@ -33,7 +34,7 @@ for fam in fam_dict:
     else:
         maybe_fams.add(fam)
 
-logfi.write("Maybe_fams_len {}".format(len(maybe_fams_dict)))
+logfi.write("Maybe_fams_len {}".format(len(maybe_fams)))
 
 fams_in_tree = {}
 rev_node_ids = {}
