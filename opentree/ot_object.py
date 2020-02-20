@@ -127,7 +127,7 @@ class OpenTree(object):
 
     def get_otus(self, study_id):
         """
-        Gets OTUs from a study in the Open Tree of Life store.
+        Gets OTUs from a study in the Open Tree of Life Phylesystem.
 
         Parameters
         ----------
@@ -139,7 +139,7 @@ class OpenTree(object):
 #TODO for Luna :)
     def conflict_info(self, study_id, tree_id, compare_to = 'synth'):
         """
-        Gets node status data from any tree in the Open Tree of Life store.
+        Gets node status data from any tree in the Open Tree of Life Phylesystem.
 
         Parameters
         ----------
@@ -155,7 +155,7 @@ class OpenTree(object):
 
     def studies_properties(self):
         """
-        Returns a list of properties that can be used to search across studies and trees in phylesystem.
+        Get properties that can be used to search across studies and trees in phylesystem.
         """
         return self.ws.studies_properties()
 
@@ -170,7 +170,7 @@ class OpenTree(object):
         search_property : single character value
             Any value from studies_properties.
         exact : boolean
-        
+
         verbose : boolean
         """
         return self.ws.studies_find_studies(value, search_property=search_property, exact=exact, verbose=verbose)
@@ -188,6 +188,11 @@ class OpenTree(object):
         exact : boolean
 
         verbose : boolean
+
+        Example
+        -------
+
+
         """
         return self.ws.studies_find_trees(value, search_property=search_property, exact=exact, verbose=verbose)
 
@@ -241,6 +246,9 @@ class OpenTree(object):
 
     def tnrs_contexts(self):
         return self.ws.tnrs_contexts()
+        """
+        Gets a list of taxonomic contexts that can be used to constraint a TNRS (Taxonomic Name Resolution System) match.
+        """
 
     def tnrs_infer_context(self, names):
         return self.ws.tnrs_infer_context(names)
