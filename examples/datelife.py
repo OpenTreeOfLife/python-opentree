@@ -39,9 +39,9 @@ for node in conf_info:
 # 2) Get ages for those nodes
 
 # We need either:
-# 2A) a newick tree with branch lengths whose node labels match node ids from nexson schema.
-## Do peyotl schemas go from nexson tree with branch lengths to newick with branch lengths?
-## Would this process retain node labels from nexson into newick?
+# 2A) a newick/nexus tree with branch lengths whose node labels match node ids from nexson schema.
+## Do peyotl schemas go from nexson tree with branch lengths to newick with branch lengths? Yes.
+## Would this process retain node labels from nexson into newick? No...
 # If we do:
 
 output = OT.get_tree(study_id, tree_id)
@@ -54,8 +54,14 @@ otus = OT.get_otus(study_id)
 output_newick = OT.get_tree(study_id, tree_id, tree_format="newick", label_format="ot:ottid", demand_success = False)
 print(output_newick)
 
-# We loose the node ids...
+# To newick, we loose the node ids...
 
+# Let's try nexus
+
+output_nexus = OT.get_tree(study_id, tree_id, tree_format="nexus", label_format="ot:ottid", demand_success = False)
+print(output_nexus)
+
+# node ids are also lost...
 
 # OR,
 # 2B) a way to get node heights from a nexson object.
@@ -63,7 +69,7 @@ print(output_newick)
 ## we thought this function might work:
 ## https://dendropy.org/library/treemodel.html?highlight=ages#dendropy.datamodel.treemodel.Tree.internal_node_ages
 ## but the nexson to nexml conversion is not fully working
-## and the node ids are modified, so we can't map them back again:
+## and the node ids are modified by dendropy, so we can't map nodes back to synth tree:
 import dendropy
 dendropy.datamodel.treemodel.Tree.internal_node_ages
 

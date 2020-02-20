@@ -335,7 +335,7 @@ class OpenTree(object):
             raise OTWebServicesError(msgtemplate.format(message))
 
     def get_citations(self, studies):
-        """Returns a string with citation info for list of study or Tree Ids"""
+        """Returns a string with citations from a list of study or Tree Ids"""
         cites = []
         for study in studies:
             if '@' in study:
