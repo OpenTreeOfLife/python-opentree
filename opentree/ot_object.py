@@ -290,6 +290,7 @@ class OpenTree(object):
 
     def synth_mrca(self, node_ids=None, ott_ids=None, ignore_unknown_ids=True):
         while True:
+            assert(ott_ids or node_ids)
             call_record = self.ws.tree_of_life_mrca(node_ids=node_ids,
                                                     ott_ids=ott_ids)
             if call_record:
@@ -299,6 +300,10 @@ class OpenTree(object):
                 message = call_record.response_dict['message']
                 raise OTWebServicesError(msgtemplate.format(message))
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
+            if not ott_ids or node_ids:
+                msgtemplate = 'Call to tree_of_life/mrca failed as all ids were pruned'
+                raise OTWebServicesError(msgtemplate.format(message))
+
 
     # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
