@@ -71,6 +71,7 @@ class WebServiceCallRecord(object):
         self._response_obj = None
         self._response_dict = None
         self._tree = None
+        self._tree_from_response_extractor = None
         try:
             self._to_object_converter = service_wrapper.to_object_converter
         except:
@@ -149,15 +150,28 @@ class WebServiceCallRecord(object):
         if self._tree is None:
             if not self:
                 return None
-            newick = self.response_dict['newick']
-            if self._to_object_converter is None:
-                self._tree = newick
-            else:
-                t = self._to_object_converter.tree_from_newick(newick,
-                                                               suppress_internal_node_taxa=True)
-                self._tree = t
+            extractor = self._tree_from_response_extractor
+            if extractor is None:
+                extractor = default_tree_extractor(self._to_object_converter)
+            self._tree = extractor(self.response_dict)
         return self._tree
 
+def extract_content_from_raw_text_method_dict(response_dict):
+    print(response_dict.keys())
+    return response_dict['content']
+
+def extract_newick(response_dict):
+    print(response_dict.keys())
+    return response_dict['newick']
+
+def extract_newick_then_obj(response_dict, to_obj):
+    newick = extract_newick(response_dict)
+    return to_obj.tree_from_newick(newick, suppress_internal_node_taxa=True)
+
+def default_tree_extractor(to_obj_conv):
+    if to_obj_conv is None:
+        return extract_newick
+    return lambda rd: extract_newick_then_obj(rd, to_obj_conv)
 
 class WebServiceRunMode(Enum):
     RUN = 1

@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
 import json
+import sys
 
 from opentree import OTCommandLineTool
 
-cli = OTCommandLineTool(usage='Fetch a tree by its phylesystem study ID and tree ID')
-cli.parser.add_argument(dest='study_id', help="The ID of the study to retrieve")
-cli.parser.add_argument(dest='tree_id', help="The ID of the study to retrieve")
-OT, args = cli.parse_cli()
-output = OT.get_tree(args.study_id, args.tree_id)
+def main(arg_list, out):
+    cli = OTCommandLineTool(usage='Fetch a tree by its phylesystem study ID and tree ID')
+    cli.parser.add_argument(dest='study_id', help="The ID of the study to retrieve")
+    cli.parser.add_argument(dest='tree_id', help="The ID of the study to retrieve")
+    cli.parser.add_argument('--format', default='nexson', type=str,
+                            help='one of: "newick", "nexson", "nexus", or "object"]')
+    OT, args = cli.parse_cli(arg_list)
+    output = OT.get_tree(args.study_id, args.tree_id, tree_format=args.format)
+    if args.format == 'nexson':
+        out.write('{}\n'.format(json.dumps(output.response_dict, indent=2, sort_keys=True)))
+    else:
+        out.write('{}\n'.format(output.tree))
+    return 0
 
-print(json.dumps(output.response_dict, indent=2, sort_keys=True))
-
+if __name__  == '__main__':
+    rc = main(sys.argv[1:], sys.stdout)
+    sys.exit(rc)

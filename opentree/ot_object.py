@@ -95,7 +95,8 @@ class OpenTree(object):
         """
         return self.ws.study(study_id)
 
-    def get_tree(self, study_id, tree_id, tree_format="nexson", label_format="ot:originallabel", demand_success=False):
+    def get_tree(self, study_id, tree_id,
+                 tree_format="nexson", label_format="ot:originallabel", demand_success=False):
         """
         Gets a source tree from phylesystem and its associated metadata.
 
@@ -117,15 +118,16 @@ class OpenTree(object):
         demand_success : boolean
             Wether to return an error or return a somewhat failed output silently.
         """
-        assert tree_format in ["newick", "nexson", "nexus", "object"]
+        if tree_format not in ["newick", "nexson", "nexus", "object"]:
+            raise ValueError('"{}" not recognized as a valid tree_format'.format(tree_format))
         if tree_format == 'object':
-            study_nexson = self.ws.study(study_id, demand_success=False)
-        output = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
-        if tree_format != "nexson":
-            return output.response_dict["content"].decode()
-
-        else:
-            return output
+            study_ws_rec = self.ws.study(study_id, demand_success=False)
+            assert False
+        ws_rec = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
+        from .ws_wrapper import extract_content_from_raw_text_method_dict
+        if tree_format == 'newick':
+            ws_rec._tree_from_response_extractor = extract_content_from_raw_text_method_dict
+        return ws_rec
 
     def get_otus(self, study_id):
         """
