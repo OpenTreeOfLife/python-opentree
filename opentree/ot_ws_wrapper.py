@@ -32,26 +32,27 @@ class OTWebServiceWrapper(WebServiceWrapper):
         c = '", "'.join(sl)
         raise ValueError('Exactly 1 of "{}" must be provided for a call to {}'.format(c, api_method))
 
-
     def studies_properties(self):
         return self._call_api('studies/properties')
 
-    def study(self, study_id):
+    def study(self, study_id, demand_success=False):
         url = 'study/{}'.format(urllib.parse.quote(study_id))
-        return self._call_api(url, http_method='GET')
+        return self._call_api(url, http_method='GET', demand_success=demand_success)
 
     def tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel", demand_success=False):
-        ext_dict = {'nexus':'.nex','newick':'.tre', 'nexson':''}
-        url = 'study/{}/tree/{}{}/?tip_label={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id), ext_dict[tree_format], label_format)
+        ext_dict = {'nexus': '.nex', 'newick': '.tre', 'nexson': ''}
+        url = 'study/{}/tree/{}{}/?tip_label={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id),
+                                                        ext_dict[tree_format], label_format)
         return self._call_api(url, http_method='GET', demand_success=demand_success)
 
     def otus(self, study_id, demand_success=False):
         url = 'study/{}/otus'.format(urllib.parse.quote(study_id))
         return self._call_api(url, http_method='GET', demand_success=demand_success)
 
-#TODO for Luna :)
+    # TODO for Luna :)
     def conflict(self, study_id, tree_id, compare_to="synth", demand_success=False):
-        url = 'conflict/conflict-status?tree1={}%23{}&tree2={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id), compare_to)
+        url = 'conflict/conflict-status?tree1={}%23{}&tree2={}'.format(urllib.parse.quote(study_id),
+                                                                       urllib.parse.quote(tree_id), compare_to)
         return self._call_api(url, http_method='GET', demand_success=demand_success)
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):

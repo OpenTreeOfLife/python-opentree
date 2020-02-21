@@ -49,6 +49,20 @@ class OTClientError(OTWebServicesError):
 
 
 class WebServiceCallRecord(object):
+    """Wrapper around a web-service call, returned by WebServiceWrapper methods.
+
+    The main client methods to call are:
+      * __bool__ (check if status code was 200)
+      * __str__ (explanation of the call status
+      * `write_response` (writes call explanation and response, if there was one).
+    The most commonly used properties:
+      * url: string
+      * response: a requests response object
+      * status_codeL: None or the HTTP status code as an integer
+      * response_dict: None, decoding of a JSON response or {'content' : raw_content} (for non-JSON methods)
+    If the API call returns some encoding of a tree, then the `tree` property of the WebServiceCallRecord
+        can be used to decode the response.
+    """
     def __init__(self, service_wrapper, url, http_method, headers, data):
         self._request_url = url
         self._request_headers = headers
@@ -63,7 +77,8 @@ class WebServiceCallRecord(object):
             self._to_object_converter = None
 
     # noinspection PyPep8
-    def generate_curl_string(self):
+    @property
+    def curl_call(self):
         """Returns a string that is a curl representation of the call
         """
         # may want to revisit this implementation
@@ -82,6 +97,7 @@ class WebServiceCallRecord(object):
         return 'curl {v} {h} {u}{d}'.format(v=varg, u=url, h=hargs, d=dargs)
 
     def __str__(self):
+        """Returns and explanation of the URL and status of the call."""
         prefix = "Web-service call to {}".format(self._request_url)
         if self:
             return '{} succeeded.'.format(prefix)
@@ -117,13 +133,14 @@ class WebServiceCallRecord(object):
             if self._response_obj is None:
                 return None
             try:
-                self._response_dict = self._response_obj.json() #NOTE: if response is not JSON this will fail
+                self._response_dict = self._response_obj.json()  # NOTE: if response is not JSON this will fail
             except json.decoder.JSONDecodeError:
-                self._response_dict = {'content':self._response_obj.content}
-            #TODO make this not fail on Newick/NEXUS responses
+                self._response_dict = {'content': self._response_obj.content}
+            # TODO make this not fail on Newick/NEXUS responses
         return self._response_dict
 
     def __bool__(self):
+        """Returns True if call completed with an HTTP status of 200"""
         sc = self.status_code
         return sc is not None and sc == 200
 
@@ -163,20 +180,21 @@ class WebServiceWrapper(object):
 
     def _call_api(self, method_url_fragment, data=None,
                   http_method='POST', demand_success=True, headers=None):
+        """Returns a ws_call_rec"""
         url = self.make_url(method_url_fragment)
+        if headers is None:
+            headers = {'content-type': 'application/json', 'accept': 'application/json', }
+        elif isinstance(headers, str) and headers.lower() == 'text':
+            headers = {'content-type': 'text/plain', 'accept': 'text/plain', }
         try:
-            if headers is None:
-                headers = {'content-type': 'application/json', 'accept': 'application/json', }
-            elif isinstance(headers, str) and headers.lower() == 'text':
-                headers = {'content-type': 'text/plain', 'accept': 'text/plain', }
-            call_obj = self._http_request(url, http_method, data=data, headers=headers)
-            if demand_success and not call_obj:
+            ws_call_rec = self._http_request(url, http_method, data=data, headers=headers)
+            if demand_success and not ws_call_rec:
                 if not self._perform_ws_calls:
                     return None
                 m = 'Wrong HTTP status code from server. Expected 200. Got {}.'
-                m = m.format(call_obj.status_code)
-                raise OTWebServicesError(m, call_obj)
-            return call_obj
+                m = m.format(ws_call_rec.status_code)
+                raise OTWebServicesError(m, ws_call_rec)
+            return ws_call_rec
         except:
             logging.exception("Error in {} to {}".format(http_method, url))
             raise
@@ -219,29 +237,20 @@ class WebServiceWrapper(object):
         raise OTClientError('api_endpoint = "{}" is not supported'.format(self._api_endpoint))
 
     def _http_request(self, url, http_method="GET", data=None, headers=None):
-        """Performs an HTTP call and returns a tuple of (the request's response, call storage dict)
-        the call storage dict will be None if this wrapper is not storing calls.
-        """
+        """Performs an HTTP call and returns a WebServiceCallRecord instance."""
         rec = WebServiceCallRecord(self, url, http_method, headers, data)
         if self._store_api_calls:
             self.call_history.append(rec)
         if self._generate_curl:
-            self.curl_strings.append(rec.generate_curl_string())
+            self.curl_strings.append(rec.curl_call)
         if not self._perform_ws_calls:
             if self._run_mode == WebServiceRunMode.CURL:
                 sys.stderr.write('{}\n'.format(self.curl_strings[-1]))
             return rec
         if data:
-            resp = requests.request(http_method,
-                                    url,
-                                    headers=headers,
-                                    data=json.dumps(data),
-                                    allow_redirects=True)
+            resp = requests.request(http_method, url, headers=headers, data=json.dumps(data), allow_redirects=True)
         else:
-            resp = requests.request(http_method,
-                                    url,
-                                    headers=headers,
-                                    allow_redirects=True)
+            resp = requests.request(http_method, url, headers=headers, allow_redirects=True)
         rec._response_obj = resp
         logging.debug('Sent {v} to {s}'.format(v=http_method, s=resp.url))
         return rec

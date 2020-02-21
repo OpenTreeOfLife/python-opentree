@@ -95,7 +95,7 @@ class OpenTree(object):
         """
         return self.ws.study(study_id)
 
-    def get_tree(self, study_id, tree_id, tree_format="nexson", label_format="ot:originallabel", demand_success = False):
+    def get_tree(self, study_id, tree_id, tree_format="nexson", label_format="ot:originallabel", demand_success=False):
         """
         Gets a source tree from phylesystem and its associated metadata.
 
@@ -106,7 +106,7 @@ class OpenTree(object):
         tree_id : single character value
             The tree id of a tree within the study id provided.
         tree_format : single character value
-            Must be one of "newick", "nexson", or "nexus".
+            Must be one of "newick", "nexson", "nexus", or "object
             If tree format is newick or nexus, returns tree as string in that format.
             If "nexson", returns semi-useless tree nexson w/o OTUS.
         label_format : single character value
@@ -117,7 +117,9 @@ class OpenTree(object):
         demand_success : boolean
             Wether to return an error or return a somewhat failed output silently.
         """
-        assert tree_format in ["newick", "nexson", "nexus"]
+        assert tree_format in ["newick", "nexson", "nexus", "object"]
+        if tree_format == 'object':
+            study_nexson = self.ws.study(study_id, demand_success=False)
         output = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
         if tree_format != "nexson":
             return output.response_dict["content"].decode()
@@ -136,8 +138,8 @@ class OpenTree(object):
         """
         return self.ws.otus(study_id)
 
-#TODO for Luna :)
-    def conflict_info(self, study_id, tree_id, compare_to = 'synth'):
+    # TODO for Luna :)
+    def conflict_info(self, study_id, tree_id, compare_to='synth'):
         """
         Gets node status data from any tree in the Open Tree of Life Phylesystem.
 
@@ -151,7 +153,7 @@ class OpenTree(object):
             Usually, you want this to be 'synth', to compare to the synthetic tree.
             Alternatively, you can compare your tree to any other tree in phylesystem.
         """
-        return self.ws.conflict(study_id, tree_id, compare_to, demand_success = False)
+        return self.ws.conflict(study_id, tree_id, compare_to, demand_success=False)
 
     def studies_properties(self):
         """
@@ -245,10 +247,8 @@ class OpenTree(object):
         return self.ws.taxonomy_subtree(ott_id=ott_id, label_format=label_format)
 
     def tnrs_contexts(self):
+        """Gets a list of taxonomic contexts that can be used to constraint a TNRS match."""
         return self.ws.tnrs_contexts()
-        """
-        Gets a list of taxonomic contexts that can be used to constraint a TNRS (Taxonomic Name Resolution System) match.
-        """
 
     def tnrs_infer_context(self, names):
         return self.ws.tnrs_infer_context(names)
@@ -290,7 +290,7 @@ class OpenTree(object):
 
     def synth_mrca(self, node_ids=None, ott_ids=None, ignore_unknown_ids=True):
         while True:
-            assert(ott_ids or node_ids)
+            assert (ott_ids or node_ids)
             call_record = self.ws.tree_of_life_mrca(node_ids=node_ids,
                                                     ott_ids=ott_ids)
             if call_record:
@@ -302,8 +302,7 @@ class OpenTree(object):
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
             if not ott_ids or node_ids:
                 msgtemplate = 'Call to tree_of_life/mrca failed as all ids were pruned'
-                raise OTWebServicesError(msgtemplate.format(message))
-
+                raise OTWebServicesError(msgtemplate)
 
     # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):

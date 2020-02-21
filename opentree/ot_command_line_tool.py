@@ -11,9 +11,9 @@ import sys
 import os
 
 
-def _write_calls_as_curl(ws_wrapper_obj):
+def _write_calls_as_curl(ws_wrapper_obj, out=sys.stderr):
     for line in ws_wrapper_obj.curl_strings:
-        sys.stderr.write('{}\n'.format(line))
+        out.write('{}\n'.format(line))
 
 
 def process_ott_or_node_id_arg(args):
