@@ -121,12 +121,17 @@ class OpenTree(object):
         if tree_format not in ["newick", "nexson", "nexus", "object"]:
             raise ValueError('"{}" not recognized as a valid tree_format'.format(tree_format))
         if tree_format == 'object':
-            study_ws_rec = self.ws.study(study_id, demand_success=False)
-            assert False
-        ws_rec = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
-        from .ws_wrapper import extract_content_from_raw_text_method_dict
-        if tree_format == 'newick':
-            ws_rec._tree_from_response_extractor = extract_content_from_raw_text_method_dict
+            ws_rec = self.ws.study(study_id, demand_success=False)
+            def efn(rd):
+                return ws_rec._to_object_converter.tree_from_nexson(rd,
+                                                                    tree_id=tree_id,
+                                                                    label_format=label_format)
+            ws_rec._tree_from_response_extractor = efn
+        else:
+            ws_rec = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
+            from .ws_wrapper import extract_content_from_raw_text_method_dict
+            if tree_format in ('newick', 'nexus'):
+                ws_rec._tree_from_response_extractor = extract_content_from_raw_text_method_dict
         return ws_rec
 
     def get_otus(self, study_id):

@@ -164,9 +164,9 @@ def extract_newick(response_dict):
     print(response_dict.keys())
     return response_dict['newick']
 
-def extract_newick_then_obj(response_dict, to_obj):
+def extract_newick_then_obj(response_dict, to_obj_conv):
     newick = extract_newick(response_dict)
-    return to_obj.tree_from_newick(newick, suppress_internal_node_taxa=True)
+    return to_obj_conv.tree_from_newick(newick, suppress_internal_node_taxa=True)
 
 def default_tree_extractor(to_obj_conv):
     if to_obj_conv is None:

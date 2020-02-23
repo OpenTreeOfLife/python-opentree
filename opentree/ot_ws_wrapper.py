@@ -37,7 +37,8 @@ class OTWebServiceWrapper(WebServiceWrapper):
 
     def study(self, study_id, demand_success=False):
         url = 'study/{}'.format(urllib.parse.quote(study_id))
-        return self._call_api(url, http_method='GET', demand_success=demand_success)
+        data = {'output_nexml2json': '1.2.1'}
+        return self._call_api(url, http_method='GET', data=data, demand_success=demand_success)
 
     def tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel", demand_success=False):
         ext_dict = {'nexus': '.nex', 'newick': '.tre', 'nexson': ''}
