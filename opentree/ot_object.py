@@ -123,7 +123,8 @@ class OpenTree(object):
         if tree_format == 'object':
             ws_rec = self.ws.study(study_id, demand_success=False)
             def efn(rd):
-                return ws_rec._to_object_converter.tree_from_nexson(rd,
+                nexs = rd['data']
+                return ws_rec._to_object_converter.tree_from_nexson(nexs,
                                                                     tree_id=tree_id,
                                                                     label_format=label_format)
             ws_rec._tree_from_response_extractor = efn
