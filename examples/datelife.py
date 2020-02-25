@@ -52,14 +52,14 @@ otus = OT.get_otus(study_id)
 # print(otus.reponse_dict) # says obkect has no attribute 'response_dict'
 
 output_newick = OT.get_tree(study_id, tree_id, tree_format="newick", label_format="ot:ottid", demand_success = False)
-print(output_newick)
+print(output_newick.tree)
 
 # To newick, we loose the node ids...
 
 # Let's try nexus
 
 output_nexus = OT.get_tree(study_id, tree_id, tree_format="nexus", label_format="ot:ottid", demand_success = False)
-print(output_nexus)
+print(output_nexus.content)
 
 # node ids are also lost...
 

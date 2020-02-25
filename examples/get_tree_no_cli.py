@@ -11,8 +11,8 @@ for study in tree_dict['matched_studies']:
         tree_id = tree['ot:treeId']
         assert(study_id == tree['ot:studyId'])
         print("Study {} tree {}".format(study_id,tree_id))
-        output_tree = OT.get_tree(study_id, tree_id, tree_format=".tre", label_format="ot:ottid")
-        tre = output_tree._response_obj.text
+        output_tree = OT.get_tree(study_id, tree_id, tree_format="newick", label_format="ot:ottid")
+        tre = output_tree.tree
         print(tre)
 
 

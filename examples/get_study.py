@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import sys
 
 from opentree import OTCommandLineTool
 
@@ -9,4 +10,5 @@ OT, args = cli.parse_cli()
 output = OT.get_study(args.study_id)
 
 print(json.dumps(output.response_dict, indent=2, sort_keys=True))
+sys.exit(0 if output else 1)
 
