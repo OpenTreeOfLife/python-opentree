@@ -12,17 +12,30 @@ opentree testing suite.
 import unittest
 import re
 import os
+import logging
 
 
 def get_test_file_names():
     """Get list of test file names."""
+    return ['testopentree.test_about']
     path = os.path.dirname(__file__)
-    files = os.listdir(path)
+    default_tests = _get_test_file_names_from_dir(path, 'opentree.test.')
+    TEST_PYTHON_OPENTREE_DIR = os.environ.get('TEST_PYTHON_OPENTREE_DIR')
+    if TEST_PYTHON_OPENTREE_DIR and os.path.exists(TEST_PYTHON_OPENTREE_DIR):
+        atd = os.path.join(TEST_PYTHON_OPENTREE_DIR, 'testopentree')
+        if not os.path.isdir(atd):
+            logging.warning('TEST_PYTHON_OPENTREE_DIR/testopentree at "{}" does not exist'.format(atd))
+        else:
+            default_tests.extend(_get_test_file_names_from_dir(atd, 'testopentree.'))
+    return default_tests
+
+def _get_test_file_names_from_dir(dirpath, pref):
+    files = os.listdir(dirpath)
     t = []
     pat = re.compile(r'^test.*\.py$')
     for f in files:
         if pat.match(f):
-            rp = 'opentree.test.' + f[:-3]  # [:-3] to strip ".py"
+            rp = pref + f[:-3]  # [:-3] to strip ".py"
             t.append(rp)
     return t
 
