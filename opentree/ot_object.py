@@ -319,7 +319,7 @@ class OpenTree(object):
 
     def get_ottid_from_gbifid(self, gbif_id):
         """Returns an ott id for a gbif id
-        ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
+        ott_id is set to 'None' if the gbif id is not found in the Open Tree Taxanomy
         """
         assert int(gbif_id)
         gbiftax = "gbif:{}".format(int(gbif_id))
