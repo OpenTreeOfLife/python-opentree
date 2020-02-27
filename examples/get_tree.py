@@ -14,6 +14,8 @@ def main(arg_list, out, list_for_results=None):
     output = OT.get_tree(args.study_id, args.tree_id, tree_format=args.format)
     if list_for_results is not None:
         list_for_results.append(output)
+    if out is None:
+        return 0
     if args.format == 'nexson':
         out.write('{}\n'.format(json.dumps(output.response_dict, indent=2, sort_keys=True)))
     else:
