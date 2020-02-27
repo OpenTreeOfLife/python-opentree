@@ -17,7 +17,6 @@ import logging
 
 def get_test_file_names():
     """Get list of test file names."""
-    return ['testopentree.test_about']
     path = os.path.dirname(__file__)
     default_tests = _get_test_file_names_from_dir(path, 'opentree.test.')
     TEST_PYTHON_OPENTREE_DIR = os.environ.get('TEST_PYTHON_OPENTREE_DIR')
