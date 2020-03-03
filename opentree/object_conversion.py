@@ -1,12 +1,26 @@
 #!/usr/bin/env python3
 
 import dendropy
-import json
+import re
 
 def get_object_converter(object_conversion_schema):
     if object_conversion_schema.lower() == 'dendropy':
         return DendropyConvert()
     raise ValueError('Currently only conversion to DendroPy objects is supported.')
+
+_name_gap_ott_num = re.compile(r'^(.+)[ _]ott(\d+)$')
+
+def _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree):
+    taxon_namespace = tree.taxon_namespace
+    for taxon in taxon_namespace:
+        label = taxon.label
+        m = _name_gap_ott_num.match(label)
+        if m:
+            name = m.group(1).strip()
+            if name and not hasattr(taxon, 'ott_taxon_name'):
+                taxon.ott_taxon_name = name
+            if not hasattr(taxon, 'ott_id'):
+                taxon.ott_id = int(m.group(2))
 
 
 # noinspection PyMethodMayBeStatic
@@ -15,13 +29,19 @@ class DendropyConvert(object):
     Class to convert newicks to dendropy objects
     """
     def tree_from_newick(self, newick, suppress_internal_node_taxa=False, **kwargs):
-        return dendropy.Tree.get(data=newick, schema="newick",
+        tree = dendropy.Tree.get(data=newick, schema="newick",
                                  suppress_internal_node_taxa=suppress_internal_node_taxa, **kwargs)
+        _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree)
+        return tree
 
     def tree_list_from_newicks(self, newick_list, suppress_internal_node_taxa=False, **kwargs):
         concat = '\n'.join(newick_list)
-        return dendropy.TreeList.get(data=concat, schema="newick",
-                                     suppress_internal_node_taxa=suppress_internal_node_taxa, **kwargs)
+        tree_list = dendropy.TreeList.get(data=concat,
+                                          schema="newick",
+                                          suppress_internal_node_taxa=suppress_internal_node_taxa,
+                                          **kwargs)
+        _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree_list)
+        return tree_list
 
     def taxon_namespace_and_id_dict_from_nexson_otus_obj(self, otus_obj, otus_id):
         tn = dendropy.TaxonNamespace(label=otus_id)
