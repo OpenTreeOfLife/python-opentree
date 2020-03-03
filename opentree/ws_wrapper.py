@@ -157,11 +157,9 @@ class WebServiceCallRecord(object):
         return self._tree
 
 def extract_content_from_raw_text_method_dict(response_dict):
-    print(response_dict.keys())
     return response_dict['content']
 
 def extract_newick(response_dict):
-    print(response_dict.keys())
     return response_dict['newick']
 
 def extract_newick_then_obj(response_dict, to_obj_conv):
