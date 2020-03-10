@@ -51,20 +51,26 @@ sys.stdout.write("This tree returns fine, but isn't very meaningful due to lack 
 otus = OT.get_otus(study_id)
 # print(otus.reponse_dict) # says obkect has no attribute 'response_dict'
 
-output_newick = OT.get_tree(study_id, tree_id, tree_format="newick", label_format="ot:ottid", demand_success = False)
-print(output_newick.tree)
+tree_newick = OT.get_tree(study_id, tree_id, tree_format="newick", label_format="ot:ottid", demand_success = False)
+tree_newick.__dict__
+print(tree_newick.tree)
 
 # To newick, we loose the node ids...
 
 # Let's try nexus
 
-output_nexus = OT.get_tree(study_id, tree_id, tree_format="nexus", label_format="ot:ottid", demand_success = False)
-print(output_nexus.content)
+tree_nexus = OT.get_tree(study_id, tree_id, tree_format="nexus", label_format="ot:ottid", demand_success = False)
+print(tree_nexus.tree)
 
 # node ids are also lost...
 
 # OR,
 # 2B) a way to get node heights from a nexson object.
+
+# Get the source tree as nexson:
+tree_nexson = OT.get_tree(study_id, tree_id, tree_format="nexson", label_format="ot:ottid", demand_success = False)
+tree_nexson.__dict__
+
 ## We tried with Dendropy traversal of nexml tree
 ## we thought this function might work:
 ## https://dendropy.org/library/treemodel.html?highlight=ages#dendropy.datamodel.treemodel.Tree.internal_node_ages
@@ -77,6 +83,25 @@ t1 = dendropy.datamodel.treemodel.Tree()
 t1.__dict__
 s = t1.as_string("nexml")
 s.__dict__ # has no attribute __dict__
+# MTH created a nexson to DendroPy converter
+# You can get the converter method like this:
+
+from opentree import get_object_converter
+OC = get_object_converter('dendropy')
+# But then I try to run it and I could not figure it out:
+OC.tree_from_nexson(tree_nexson, tree_id)
+OC.tree_from_newick(tree_newick.tree)
+tree_object = OT.get_tree(study_id, tree_id, tree_format="object", label_format="ot:ottid", demand_success = False)
+tree_object.__dict__
+tree_object.tree
+OC.tree_from_newick(tree_object.tree)
+
+# Until I realized it is already implemented in get_tree:
+tree_nexson = OT.get_tree(study_id, tree_id, tree_format="nexson", label_format="ot:ottid", demand_success = False)
+# And can be extracted with
+tree_nexson.response_dict # this has the nexson object
+# now read it into dendropy
+dendropy.datamodel.treemodel.Tree.internal_node_ages(tree_nexson.response_dict)
 
 # Third alternative:
 # Is there a function that gets node heights from a nexson tree object directly, without transforming to nexml?

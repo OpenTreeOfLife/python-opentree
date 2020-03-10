@@ -107,7 +107,7 @@ class OpenTree(object):
         tree_id : single character value
             The tree id of a tree within the study id provided.
         tree_format : single character value
-            Must be one of "newick", "nexson", "nexus", or "object
+            Must be one of "newick", "nexson", "nexus", or "object"
             If tree format is newick or nexus, returns tree as string in that format.
             If "nexson", returns semi-useless tree nexson w/o OTUS.
         label_format : single character value
