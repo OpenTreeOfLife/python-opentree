@@ -146,6 +146,56 @@ class OpenTree(object):
         """
         return self.ws.otus(study_id)
 
+    def get_subtree_otus(self, nexson, tree_id, subtree_id=None, return_format='otu_id'):
+        assert(return_format in ['otu_id', 'ottid'])
+        tree = extract_tree_nexson(nexson, tree_id)[0][1]
+        ingroup_node_id = tree.get('^ot:inGroupClade')
+        edges = tree['edgeBySourceId']
+        nodes = tree['nodeById']
+        if subtree_id:
+            if subtree_id == 'ingroup':
+                root_id = ingroup_node_id
+            else:
+                root_id = subtree_id
+        else:
+            root_id = tree['^ot:rootNodeId']
+        if root_id not in edges:
+            return None
+        otuset = set()
+        todo = set()
+        todo.add(root_id)
+        while todo:
+            curr_node_id = todo.pop()
+            outgoing_edges = edges.get(curr_node_id)
+            if outgoing_edges is None:
+                otu = nodes.get(curr_node_id).get('@otu')
+                assert(otu)
+                if return_format == 'otu_id':
+                    otuset.add(otu)
+                if return_format == 'ottid':
+                    d = extract_otu_nexson(nexson, otu, detect_nexson_version(nexson))
+                    ottid = d[otu].get('^ot:ottId')
+                    otuset.add(ottid)
+            else:
+                for edge, info in outgoing_edges.items():
+                    todo.add(info.get('@target'))
+        return(otuset)
+
+    def extract_otu_nexson(self, nexson, otu_id, curr_version=None):
+        nexml_el = nexson.get('nexml')
+        o = nexml_el['otusById']
+        if otu_id is None:
+            r = {}
+            for g in o.values():
+                r.update(g.get('otuById', {}))
+            return r
+        else:
+            for g in o.values():
+                go = g['otuById']
+                if otu_id in go:
+                    return {otu_id: go[otu_id]}
+        return None
+
     # TODO for Luna :)
     def conflict_info(self, study_id, tree_id, compare_to='synth'):
         """
