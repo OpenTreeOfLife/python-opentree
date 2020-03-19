@@ -6,7 +6,7 @@ DC = object_conversion.DendropyConvert()
 
 
 
-def node_ages(study_id, tree_id):
+def get_tree(study_id, tree_id):
     study = OT.get_study(study_id)
     study_nexson = study.response_dict['data']
     tree_obj = DC.tree_from_nexson(study_nexson, tree_id)
@@ -14,12 +14,12 @@ def node_ages(study_id, tree_id):
 
 
 #this works
-t1 = node_ages('ot_1877', 'tree3' )
+t1 = get_tree('ot_1877', 'tree3' )
 t1.internal_node_ages()
 
 
 #this doesn't
-t2 = node_ages('ot_350', 'Tr53297')
+t2 = get_tree('ot_350', 'Tr53297')
 
 '''Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
