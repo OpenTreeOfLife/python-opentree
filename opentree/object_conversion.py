@@ -63,8 +63,9 @@ class DendropyConvert(object):
             raise KeyError('Tree set missing "@otus" property')
         otus_by_id = nexml['otusById']
         otu_set = otus_by_id[otu_set_id]
-        if len(otu_set) != 1:
-            raise ValueError('expecting just  "otuById" in OTUs object')
+#        if len(otu_set) != 1:
+#            raise ValueError('expecting just  "otuById" in OTUs object')
+###      Hmmm. Some have otu_set.keys() = dict_keys(['@label', '^skos:historyNote', 'otuById']). Seems fine.
         obi = otu_set["otuById"]
         tn, id2taxon = self.taxon_namespace_and_id_dict_from_nexson_otus_obj(obi, otu_set_id)
         for taxon in tn:
