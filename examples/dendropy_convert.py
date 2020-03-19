@@ -1,18 +1,31 @@
+import sys
 from opentree import OpenTree, object_conversion
 OT = OpenTree()
 
 DC = object_conversion.DendropyConvert()
 
 
-study_id = 'ot_1877'
+
+def node_ages(study_id, tree_id):
+    study = OT.get_study(study_id)
+    study_nexson = study.response_dict['data']
+    tree_obj = DC.tree_from_nexson(study_nexson, tree_id)
+    return tree_obj
 
 
-tree_id = 'tree3' # "tree1"
-study = OT.get_study(study_id)
-study_nexson = study.response_dict['data']
+#this works
+t1 = node_ages('ot_1877', 'tree3' )
+t1.internal_node_ages()
 
 
-tree_obj = DC.tree_from_nexson(study_nexson, tree_id)
+#this doesn't
+t2 = node_ages('ot_350', 'Tr53297')
 
-tree_obj.internal_node_ages()
+'''Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "<stdin>", line 4, in node_ages
+  File "/home/ejmctavish/projects/otapi/python-opentree/opentree/object_conversion.py", line 67, in tree_from_nexson
+    raise ValueError('expecting just  "otuById" in OTUs object')
+ValueError: expecting just  "otuById" in OTUs object
+'''
 
