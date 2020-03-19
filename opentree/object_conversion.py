@@ -31,6 +31,7 @@ class DendropyConvert(object):
             if oid in id_to_taxon:
                 raise ValueError('otu id "{}" repeated'.format(oid))
             id_to_taxon[oid] = dt
+            dt.otu = oid
             dt.ott_taxon_name, dt.ott_id, dt.original_label = None, None, None
             for meta_key, meta_v in otu_obj.items():
                 if meta_key == '^ot:ottTaxonName':
