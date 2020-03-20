@@ -47,6 +47,8 @@ class DendropyConvert(object):
             "ot:originallabel": "original_label",
             "ot:ottid": "ott_id",
             "ot:otttaxonname": "ott_taxon_name",
+            "id" : "ott_id",
+            "name" : "ott_taxon_name"
         }
         taxon_attr = to_taxon_attr[label_format.lower()]
         nexml = nexson['nexml']

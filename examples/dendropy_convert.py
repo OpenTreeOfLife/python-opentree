@@ -19,7 +19,7 @@ t1.internal_node_ages()
 
 
 #this doesn't
-t2 = get_tree('ot_350', 'Tr53297')
+t2 = get_tree('ot_350', 'Tr53296')
 
 '''Traceback (most recent call last):
   File "<stdin>", line 2, in <module>

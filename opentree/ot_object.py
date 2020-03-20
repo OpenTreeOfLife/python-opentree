@@ -316,6 +316,7 @@ class OpenTree(object):
 
     # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
+        assert('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
         for u in unknown_ids:
             if node_ids and u in node_ids:
