@@ -18,14 +18,4 @@ t1 = get_tree('ot_1877', 'tree3' )
 t1.internal_node_ages()
 
 
-#this doesn't
 t2 = get_tree('ot_350', 'Tr53296')
-
-'''Traceback (most recent call last):
-  File "<stdin>", line 2, in <module>
-  File "<stdin>", line 4, in node_ages
-  File "/home/ejmctavish/projects/otapi/python-opentree/opentree/object_conversion.py", line 67, in tree_from_nexson
-    raise ValueError('expecting just  "otuById" in OTUs object')
-ValueError: expecting just  "otuById" in OTUs object
-'''
-
