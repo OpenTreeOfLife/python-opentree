@@ -10,6 +10,7 @@ import logging
 import sys
 import re
 from enum import Enum
+from .node_reference import SynthNodeReference
 
 import requests
 
@@ -71,6 +72,7 @@ class WebServiceCallRecord(object):
         self._response_obj = None
         self._response_dict = None
         self._tree = None
+        self._node_ref = None
         self._tree_from_response_extractor = None
         try:
             self._to_object_converter = service_wrapper.to_object_converter
@@ -144,6 +146,14 @@ class WebServiceCallRecord(object):
         """Returns True if call completed with an HTTP status of 200"""
         sc = self.status_code
         return sc is not None and sc == 200
+
+    @property
+    def node_ref(self):
+        if self._node_ref is None:
+            if not self:
+                return None
+            self._node_ref = SynthNodeReference(self.response_dict)
+        return self._node_ref
 
     @property
     def tree(self):
