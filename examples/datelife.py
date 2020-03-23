@@ -13,7 +13,16 @@ from opentree import OpenTree
 
 OT = OpenTree()
 output = OT.find_trees(search_property="ot:branchLengthMode", value="ot:time")
+output.__dict__
+output.response_dict.keys()
+output.response_dict["matched_studies"]
 
+for study in output.response_dict["matched_studies"]:
+    for studies in study["matched_trees"]:
+        print(studies.keys())
+
+
+output.response_dict["matched_studies"][1]
 # 1.2) Get conflict information for each node in source chronograms:
 study_id = 'ot_1877' # "ot_864"
 tree_id = 'tree3' # "tree1"
@@ -85,7 +94,6 @@ s = t1.as_string("nexml")
 s.__dict__ # has no attribute __dict__
 # MTH created a nexson to DendroPy converter
 # You can get the converter method like this:
-
 from opentree import get_object_converter
 OC = get_object_converter('dendropy')
 # But then I try to run it and I could not figure it out:
@@ -102,6 +110,51 @@ tree_nexson = OT.get_tree(study_id, tree_id, tree_format="nexson", label_format=
 tree_nexson.response_dict # this has the nexson object
 # now read it into dendropy
 dendropy.datamodel.treemodel.Tree.internal_node_ages(tree_nexson.response_dict)
+# but that did not work..
+# Emily Jane helped me figure it out in examples/dendropy_convert.py
+# So now, make a function that extracts node heights for any given tree2
+
+DC = object_conversion.DendropyConvert()
+
+def get_node_ages(study_id, tree_id):
+    """
+    Get the node ages for any given tree in the Open Tree of Life
+    """
+    study = OT.get_study(study_id)
+    study_nexson = study.response_dict['data']
+    tree_obj = DC.tree_from_nexson(study_nexson, tree_id)
+    return tree_obj.internal_node_ages()
+
+get_node_ages('ot_1877', 'tree3')
+
+# this gets the nodeheights but not the node labels.
+
+# To get node labls there's the function internal_node_ages()
+
+
+tree_obj.internal_nodes()
+for nd in tree_obj:
+    print(nd)
+
+# So, tree_from_nexson seems to be dropping thenode labels.
+
+# get node ages for all chronograms in phylesystem
+fulterr =  open('examples/ultrametricity_error.txt', 'w')
+fvalerr = open('examples/value_error.txt', 'w')
+for study in output.response_dict["matched_studies"]:
+    for studies in study["matched_trees"]:
+        try:
+            get_node_ages(studies["ot:studyId"], studies["ot:treeId"])
+        except dendropy.utility.error.UltrametricityError as err:
+            print(studies["ot:studyId"] + ", " + studies["ot:treeId"], file = fulterr)
+            sys.stderr.write("Ultrametricity Error in chronogram {} from study {}\n".format(studies["ot:treeId"], studies["ot:studyId"]))
+        except ValueError:
+            print(studies["ot:studyId"] + ", " + studies["ot:treeId"], file = fvalerr)
+            sys.stderr.write("Value Error in chronogram {} from study {}\n".format(studies["ot:treeId"], studies["ot:studyId"]))
+
+fulterr.close()
+fvalerr.close()
+
 
 # Third alternative:
 # Is there a function that gets node heights from a nexson tree object directly, without transforming to nexml?

@@ -50,7 +50,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
         url = 'study/{}/otus'.format(urllib.parse.quote(study_id))
         return self._call_api(url, http_method='GET', demand_success=demand_success)
 
-    # TODO for Luna :)
+    # TODO for Luna :) done!
     def conflict(self, study_id, tree_id, compare_to="synth", demand_success=False):
         url = 'conflict/conflict-status?tree1={}%23{}&tree2={}'.format(urllib.parse.quote(study_id),
                                                                        urllib.parse.quote(tree_id), compare_to)

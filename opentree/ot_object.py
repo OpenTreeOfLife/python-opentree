@@ -146,7 +146,7 @@ class OpenTree(object):
         """
         return self.ws.otus(study_id)
 
-    # TODO for Luna :)
+    # TODO for Luna :) done!
     def conflict_info(self, study_id, tree_id, compare_to='synth'):
         """
         Gets node status data from any tree in the Open Tree of Life Phylesystem.
