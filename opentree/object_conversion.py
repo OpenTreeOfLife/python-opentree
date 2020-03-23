@@ -121,3 +121,4 @@ def _decorate_nd(node, nexson_nd, id2taxon):
     otu_id = nexson_nd.get('@otu')
     if otu_id:
         node.taxon = id2taxon[otu_id]
+    node.label = node.id

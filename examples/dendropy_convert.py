@@ -16,6 +16,10 @@ def get_tree(study_id, tree_id):
 #this works
 t1 = get_tree('ot_1877', 'tree3' )
 t1.internal_node_ages()
+for node in t1.internal_nodes():
+    print(node)
+    print(node.__dict__)
+
+#t2 = get_tree('ot_350', 'Tr53296')
 
 
-t2 = get_tree('ot_350', 'Tr53296')
