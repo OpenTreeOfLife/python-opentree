@@ -1,16 +1,20 @@
+import sys
 from opentree import OpenTree, object_conversion
 OT = OpenTree()
 
 DC = object_conversion.DendropyConvert()
 
 
-study_id = 'ot_1877'
-study = OT.get_study(study_id)
-study_nexson = study.response_dict['data']
-study_nexson["nexml"].keys()
-tree_id = 'tree3' # "tree1"
-tree_obj = DC.tree_from_nexson(study_nexson, tree_id)
+def get_tree(study_id, tree_id):
+    study = OT.get_study(study_id)
+    study_nexson = study.response_dict['data']
+    tree_obj = DC.tree_from_nexson(study_nexson, tree_id)
+    return tree_obj
 
-tree_obj.internal_node_ages()
 
-tree_obj.internal_nodes()
+t1 = get_tree('ot_1877', 'tree3' )
+t1.internal_node_ages()
+for node in t1.internal_nodes():
+    print(node.label)
+
+t2 = get_tree('ot_350', 'Tr53296')
