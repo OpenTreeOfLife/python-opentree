@@ -12,6 +12,13 @@ _name_gap_ott_num = re.compile(r'^(.+)[ _]ott(\d+)$')
 
 def _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree):
     taxon_namespace = tree.taxon_namespace
+    for nd in tree.preorder_node_iter():
+        if (nd.taxon is not None) or (not nd.label):
+            continue
+        m = _name_gap_ott_num.match(nd.label)
+        if m:
+            nd. taxon = taxon_namespace.new_taxon(nd.label)
+
     for taxon in taxon_namespace:
         label = taxon.label
         m = _name_gap_ott_num.match(label)
@@ -40,7 +47,8 @@ class DendropyConvert(object):
                                           schema="newick",
                                           suppress_internal_node_taxa=suppress_internal_node_taxa,
                                           **kwargs)
-        _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree_list)
+        for tree in tree_list:
+            _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree)
         return tree_list
 
     def taxon_namespace_and_id_dict_from_nexson_otus_obj(self, otus_obj, otus_id):
