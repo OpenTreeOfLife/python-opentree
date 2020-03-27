@@ -35,5 +35,9 @@ def main(arg_list, out, list_for_results=None):
 
 
 if __name__  == '__main__':
-    rc = main(sys.argv[1:], sys.stdout)
-    sys.exit(rc)
+    try:
+        rc = main(sys.argv[1:], sys.stdout)
+    except Exception as x:
+        sys.exit('{}\n'.format(str(x)))
+    else:
+        sys.exit(rc)
