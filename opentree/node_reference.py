@@ -28,4 +28,12 @@ class SynthNodeReference(object):
         self.resolves = SSC(ndd.get('resolves', {}), src_id_map)
         self.partial_path_of = SSC(ndd.get('partial_path_of', {}), src_id_map)
         self.terminal = SSC(ndd.get('terminal', {}), src_id_map)
-        self._lineage = ndd.get('lineage')
+        self._lineage = ndd.get('lineage', [])
+        self._lineage_converted = False
+
+    @property
+    def lineage(self):
+        if self._lineage and (not self._lineage_converted):
+            self._lineage = [SynthNodeReference(i) for i in self._lineage]
+            self._lineage_converted = True
+        return self._lineage
