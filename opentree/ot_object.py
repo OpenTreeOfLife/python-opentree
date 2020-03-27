@@ -33,6 +33,18 @@ class FilesServerWrapper(OTWebServiceWrapper):
         return self._call_api(url_frag, http_method='GET', headers='text')
 
 
+_default_api_endpoint = None
+_default_run_mode = None
+
+def default_open_tree_obj():
+    global _default_api_endpoint, _default_run_mode
+    if _default_api_endpoint is None:
+        _default_api_endpoint = 'production'
+        _default_run_mode = WebServiceRunMode.RUN
+    return OpenTree(api_endpoint=_default_api_endpoint,
+                    run_mode=_default_run_mode)
+
+
 class OpenTree(object):
     """
     This class provides a high-level wrapper for interaction with OT web services and data.
@@ -41,6 +53,10 @@ class OpenTree(object):
     """
 
     def __init__(self, api_endpoint='production', run_mode=WebServiceRunMode.RUN):
+        global _default_api_endpoint, _default_run_mode
+        if _default_api_endpoint is None:
+            _default_api_endpoint = api_endpoint
+            _default_run_mode = run_mode
         self._api_endpoint = api_endpoint
         self._run_mode = run_mode
         self._ws = None
