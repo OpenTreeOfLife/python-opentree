@@ -3,12 +3,15 @@
 import dendropy
 import re
 
+
 def get_object_converter(object_conversion_schema):
     if object_conversion_schema.lower() == 'dendropy':
         return DendropyConvert()
     raise ValueError('Currently only conversion to DendroPy objects is supported.')
 
+
 _name_gap_ott_num = re.compile(r'^(.+)[ _]ott(\d+)$')
+
 
 def _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree):
     taxon_namespace = tree.taxon_namespace
@@ -17,7 +20,7 @@ def _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree):
             continue
         m = _name_gap_ott_num.match(nd.label)
         if m:
-            nd. taxon = taxon_namespace.new_taxon(nd.label)
+            nd.taxon = taxon_namespace.new_taxon(nd.label)
 
     for taxon in taxon_namespace:
         label = taxon.label
@@ -35,6 +38,7 @@ class DendropyConvert(object):
     """
     Class to convert newicks to dendropy objects
     """
+
     def tree_from_newick(self, newick, suppress_internal_node_taxa=False, **kwargs):
         tree = dendropy.Tree.get(data=newick, schema="newick",
                                  suppress_internal_node_taxa=suppress_internal_node_taxa, **kwargs)
@@ -75,8 +79,8 @@ class DendropyConvert(object):
             "ot:originallabel": "original_label",
             "ot:ottid": "ott_id",
             "ot:otttaxonname": "ott_taxon_name",
-            "id" : "ott_id",
-            "name" : "ott_taxon_name"
+            "id": "ott_id",
+            "name": "ott_taxon_name"
         }
         taxon_attr = to_taxon_attr[label_format.lower()]
         nexml = nexson['nexml']
@@ -94,9 +98,9 @@ class DendropyConvert(object):
             raise KeyError('Tree set missing "@otus" property')
         otus_by_id = nexml['otusById']
         otu_set = otus_by_id[otu_set_id]
-#        if len(otu_set) != 1:
-#            raise ValueError('expecting just  "otuById" in OTUs object')
-###      Hmmm. Some have otu_set.keys() = dict_keys(['@label', '^skos:historyNote', 'otuById']). Seems fine.
+        #        if len(otu_set) != 1:
+        #            raise ValueError('expecting just  "otuById" in OTUs object')
+        #       # Hmmm. Some have otu_set.keys() = dict_keys(['@label', '^skos:historyNote', 'otuById']). Seems fine.
         obi = otu_set["otuById"]
         tn, id2taxon = self.taxon_namespace_and_id_dict_from_nexson_otus_obj(obi, otu_set_id)
         for taxon in tn:
@@ -111,7 +115,6 @@ class DendropyConvert(object):
         spec_root_id = tree_obj["^ot:specifiedRoot"]
         if spec_root_id:
             assert spec_root_id == root_node_id
-        ingroup_node_id = tree_obj.get("^ot:inGroupClade")
         non_annotations = frozenset(["^ot:inGroupClade", "^ot:rootNodeId", "^ot:specifiedRoot"])
         for key, value in tree_obj.items():
             if key in non_annotations:
@@ -140,10 +143,12 @@ class DendropyConvert(object):
                 to_proc.append(new_nd)
         return tree
 
+
 def _proc_nd(node, nexson_nd, id2taxon, node_id, nd_id2dend):
     node.id = node_id
     nd_id2dend[node_id] = node
     _decorate_nd(node, nexson_nd, id2taxon)
+
 
 def _decorate_nd(node, nexson_nd, id2taxon):
     otu_id = nexson_nd.get('@otu')
