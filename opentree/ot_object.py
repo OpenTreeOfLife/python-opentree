@@ -5,6 +5,8 @@ from .ws_wrapper import (OTWebServicesError,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
 
+from .nexson_helpers import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
+
 FILES_SERVER_URL = 'files'
 
 
@@ -123,7 +125,7 @@ class OpenTree(object):
         tree_id : single character value
             The tree id of a tree within the study id provided.
         tree_format : single character value
-            Must be one of "newick", "nexson", "nexus", or "object
+            Must be one of "newick", "nexson", "nexus", or "object"
             If tree format is newick or nexus, returns tree as string in that format.
             If "nexson", returns semi-useless tree nexson w/o OTUS.
         label_format : single character value
@@ -162,7 +164,7 @@ class OpenTree(object):
         """
         return self.ws.otus(study_id)
 
-    # TODO for Luna :)
+    # TODO for Luna :) done!
     def conflict_info(self, study_id, tree_id, compare_to='synth'):
         """
         Gets node status data from any tree in the Open Tree of Life Phylesystem.
@@ -330,6 +332,7 @@ class OpenTree(object):
 
     # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
+        assert('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
         for u in unknown_ids:
             if node_ids and u in node_ids:
@@ -342,7 +345,7 @@ class OpenTree(object):
 
     def get_ottid_from_gbifid(self, gbif_id):
         """Returns an ott id for a gbif id
-        ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
+        ott_id is set to 'None' if the gbif id is not found in the Open Tree Taxanomy
         """
         assert int(gbif_id)
         gbiftax = "gbif:{}".format(int(gbif_id))

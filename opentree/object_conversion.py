@@ -59,6 +59,7 @@ class DendropyConvert(object):
             if oid in id_to_taxon:
                 raise ValueError('otu id "{}" repeated'.format(oid))
             id_to_taxon[oid] = dt
+            dt.otu = oid
             dt.ott_taxon_name, dt.ott_id, dt.original_label = None, None, None
             for meta_key, meta_v in otu_obj.items():
                 if meta_key == '^ot:ottTaxonName':
@@ -74,6 +75,8 @@ class DendropyConvert(object):
             "ot:originallabel": "original_label",
             "ot:ottid": "ott_id",
             "ot:otttaxonname": "ott_taxon_name",
+            "id" : "ott_id",
+            "name" : "ott_taxon_name"
         }
         taxon_attr = to_taxon_attr[label_format.lower()]
         nexml = nexson['nexml']
@@ -91,8 +94,9 @@ class DendropyConvert(object):
             raise KeyError('Tree set missing "@otus" property')
         otus_by_id = nexml['otusById']
         otu_set = otus_by_id[otu_set_id]
-        if len(otu_set) != 1:
-            raise ValueError('expecting just  "otuById" in OTUs object')
+#        if len(otu_set) != 1:
+#            raise ValueError('expecting just  "otuById" in OTUs object')
+###      Hmmm. Some have otu_set.keys() = dict_keys(['@label', '^skos:historyNote', 'otuById']). Seems fine.
         obi = otu_set["otuById"]
         tn, id2taxon = self.taxon_namespace_and_id_dict_from_nexson_otus_obj(obi, otu_set_id)
         for taxon in tn:
@@ -145,3 +149,4 @@ def _decorate_nd(node, nexson_nd, id2taxon):
     otu_id = nexson_nd.get('@otu')
     if otu_id:
         node.taxon = id2taxon[otu_id]
+    node.label = node.id
