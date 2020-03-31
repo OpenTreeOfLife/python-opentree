@@ -14,6 +14,7 @@ def get_tree(study_id, tree_id):
 
 t1 = get_tree('ot_1877', 'tree3' )
 t1.internal_node_ages()
+t1.internal_nodes()
 for node in t1.internal_nodes():
     print(node.label)
 

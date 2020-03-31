@@ -30,6 +30,7 @@ tree_id = 'tree3' # "tree1"
 output_conflict = OT.conflict_info(study_id = study_id, tree_id= tree_id)
 output_conflict.__dict__
 output_conflict.response_dict.keys()
+len(output_conflict.response_dict.keys())
 print(output_conflict.response_dict["node100"])
 
 conf_info = output_conflict.response_dict
@@ -51,7 +52,12 @@ for node in conf_info:
 # 2A) a newick/nexus tree with branch lengths whose node labels match node ids from nexson schema.
 ## Do peyotl schemas go from nexson tree with branch lengths to newick with branch lengths? Yes.
 ## Would this process retain node labels from nexson into newick? No...
-# If we do:
+# 2B) a way to get node heights from a nexson object.
+
+# 2C) Is there a function that gets node heights from a nexson tree object directly, without transforming to nexml?
+## Maybe in peyotl?
+
+# Trying 2A:
 
 output = OT.get_tree(study_id, tree_id)
 tre = output.response_dict[tree_id]
@@ -73,8 +79,7 @@ print(tree_nexus.tree)
 
 # node ids are also lost...
 
-# OR,
-# 2B) a way to get node heights from a nexson object.
+# Trying 2B: a way to get node heights from a nexson object.
 
 # Get the source tree as nexson:
 tree_nexson = OT.get_tree(study_id, tree_id, tree_format="nexson", label_format="ot:ottid", demand_success = False)
@@ -127,17 +132,6 @@ def get_node_ages(study_id, tree_id):
 
 get_node_ages('ot_1877', 'tree3')
 
-# this gets the nodeheights but not the node labels.
-
-# To get node labls there's the function internal_node_ages()
-
-
-tree_obj.internal_nodes()
-for nd in tree_obj:
-    print(nd)
-
-# So, tree_from_nexson seems to be dropping thenode labels.
-
 # get node ages for all chronograms in phylesystem
 fulterr =  open('examples/ultrametricity_error.txt', 'w')
 fvalerr = open('examples/value_error.txt', 'w')
@@ -156,6 +150,44 @@ fulterr.close()
 fvalerr.close()
 
 
-# Third alternative:
-# Is there a function that gets node heights from a nexson tree object directly, without transforming to nexml?
-# Maybe in peyotl?
+# the previous function gets the node heights but not the node labels.
+# let's make a function that just gets the dendropy tree object:
+def get_tree_as_dendropy(study_id, tree_id):
+    study = OT.get_study(study_id)
+    study_nexson = study.response_dict['data']
+    tree_obj = DC.tree_from_nexson(study_nexson, tree_id)
+    return tree_obj
+
+tree_obj = get_tree_as_denropy('ot_1877', 'tree3')
+
+ages = tree_obj.internal_node_ages()
+for a in ages:
+    print(a)
+
+# To get node labels there's the function internal_nodes()
+
+tree_obj.internal_nodes()
+
+# Let's look at the elements of the dendropy tree object
+for nd in tree_obj:
+    print(nd.__dict__)
+
+node_labels = []
+for node in tree_obj.internal_nodes():
+    print(node.label + ", " + str(node.age))
+    node_labels.append(node.label)
+
+len(node_labels) # there are 65 nodes in the dendropy source tree
+type(node_labels)
+
+for i in output_conflict.response_dict.keys():
+    print(i)
+
+conflict_nodes = [k for k in output_conflict.response_dict.keys()]
+len(conflict_nodes) # there are 88 nodes in conflict info
+type(conflict_nodes)
+
+len(set(conflict_nodes))
+len(set(node_labels))
+len(set(conflict_nodes) & set(node_labels))  # 43 matches
+len(set(node_labels) & set(conflict_nodes)) # same as ^
