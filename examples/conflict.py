@@ -49,4 +49,18 @@ print("\nThere are more nodes (" + str(len(conflict_nodes)) + ") in the conflict
 print("Also, not all node ids from source trees are found in conflict info. Only " +  str(len(matching_nodes)) +
 " nodes from source tree are in conflict info. The tree is not included in synthesis, but these nodes correspond to the ingroup determined by the curator.")
 
+unmatching_nodes = set(conflict_nodes) - set(node_labels)
 # ott868256
+
+assert(len(unmatching_nodes) == 45)
+
+for node in unmatching_nodes:
+    assert(conf_info[node]['status']=='terminal')
+
+
+assert(len(node_labels) == 65)
+
+study = OT.get_study(study_id)
+study_nexson = study.response_dict['data']
+
+assert(study_nexson['nexml']['treesById']['trees1']['treeById']['tree3']['^ot:inGroupClade'] == 'node21')
