@@ -371,6 +371,8 @@ class OpenTree(object):
         res = self.tnrs_match([spp_name], do_approximate_matching=not exact)
         if res.status_code == 200:
             if len(res.response_dict['results']) > 0:
+                if res.response_dict['results'][0]['matches'] == None:
+                    return None
                 ott_id = int(res.response_dict['results'][0]['matches'][0]['taxon']['ott_id'])
                 return ott_id
             else:
