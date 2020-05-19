@@ -5,7 +5,7 @@ from .ws_wrapper import (OTWebServicesError,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
 
-from .nexson_helpers import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
+from nexson import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
 
 FILES_SERVER_URL = 'files'
 
