@@ -165,6 +165,22 @@ class OpenTree(object):
         """
         return self.ws.conflict(study_id, tree_id, compare_to, demand_success=False)
 
+    def conflict_str(self, tree_str, compare_to='synth'):
+        """
+        Gets node status data from any tree in the Open Tree of Life Phylesystem.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        tree_id : single character value
+            The tree id of a tree within the study id provided.
+        compare_to : a single character value
+            Usually, you want this to be 'synth', to compare to the synthetic tree.
+            Alternatively, you can compare your tree to any other tree in phylesystem.
+        """
+        return self.ws.conflict_from_newick(tree_str, compare_to, demand_success=False)
+
     def studies_properties(self):
         """
         Get properties that can be used to search across studies and trees in phylesystem.
@@ -296,6 +312,7 @@ class OpenTree(object):
                 msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
                 message = call_record.response_dict['message']
                 raise OTWebServicesError(msgtemplate.format(message))
+            msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
 
     def synth_mrca(self, node_ids=None, ott_ids=None, ignore_unknown_ids=True):
@@ -324,7 +341,9 @@ class OpenTree(object):
             else:
                 assert u.startswith('ott')
                 ui = int(u[3:])
-                if ott_ids and (ui in ott_ids):
+                if ott_ids and (ui in ott_ids):### What if it is a astinrg
+                    ott_ids.remove(ui)
+                if ott_ids and (str(ui) in ott_ids):### What if it is a astinrg
                     ott_ids.remove(ui)
 
     def get_ottid_from_gbifid(self, gbif_id):

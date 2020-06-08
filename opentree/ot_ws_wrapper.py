@@ -56,6 +56,12 @@ class OTWebServiceWrapper(WebServiceWrapper):
                                                                        urllib.parse.quote(tree_id), compare_to)
         return self._call_api(url, http_method='GET', demand_success=demand_success)
 
+    def conflict_from_newick(self, input_newick, compare_to, demand_success=False):
+        assert(compare_to in ['synth', 'ott'])
+        d = {"tree1newick": input_newick,
+             "tree2": compare_to }
+        return self._call_api('conflict/conflict-status', data=d, demand_success=demand_success)
+
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}
         return self._call_api('studies/find_studies', data=d, demand_success=False)
