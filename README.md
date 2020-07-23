@@ -1,6 +1,6 @@
 python-opentree
 ===============
-[![Build Status](https://travis-ci.org/OpenTreeOfLife/python-opentree.svg?branch=master)](https://travis-ci.org/OpenTreeOfLife/python-opentree)[![Documentation](https://readthedocs.org/projects/opentree/badge/?version=latest&style=flat)](https://opentree.readthedocs.io/en/latest/)[![codecov](https://codecov.io/gh/OpenTreeOfLife/python-opentree/branch/ms/graph/badge.svg)](https://codecov.io/gh/OpenTreeOfLife/python-opentree)
+[![Build Status](https://travis-ci.org/OpenTreeOfLife/python-opentree.svg?branch=master)](https://travis-ci.org/OpenTreeOfLife/python-opentree)[![Documentation](https://readthedocs.org/projects/opentree/badge/?version=latest&style=flat)](https://opentree.readthedocs.io/en/latest/)[![codecov](https://codecov.io/gh/OpenTreeOfLife/python-opentree/branch/main/graph/badge.svg)](https://codecov.io/gh/OpenTreeOfLife/python-opentree)
 
 This package is a python library designed to make it easier to work with web services and
 data resources associated with the [Open Tree of Life](https://opentreeoflife.github.io)
