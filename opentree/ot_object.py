@@ -35,6 +35,19 @@ class FilesServerWrapper(OTWebServiceWrapper):
         return self._call_api(url_frag, http_method='GET', headers='text')
 
 
+_default_api_endpoint = None
+_default_run_mode = None
+
+
+def default_open_tree_obj():
+    global _default_api_endpoint, _default_run_mode
+    if _default_api_endpoint is None:
+        _default_api_endpoint = 'production'
+        _default_run_mode = WebServiceRunMode.RUN
+    return OpenTree(api_endpoint=_default_api_endpoint,
+                    run_mode=_default_run_mode)
+
+
 class OpenTree(object):
     """
     This class provides a high-level wrapper for interaction with OT web services and data.
@@ -43,6 +56,10 @@ class OpenTree(object):
     """
 
     def __init__(self, api_endpoint='production', run_mode=WebServiceRunMode.RUN):
+        global _default_api_endpoint, _default_run_mode
+        if _default_api_endpoint is None:
+            _default_api_endpoint = api_endpoint
+            _default_run_mode = run_mode
         self._api_endpoint = api_endpoint
         self._run_mode = run_mode
         self._ws = None
@@ -124,11 +141,13 @@ class OpenTree(object):
             raise ValueError('"{}" not recognized as a valid tree_format'.format(tree_format))
         if tree_format == 'object':
             ws_rec = self.ws.study(study_id, demand_success=False)
+
             def efn(rd):
                 nexs = rd['data']
                 return ws_rec._to_object_converter.tree_from_nexson(nexs,
                                                                     tree_id=tree_id,
                                                                     label_format=label_format)
+
             ws_rec._tree_from_response_extractor = efn
         else:
             ws_rec = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
@@ -333,7 +352,7 @@ class OpenTree(object):
 
     # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
-        assert('unknown' in call_record.response_dict), call_record.response_dict
+        assert ('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
         for u in unknown_ids:
             if node_ids and u in node_ids:

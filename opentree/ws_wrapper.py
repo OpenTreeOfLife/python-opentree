@@ -10,6 +10,7 @@ import logging
 import sys
 import re
 from enum import Enum
+from .node_reference import SynthNodeReference, OTTaxonRef
 
 import requests
 
@@ -71,6 +72,8 @@ class WebServiceCallRecord(object):
         self._response_obj = None
         self._response_dict = None
         self._tree = None
+        self._node_ref = None
+        self._taxon_ref = None
         self._tree_from_response_extractor = None
         try:
             self._to_object_converter = service_wrapper.to_object_converter
@@ -146,6 +149,22 @@ class WebServiceCallRecord(object):
         return sc is not None and sc == 200
 
     @property
+    def taxon(self):
+        if self._taxon_ref is None:
+            if not self:
+                return None
+            self._taxon_ref = OTTaxonRef(self.response_dict)
+        return self._taxon_ref
+
+    @property
+    def node_ref(self):
+        if self._node_ref is None:
+            if not self:
+                return None
+            self._node_ref = SynthNodeReference(self.response_dict)
+        return self._node_ref
+
+    @property
     def tree(self):
         if self._tree is None:
             if not self:
@@ -157,11 +176,9 @@ class WebServiceCallRecord(object):
         return self._tree
 
 def extract_content_from_raw_text_method_dict(response_dict):
-    print(response_dict.keys())
     return response_dict['content']
 
 def extract_newick(response_dict):
-    print(response_dict.keys())
     return response_dict['newick']
 
 def extract_newick_then_obj(response_dict, to_obj_conv):
