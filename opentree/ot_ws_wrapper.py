@@ -35,13 +35,32 @@ class OTWebServiceWrapper(WebServiceWrapper):
     def studies_properties(self):
         return self._call_api('studies/properties')
 
-    def study(self, study_id):
+    def study(self, study_id, demand_success=False):
         url = 'study/{}'.format(urllib.parse.quote(study_id))
-        return self._call_api(url, http_method='GET')
+        data = {'output_nexml2json': '1.2.1'}
+        return self._call_api(url, http_method='GET', data=data, demand_success=demand_success)
 
-    def tree(self, study_id, tree_id):
-        url = 'study/{}/tree/'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id))
-        return self._call_api(url, http_method='GET')
+    def tree(self, study_id, tree_id, tree_format="", label_format="ot:originallabel", demand_success=False):
+        ext_dict = {'nexus': '.nex', 'newick': '.tre', 'nexson': ''}
+        url = 'study/{}/tree/{}{}/?tip_label={}'.format(urllib.parse.quote(study_id), urllib.parse.quote(tree_id),
+                                                        ext_dict[tree_format], label_format)
+        return self._call_api(url, http_method='GET', demand_success=demand_success)
+
+    def otus(self, study_id, demand_success=False):
+        url = 'study/{}/otus'.format(urllib.parse.quote(study_id))
+        return self._call_api(url, http_method='GET', demand_success=demand_success)
+
+    # TODO for Luna :) done!
+    def conflict(self, study_id, tree_id, compare_to="synth", demand_success=False):
+        url = 'conflict/conflict-status?tree1={}%23{}&tree2={}'.format(urllib.parse.quote(study_id),
+                                                                       urllib.parse.quote(tree_id), compare_to)
+        return self._call_api(url, http_method='GET', demand_success=demand_success)
+
+    def conflict_from_newick(self, input_newick, compare_to, demand_success=False):
+        assert(compare_to in ['synth', 'ott'])
+        d = {"tree1newick": input_newick,
+             "tree2": compare_to }
+        return self._call_api('conflict/conflict-status', data=d, demand_success=demand_success)
 
     def studies_find_studies(self, value, search_property, exact=False, verbose=False):
         d = {"property": str(search_property), "value": str(value), "exact": bool(exact), "verbose": bool(verbose)}

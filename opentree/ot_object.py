@@ -5,6 +5,8 @@ from .ws_wrapper import (OTWebServicesError,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
 
+from .nexson_helpers import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
+
 FILES_SERVER_URL = 'files'
 
 
@@ -33,14 +35,31 @@ class FilesServerWrapper(OTWebServiceWrapper):
         return self._call_api(url_frag, http_method='GET', headers='text')
 
 
-class OpenTree(object):
-    """This class is intended to provide a high-level wrapper for interaction with OT web services and data.
-    The method names are intended to be clear to a wide variety of users, rather than (necessarily matching
-    the API calls directly.
+_default_api_endpoint = None
+_default_run_mode = None
 
+
+def default_open_tree_obj():
+    global _default_api_endpoint, _default_run_mode
+    if _default_api_endpoint is None:
+        _default_api_endpoint = 'production'
+        _default_run_mode = WebServiceRunMode.RUN
+    return OpenTree(api_endpoint=_default_api_endpoint,
+                    run_mode=_default_run_mode)
+
+
+class OpenTree(object):
+    """
+    This class provides a high-level wrapper for interaction with OT web services and data.
+    The method names are intended to be clear to a wide variety of users, rather than necessarily matching
+    the API calls directly.
     """
 
     def __init__(self, api_endpoint='production', run_mode=WebServiceRunMode.RUN):
+        global _default_api_endpoint, _default_run_mode
+        if _default_api_endpoint is None:
+            _default_api_endpoint = api_endpoint
+            _default_run_mode = run_mode
         self._api_endpoint = api_endpoint
         self._run_mode = run_mode
         self._ws = None
@@ -75,6 +94,9 @@ class OpenTree(object):
         return self.files_server.get_reversed_subproblem_solution(synth_id, ott_id)
 
     def about(self):
+        """
+        Gets information about the Open Tree of Life taxonomy and the synthetic tree.
+        """
         tax_about = self.ws.taxonomy_about()
         tree_about = self.ws.tree_of_life_about()
         return {'taxonomy_about': tax_about,
@@ -82,28 +104,180 @@ class OpenTree(object):
                 }
 
     def get_study(self, study_id):
+        """
+        Gets the citation of a study and its associated metadata.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        """
         return self.ws.study(study_id)
 
-    def get_tree(self, study_id, tree_id):
-        return self.ws.tree(study_id, tree_id)
+    def get_tree(self, study_id, tree_id,
+                 tree_format="nexson", label_format="ot:originallabel", demand_success=False):
+        """
+        Gets a source tree from phylesystem and its associated metadata.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        tree_id : single character value
+            The tree id of a tree within the study id provided.
+        tree_format : single character value
+            Must be one of "newick", "nexson", "nexus", or "object"
+            If tree format is newick or nexus, returns tree as string in that format.
+            If "nexson", returns semi-useless tree nexson w/o OTUS.
+        label_format : single character value
+            Must be one of "ot:originallabel", "ot:ottid", or "ot:otttaxonname".
+            "ot:originallabel" returns the tree with tip labels as it was originally submitted to phylesystem by a curator.
+            "ot:ottid" returns a tree with tip labels corresponding to the matching ott id.
+            "ot:otttaxonname" returns a tree with tip labels corresponding to the matching ott taxon name.
+        demand_success : boolean
+            Wether to return an error or return a somewhat failed output silently.
+        """
+        if tree_format not in ["newick", "nexson", "nexus", "object"]:
+            raise ValueError('"{}" not recognized as a valid tree_format'.format(tree_format))
+        if tree_format == 'object':
+            ws_rec = self.ws.study(study_id, demand_success=False)
+
+            def efn(rd):
+                nexs = rd['data']
+                return ws_rec._to_object_converter.tree_from_nexson(nexs,
+                                                                    tree_id=tree_id,
+                                                                    label_format=label_format)
+
+            ws_rec._tree_from_response_extractor = efn
+        else:
+            ws_rec = self.ws.tree(study_id, tree_id, tree_format, label_format, demand_success)
+            from .ws_wrapper import extract_content_from_raw_text_method_dict
+            if tree_format in ('newick', 'nexus'):
+                ws_rec._tree_from_response_extractor = extract_content_from_raw_text_method_dict
+        return ws_rec
+
+    def get_otus(self, study_id):
+        """
+        Gets OTUs from a study in the Open Tree of Life Phylesystem.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        """
+        return self.ws.otus(study_id)
+
+    # TODO for Luna :) done!
+    def conflict_info(self, study_id, tree_id, compare_to='synth'):
+        """
+        Gets node status data from any tree in the Open Tree of Life Phylesystem.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        tree_id : single character value
+            The tree id of a tree within the study id provided.
+        compare_to : a single character value
+            Usually, you want this to be 'synth', to compare to the synthetic tree.
+            Alternatively, you can compare your tree to any other tree in phylesystem.
+        """
+        return self.ws.conflict(study_id, tree_id, compare_to, demand_success=False)
+
+    def conflict_str(self, tree_str, compare_to='synth'):
+        """
+        Gets node status data from any tree in the Open Tree of Life Phylesystem.
+
+        Parameters
+        ----------
+        study_id : single character value
+            The study id from Open Tree of Life.
+        tree_id : single character value
+            The tree id of a tree within the study id provided.
+        compare_to : a single character value
+            Usually, you want this to be 'synth', to compare to the synthetic tree.
+            Alternatively, you can compare your tree to any other tree in phylesystem.
+        """
+        return self.ws.conflict_from_newick(tree_str, compare_to, demand_success=False)
 
     def studies_properties(self):
+        """
+        Get properties that can be used to search across studies and trees in phylesystem.
+        """
         return self.ws.studies_properties()
 
     def find_studies(self, value, search_property, exact=False, verbose=False):
+        """
+        Gets study ids that match a certain value of a given search property.
+
+        Parameters
+        ----------
+        value : single character value
+            The study id from Open Tree of Life.
+        search_property : single character value
+            Any value from studies_properties.
+        exact : boolean
+
+        verbose : boolean
+        """
         return self.ws.studies_find_studies(value, search_property=search_property, exact=exact, verbose=verbose)
 
     def find_trees(self, value, search_property, exact=False, verbose=False):
+        """
+        Gets trees that match a certain value of a given search property.
+
+        Parameters
+        ----------
+        value : single character value
+            The study id from Open Tree of Life.
+        search_property : single character value
+            Any value from studies_properties.
+        exact : boolean
+
+        verbose : boolean
+
+        Example
+        -------
+
+
+        """
         return self.ws.studies_find_trees(value, search_property=search_property, exact=exact, verbose=verbose)
 
     def taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
                    include_children=False, include_terminal_descendants=False):
+        """
+        Gets taxonomic information for a given taxon in the Open Tree taxonomy.
+
+        Parameters
+        ----------
+        ott_id : single character value
+            The OTT id of a taxon.
+        source_id : maybe single character value
+
+        include_lineage : boolean
+
+        include_children : boolean
+
+        include_terminal_descendants : boolean
+        """
         return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
                                            include_lineage=include_lineage,
                                            include_children=include_children,
                                            include_terminal_descendants=include_terminal_descendants)
 
     def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
+        """
+        Gets the node corresponding to the most recent commom ancestor (mrca) of a taxon in the synthetic Open Tree of Life tree.
+        Notes from Luna:
+            Does it work with just one id?
+            Since it is not always a taxon mrca, should it be called get_mrca?
+
+        Parameters
+        ----------
+        ott_ids : maybe single character value
+        ignore_unknown_ids : boolean
+            Default to TRUE.
+        """
         while True:
             call_record = self.ws.taxonomy_mrca(ott_ids=ott_ids)
             if call_record:
@@ -118,6 +292,7 @@ class OpenTree(object):
         return self.ws.taxonomy_subtree(ott_id=ott_id, label_format=label_format)
 
     def tnrs_contexts(self):
+        """Gets a list of taxonomic contexts that can be used to constraint a TNRS match."""
         return self.ws.tnrs_contexts()
 
     def tnrs_infer_context(self, names):
@@ -156,10 +331,12 @@ class OpenTree(object):
                 msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
                 message = call_record.response_dict['message']
                 raise OTWebServicesError(msgtemplate.format(message))
+            msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
 
     def synth_mrca(self, node_ids=None, ott_ids=None, ignore_unknown_ids=True):
         while True:
+            assert (ott_ids or node_ids)
             call_record = self.ws.tree_of_life_mrca(node_ids=node_ids,
                                                     ott_ids=ott_ids)
             if call_record:
@@ -169,9 +346,13 @@ class OpenTree(object):
                 message = call_record.response_dict['message']
                 raise OTWebServicesError(msgtemplate.format(message))
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
+            if not ott_ids or node_ids:
+                msgtemplate = 'Call to tree_of_life/mrca failed as all ids were pruned'
+                raise OTWebServicesError(msgtemplate)
 
     # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
+        assert ('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
         for u in unknown_ids:
             if node_ids and u in node_ids:
@@ -179,12 +360,14 @@ class OpenTree(object):
             else:
                 assert u.startswith('ott')
                 ui = int(u[3:])
-                if ott_ids and (ui in ott_ids):
+                if ott_ids and (ui in ott_ids):### What if it is a astinrg
+                    ott_ids.remove(ui)
+                if ott_ids and (str(ui) in ott_ids):### What if it is a astinrg
                     ott_ids.remove(ui)
 
     def get_ottid_from_gbifid(self, gbif_id):
         """Returns an ott id for a gbif id
-        ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
+        ott_id is set to 'None' if the gbif id is not found in the Open Tree Taxanomy
         """
         assert int(gbif_id)
         gbiftax = "gbif:{}".format(int(gbif_id))
@@ -200,7 +383,7 @@ class OpenTree(object):
             raise OTWebServicesError(msgtemplate.format(message))
 
     def get_citations(self, studies):
-        """Returns a string with citation info for list of study or Tree Ids"""
+        """Returns a string with citations from a list of study or Tree Ids"""
         cites = []
         for study in studies:
             if '@' in study:
@@ -226,6 +409,8 @@ class OpenTree(object):
         res = self.tnrs_match([spp_name], do_approximate_matching=not exact)
         if res.status_code == 200:
             if len(res.response_dict['results']) > 0:
+                if res.response_dict['results'][0]['matches'] == None:
+                    return None
                 ott_id = int(res.response_dict['results'][0]['matches'][0]['taxon']['ott_id'])
                 return ott_id
             else:
@@ -234,3 +419,54 @@ class OpenTree(object):
             msgtemplate = 'Call to tnrs_match failed with the message "{}"'
             message = res.response_dict['message']
             raise OTWebServicesError(msgtemplate.format(message))
+
+    def get_matchdict_from_taxlist(self, list_of_taxa):
+        """Returns tree object
+        """
+        matches = dict()
+        failed = set()
+        for tax in list_of_taxa:
+            tax = tax.strip()
+            if tax != '':
+                try:
+                    ott_id = self.get_ottid_from_name(tax)
+                    matches[tax] = 'ott{}'.format(ott_id)
+                except IndexError:
+                    failed.add(tax)
+                    sys.stderr.write("Failed to get an ottid for {}".format(tax))
+        return matches, failed
+
+    def remove_problem_characters(self, instr, prob_char = "():#", replace_w = '?'):
+        problem_characters = set(prob_char)
+        for char in problem_characters:
+            instr = instr.replace(char,replace_w)
+        return instr
+
+    def relabel_tree(self, response):
+        relabel = dict()
+        broken = oresponse_dict['broken']
+        for taxon in broken:
+            remap = broken[taxon]
+            if remap.startswith('mrca'):
+                if remap not in relabel:
+                    relabel[remap] = []
+                relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
+            if remap.startswith('ott'):
+                if remap not in relabel:
+                    relabel[remap] = []
+            relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
+        backuptree = copy.deepcopy(response.tree)
+        for taxon in backuptree.taxon_namespace:
+            if taxon.label.startswith('mrca'):
+                taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
+            else:
+                ott = taxon.label.split()[-1]
+                if ott in relabel:
+                    added_taxa = 'and MRCA of taxa in '+' '.join(relabel[ott])
+                    taxon.label = taxon.label + added_taxa
+        return(backuptree)
+
+    def get_induced_from_taxlist(self, list_of_taxa, relabel_mrca = True):
+        matches, failed = get_matchdict_from_taxlist(list_of_taxa)
+        ott_ids = matches.values()
+        output = self.synth_induced_tree(ott_ids=list(matches.values()),  label_format='name_and_id')

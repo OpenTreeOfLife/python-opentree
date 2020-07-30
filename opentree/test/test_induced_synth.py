@@ -20,7 +20,6 @@ class TestInducedSynth(unittest.TestCase):
     
     def test_success_mixed_ids(self):
         OT.synth_induced_tree(node_ids=['ott770315'], ott_ids=[417950])
-    
 
 if __name__ == '__main__':
     unittest.main()
