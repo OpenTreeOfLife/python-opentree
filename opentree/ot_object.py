@@ -186,14 +186,13 @@ class OpenTree(object):
 
     def conflict_str(self, tree_str, compare_to='synth'):
         """
-        Gets node status data from any tree in the Open Tree of Life Phylesystem.
+        Gets node status data from a newick string tree with ott_ids as labels, following the rough 
+        format:
+        "(('_nd1_ott770315','newick_nd2_ott417950')'_nd3_','_nd4_ott158484')'_nd5';".
 
         Parameters
         ----------
-        study_id : single character value
-            The study id from Open Tree of Life.
-        tree_id : single character value
-            The tree id of a tree within the study id provided.
+        tree_str: a tree in 'conflict formatted' newick string
         compare_to : a single character value
             Usually, you want this to be 'synth', to compare to the synthetic tree.
             Alternatively, you can compare your tree to any other tree in phylesystem.
