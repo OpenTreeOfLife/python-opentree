@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
+import sys
 
 from .ws_wrapper import (OTWebServicesError,
                          WebServiceRunMode,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
 
-from .nexson_helpers import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
+# from .nexson_helpers import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
 
 FILES_SERVER_URL = 'files'
 
 
 class FilesServerWrapper(OTWebServiceWrapper):
+    """
+    This class provides a mid-level wrapper for interaction with OT web services and data.
+    """
     def __init__(self, api_endpoint=FILES_SERVER_URL, run_mode=WebServiceRunMode.RUN):
         super(FilesServerWrapper, self).__init__(api_endpoint=api_endpoint, run_mode=run_mode)
 
@@ -23,11 +27,13 @@ class FilesServerWrapper(OTWebServiceWrapper):
         return self._call_api(url_frag, http_method='GET')
 
     def get_subproblem_solution(self, synth_id, ott_id):
-        url_frag = 'synthesis/{s}/{s}/subproblem_solutions/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        url_frag = 'synthesis/{s}/{s}/subproblem_solutions/ott{o}.tre'.format(s=synth_id,
+                                                                              o=ott_id)
         return self._call_api(url_frag, http_method='GET', headers='text')
 
     def get_reversed_subproblem_solution(self, synth_id, ott_id):
-        url_frag = 'synthesis/{s}/{s}/reversed_subproblem_solutions/ott{o}.tre'.format(s=synth_id, o=ott_id)
+        url_frag = 'synthesis/{s}/{s}/reversed_subproblem_solutions/ott{o}.tre'.format(s=synth_id,
+                                                                                       o=ott_id)
         return self._call_api(url_frag, http_method='GET', headers='text')
 
     def get_subproblem_trees(self, synth_id, ott_id):
@@ -51,8 +57,8 @@ def default_open_tree_obj():
 class OpenTree(object):
     """
     This class provides a high-level wrapper for interaction with OT web services and data.
-    The method names are intended to be clear to a wide variety of users, rather than necessarily matching
-    the API calls directly.
+    The method names are intended to be clear to a wide variety of users, rather than
+    necessarily matching the API calls directly.
     """
 
     def __init__(self, api_endpoint='production', run_mode=WebServiceRunMode.RUN):
@@ -133,10 +139,12 @@ class OpenTree(object):
             Must be one of "ot:originallabel", "ot:ottid", or "ot:otttaxonname".
             "ot:originallabel" returns the tree with tip labels as it was originally
               submitted to phylesystem by a curator.
-            "ot:ottid" returns a tree with tip labels corresponding to the matching ott id.
-            "ot:otttaxonname" returns a tree with tip labels corresponding to the matching ott taxon name.
+            "ot:ottid" returns a tree with tip labels corresponding to the matching
+              ott id.
+            "ot:otttaxonname" returns a tree with tip labels corresponding to the
+              matching ott taxon name.
         demand_success : boolean
-            Wether to return an error or return a somewhat failed output silently.
+            Whether to return an error or return a somewhat failed output silently.
         """
         if tree_format not in ["newick", "nexson", "nexus", "object"]:
             raise ValueError('"{}" not recognized as a valid tree_format'.format(tree_format))
@@ -219,7 +227,8 @@ class OpenTree(object):
 
         verbose : boolean
         """
-        return self.ws.studies_find_studies(value, search_property=search_property, exact=exact, verbose=verbose)
+        return self.ws.studies_find_studies(value, search_property=search_property,
+                                            exact=exact, verbose=verbose)
 
     def find_trees(self, value, search_property, exact=False, verbose=False):
         """
@@ -240,10 +249,11 @@ class OpenTree(object):
 
 
         """
-        return self.ws.studies_find_trees(value, search_property=search_property, exact=exact, verbose=verbose)
+        return self.ws.studies_find_trees(value, search_property=search_property,
+                                          exact=exact, verbose=verbose)
 
     def taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
-                   include_children=False, include_terminal_descendants=False):
+                   include_children=False, include_terminal_descendant=False):
         """
         Gets taxonomic information for a given taxon in the Open Tree taxonomy.
 
@@ -257,16 +267,17 @@ class OpenTree(object):
 
         include_children : boolean
 
-        include_terminal_descendants : boolean
+        include_terminal_descendant : boolean
         """
         return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
                                            include_lineage=include_lineage,
                                            include_children=include_children,
-                                           include_terminal_descendants=include_terminal_descendants)
+                                           include_terminal_descendant=include_terminal_descendant)
 
     def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
         """
-        Gets the node corresponding to the most recent commom ancestor (mrca) of a taxon in the synthetic Open Tree of Life tree.
+        Gets the node corresponding to the most recent commom ancestor (mrca) of
+          a taxon in the synthetic Open Tree of Life tree.
         Notes from Luna:
             Does it work with just one id?
             Since it is not always a taxon mrca, should it be called get_mrca?
@@ -297,13 +308,15 @@ class OpenTree(object):
     def tnrs_infer_context(self, names):
         return self.ws.tnrs_infer_context(names)
 
-    def tnrs_match(self, names, context_name=None, do_approximate_matching=False, include_suppressed=False):
+    def tnrs_match(self, names, context_name=None, do_approximate_matching=False,
+                   include_suppressed=False):
         return self.ws.tnrs_match_names(names, context_name=context_name,
                                         do_approximate_matching=do_approximate_matching,
                                         include_suppressed=include_suppressed)
 
     def tnrs_autocomplete(self, name, context_name=None, include_suppressed=False):
-        return self.ws.tnrs_autocomplete_name(name, context_name=context_name, include_suppressed=include_suppressed)
+        return self.ws.tnrs_autocomplete_name(name, context_name=context_name,
+                                              include_suppressed=include_suppressed)
 
     def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
@@ -395,9 +408,10 @@ class OpenTree(object):
             studyres = self.find_studies(studyid, search_property='ot:studyId', verbose=True)
             new_cite = studyres.response_dict.get('matched_studies', None)
             if new_cite:
-                cites.append(
-                    opentree_url + '\n' + new_cite[0].get('ot:studyPublicationReference', '') + '\n' + new_cite[0].get(
-                        'ot:studyPublication', '') + '\n')
+                cites.append(opentree_url + '\n' +
+                             new_cite[0].get('ot:studyPublicationReference', '')
+                             + '\n' +
+                             new_cite[0].get('ot:studyPublication', '') + '\n')
         return "\n".join(cites)
 
     def get_ottid_from_name(self, spp_name, exact=True):
@@ -434,10 +448,10 @@ class OpenTree(object):
                     sys.stderr.write("Failed to get an ottid for {}".format(tax))
         return matches, failed
 
-    def remove_problem_characters(self, instr, prob_char = "():#", replace_w = '?'):
+    def remove_problem_characters(self, instr, prob_char="():#", replace_w='?'):
         problem_characters = set(prob_char)
         for char in problem_characters:
-            instr = instr.replace(char,replace_w)
+            instr = instr.replace(char, replace_w)
         return instr
 
     # def relabel_tree(self, response):
@@ -464,6 +478,7 @@ class OpenTree(object):
     #                 taxon.label = taxon.label + added_taxa
     #     return(backuptree)
 
-    def get_induced_from_taxlist(self, list_of_taxa, relabel_mrca = True):
-        matches, failed = get_matchdict_from_taxlist(list_of_taxa)
-        output = self.synth_induced_tree(ott_ids=list(matches.values()),  label_format='name_and_id')
+    # def get_induced_from_taxlist(self, list_of_taxa, relabel_mrca=True):
+    #     matches, failed = get_matchdict_from_taxlist(list_of_taxa)
+    #     output = self.synth_induced_tree(ott_ids=list(matches.values()),
+    #                                      label_format='name_and_id')
