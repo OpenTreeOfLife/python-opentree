@@ -131,7 +131,8 @@ class OpenTree(object):
             If "nexson", returns semi-useless tree nexson w/o OTUS.
         label_format : single character value
             Must be one of "ot:originallabel", "ot:ottid", or "ot:otttaxonname".
-            "ot:originallabel" returns the tree with tip labels as it was originally submitted to phylesystem by a curator.
+            "ot:originallabel" returns the tree with tip labels as it was originally
+              submitted to phylesystem by a curator.
             "ot:ottid" returns a tree with tip labels corresponding to the matching ott id.
             "ot:otttaxonname" returns a tree with tip labels corresponding to the matching ott taxon name.
         demand_success : boolean
@@ -167,7 +168,6 @@ class OpenTree(object):
         """
         return self.ws.otus(study_id)
 
-    # TODO for Luna :) done!
     def conflict_info(self, study_id, tree_id, compare_to='synth'):
         """
         Gets node status data from any tree in the Open Tree of Life Phylesystem.
@@ -186,7 +186,7 @@ class OpenTree(object):
 
     def conflict_str(self, tree_str, compare_to='synth'):
         """
-        Gets node status data from a newick string tree with ott_ids as labels, following the rough 
+        Gets node status data from a newick string tree with ott_ids as labels, following the rough
         format:
         "(('_nd1_ott770315','newick_nd2_ott417950')'_nd3_','_nd4_ott158484')'_nd5';".
 
@@ -374,12 +374,11 @@ class OpenTree(object):
         if res.status_code == 200:
             ott_id = int(res.response_dict['ott_id'])
             return ott_id
-        elif res.status_code == 400:
+        if res.status_code == 400:
             return None
-        else:
-            msgtemplate = 'Call to taxon_info failed with the message "{}"'
-            message = res.response_dict['message']
-            raise OTWebServicesError(msgtemplate.format(message))
+        msgtemplate = 'Call to taxon_info failed with the message "{}"'
+        message = res.response_dict['message']
+        raise OTWebServicesError(msgtemplate.format(message))
 
     def get_citations(self, studies):
         """Returns a string with citations from a list of study or Tree Ids"""
@@ -441,31 +440,30 @@ class OpenTree(object):
             instr = instr.replace(char,replace_w)
         return instr
 
-    def relabel_tree(self, response):
-        relabel = dict()
-        broken = oresponse_dict['broken']
-        for taxon in broken:
-            remap = broken[taxon]
-            if remap.startswith('mrca'):
-                if remap not in relabel:
-                    relabel[remap] = []
-                relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
-            if remap.startswith('ott'):
-                if remap not in relabel:
-                    relabel[remap] = []
-            relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
-        backuptree = copy.deepcopy(response.tree)
-        for taxon in backuptree.taxon_namespace:
-            if taxon.label.startswith('mrca'):
-                taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
-            else:
-                ott = taxon.label.split()[-1]
-                if ott in relabel:
-                    added_taxa = 'and MRCA of taxa in '+' '.join(relabel[ott])
-                    taxon.label = taxon.label + added_taxa
-        return(backuptree)
+    # def relabel_tree(self, response):
+    #     relabel = dict()
+    #     broken = oresponse_dict['broken']
+    #     for taxon in broken:
+    #         remap = broken[taxon]
+    #         if remap.startswith('mrca'):
+    #             if remap not in relabel:
+    #                 relabel[remap] = []
+    #             relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
+    #         if remap.startswith('ott'):
+    #             if remap not in relabel:
+    #                 relabel[remap] = []
+    #         relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
+    #     backuptree = copy.deepcopy(response.tree)
+    #     for taxon in backuptree.taxon_namespace:
+    #         if taxon.label.startswith('mrca'):
+    #             taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
+    #         else:
+    #             ott = taxon.label.split()[-1]
+    #             if ott in relabel:
+    #                 added_taxa = 'and MRCA of taxa in '+' '.join(relabel[ott])
+    #                 taxon.label = taxon.label + added_taxa
+    #     return(backuptree)
 
     def get_induced_from_taxlist(self, list_of_taxa, relabel_mrca = True):
         matches, failed = get_matchdict_from_taxlist(list_of_taxa)
-        ott_ids = matches.values()
         output = self.synth_induced_tree(ott_ids=list(matches.values()),  label_format='name_and_id')

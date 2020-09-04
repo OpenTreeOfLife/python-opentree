@@ -51,8 +51,6 @@ class TestPhyscraperDeps(unittest.TestCase):
         assert res['matches'][0]['matched_name'] == 'Bos grunniens'
         assert res['matches'][0]['taxon']['ott_id'] ==  bg_tax
 
-
-
     def test_ottid_from_name(self):
         ottid = OT.get_ottid_from_name('Bos grunniens')
         assert ottid == bg_tax
@@ -61,5 +59,10 @@ class TestPhyscraperDeps(unittest.TestCase):
         resp = OT.conflict_str(conf_newick_str, 'ott').response_dict
         assert resp['nd3']['status'] == 'conflicts_with'
     
+    def test_find_trees(self):
+        phylesystem_studies_resp = OT.find_trees(bg_tax, search_property ='ot:ottId')
+        matches = [study['ot:studyId'] for study in phylesystem_studies_resp.response_dict['matched_studies']]
+        assert 'ot_409' in matches
+
 if __name__ == '__main__':
     unittest.main()
