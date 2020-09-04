@@ -101,7 +101,7 @@ class OpenTree(object):
 
     def about(self):
         """
-        Gets information about the Open Tree of Life taxonomy and the synthetic tree.
+        Get information about the Open Tree of Life taxonomy and the synthetic tree.
         """
         tax_about = self.ws.taxonomy_about()
         tree_about = self.ws.tree_of_life_about()
@@ -111,7 +111,7 @@ class OpenTree(object):
 
     def get_study(self, study_id):
         """
-        Gets the citation of a study and its associated metadata.
+        Get citation of a study and its associated metadata.
 
         Parameters
         ----------
@@ -123,7 +123,7 @@ class OpenTree(object):
     def get_tree(self, study_id, tree_id,
                  tree_format="nexson", label_format="ot:originallabel", demand_success=False):
         """
-        Gets a source tree from phylesystem and its associated metadata.
+        Get a source tree from phylesystem and its associated metadata.
 
         Parameters
         ----------
@@ -167,7 +167,7 @@ class OpenTree(object):
 
     def get_otus(self, study_id):
         """
-        Gets OTUs from a study in the Open Tree of Life Phylesystem.
+        Get OTUs from a study in the Open Tree of Life Phylesystem.
 
         Parameters
         ----------
@@ -178,7 +178,7 @@ class OpenTree(object):
 
     def conflict_info(self, study_id, tree_id, compare_to='synth'):
         """
-        Gets node status data from any tree in the Open Tree of Life Phylesystem.
+        Get node status data from any tree in the Open Tree of Life Phylesystem.
 
         Parameters
         ----------
@@ -194,7 +194,7 @@ class OpenTree(object):
 
     def conflict_str(self, tree_str, compare_to='synth'):
         """
-        Gets node status data from a newick string tree with ott_ids as labels, following the rough
+        Get node status data from a newick string tree with ott_ids as labels, following the rough
         format:
         "(('_nd1_ott770315','newick_nd2_ott417950')'_nd3_','_nd4_ott158484')'_nd5';".
 
@@ -215,7 +215,7 @@ class OpenTree(object):
 
     def find_studies(self, value, search_property, exact=False, verbose=False):
         """
-        Gets study ids that match a certain value of a given search property.
+        Get study ids that match a certain value of a given search property.
 
         Parameters
         ----------
@@ -232,7 +232,7 @@ class OpenTree(object):
 
     def find_trees(self, value, search_property, exact=False, verbose=False):
         """
-        Gets trees that match a certain value of a given search property.
+        Get trees that match a certain value of a given search property.
 
         Parameters
         ----------
@@ -255,7 +255,7 @@ class OpenTree(object):
     def taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
                    include_children=False, include_terminal_descendant=False):
         """
-        Gets taxonomic information for a given taxon in the Open Tree taxonomy.
+        Get taxonomic information for a given taxon in the Open Tree taxonomy.
 
         Parameters
         ----------
@@ -276,7 +276,7 @@ class OpenTree(object):
 
     def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
         """
-        Gets the node corresponding to the most recent commom ancestor (mrca) of
+        Get the node corresponding to the most recent commom ancestor (mrca) of
           a taxon in the synthetic Open Tree of Life tree.
         Notes from Luna:
             Does it work with just one id?
@@ -299,32 +299,46 @@ class OpenTree(object):
             self._cull_unknown_ids_from_args(call_record, [], ott_ids)
 
     def taxon_subtree(self, ott_id=None, label_format="name_and_id"):
+        """Get a subtree of a particular taxon
+        """
         return self.ws.taxonomy_subtree(ott_id=ott_id, label_format=label_format)
 
     def tnrs_contexts(self):
-        """Gets a list of taxonomic contexts that can be used to constraint a TNRS match."""
+        """Get a list of taxonomic contexts that can be used to constraint a TNRS match.
+        """
         return self.ws.tnrs_contexts()
 
     def tnrs_infer_context(self, names):
+        """Infer taxonomic context for a TNRS (Taxonomic Name Resolution Service) match.
+        """
         return self.ws.tnrs_infer_context(names)
 
     def tnrs_match(self, names, context_name=None, do_approximate_matching=False,
                    include_suppressed=False):
+        """Match taxon names to Open Tree Taxonomy using TNRS (Taxonomic Name Resolution
+             Service).
+        """
         return self.ws.tnrs_match_names(names, context_name=context_name,
                                         do_approximate_matching=do_approximate_matching,
                                         include_suppressed=include_suppressed)
 
     def tnrs_autocomplete(self, name, context_name=None, include_suppressed=False):
+        """Taxonomic name resolution service autocomplete
+        """
         return self.ws.tnrs_autocomplete_name(name, context_name=context_name,
                                               include_suppressed=include_suppressed)
 
     def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
+        """Get information of a node
+        """
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)
 
     def synth_subtree(self, node_id=None, ott_id=None,
                       tree_format="newick", label_format="name_and_id",
                       height_limit=None):
+        """Get a subtree
+        """
         return self.ws.tree_of_life_subtree(node_id=node_id, ott_id=ott_id,
                                             tree_format=tree_format,
                                             label_format=label_format,
@@ -333,6 +347,8 @@ class OpenTree(object):
     def synth_induced_tree(self, node_ids=None,
                            ott_ids=None, label_format="name_and_id",
                            ignore_unknown_ids=True):
+        """Get an induced subtree
+        """
         while True:
             call_record = self.ws.tree_of_life_induced_subtree(node_ids=node_ids,
                                                                ott_ids=ott_ids,
@@ -347,6 +363,9 @@ class OpenTree(object):
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
 
     def synth_mrca(self, node_ids=None, ott_ids=None, ignore_unknown_ids=True):
+        """Get the most recent common ancestor of a group of taxa on the synthetic
+             Open Tree of Life
+        """
         while True:
             assert (ott_ids or node_ids)
             call_record = self.ws.tree_of_life_mrca(node_ids=node_ids,
@@ -364,6 +383,8 @@ class OpenTree(object):
 
     # noinspection PyMethodMayBeStatic
     def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
+        """Cull unknown ids from arguments
+        """
         assert ('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
         for u in unknown_ids:
@@ -394,7 +415,8 @@ class OpenTree(object):
         raise OTWebServicesError(msgtemplate.format(message))
 
     def get_citations(self, studies):
-        """Returns a string with citations from a list of study or Tree Ids"""
+        """Returns study citations from a list of study or tree ids
+        """
         cites = []
         for study in studies:
             if '@' in study:
@@ -449,6 +471,8 @@ class OpenTree(object):
         return matches, failed
 
     def remove_problem_characters(self, instr, prob_char="():#", replace_w='?'):
+        """Removes problematic characters from a tree or alignment file(?)
+        """
         problem_characters = set(prob_char)
         for char in problem_characters:
             instr = instr.replace(char, replace_w)
