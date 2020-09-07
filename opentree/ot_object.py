@@ -1,3 +1,4 @@
+"""OT object. High level wrapper for OpenTree calls"""
 #!/usr/bin/env python3
 import sys
 
@@ -253,7 +254,7 @@ class OpenTree(object):
                                           exact=exact, verbose=verbose)
 
     def taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
-                   include_children=False, include_terminal_descendant=False):
+                   include_children=False, include_terminal_descendants=False):
         """
         Get taxonomic information for a given taxon in the Open Tree taxonomy.
 
@@ -272,7 +273,7 @@ class OpenTree(object):
         return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
                                            include_lineage=include_lineage,
                                            include_children=include_children,
-                                           include_terminal_descendant=include_terminal_descendant)
+                                           include_terminal_descendants=include_terminal_descendant)
 
     def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
         """
@@ -447,15 +448,16 @@ class OpenTree(object):
                     return None
                 ott_id = int(res.response_dict['results'][0]['matches'][0]['taxon']['ott_id'])
                 return ott_id
-            else:
-                return None
-        else:
-            msgtemplate = 'Call to tnrs_match failed with the message "{}"'
-            message = res.response_dict['message']
-            raise OTWebServicesError(msgtemplate.format(message))
+            return None
+        msgtemplate = 'Call to tnrs_match failed with the message "{}"'
+        message = res.response_dict['message']
+        raise OTWebServicesError(msgtemplate.format(message))
 
     def get_matchdict_from_taxlist(self, list_of_taxa):
-        """Returns tree object
+        """
+        Input: a list of taxon names
+        Returns: matches - a dictionary of name:ott_id
+        and failed - a set of the names that were not found.
         """
         matches = dict()
         failed = set()
@@ -469,40 +471,3 @@ class OpenTree(object):
                     failed.add(tax)
                     sys.stderr.write("Failed to get an ottid for {}".format(tax))
         return matches, failed
-
-    def remove_problem_characters(self, instr, prob_char="():#", replace_w='?'):
-        """Removes problematic characters from a tree or alignment file(?)
-        """
-        problem_characters = set(prob_char)
-        for char in problem_characters:
-            instr = instr.replace(char, replace_w)
-        return instr
-
-    # def relabel_tree(self, response):
-    #     relabel = dict()
-    #     broken = oresponse_dict['broken']
-    #     for taxon in broken:
-    #         remap = broken[taxon]
-    #         if remap.startswith('mrca'):
-    #             if remap not in relabel:
-    #                 relabel[remap] = []
-    #             relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
-    #         if remap.startswith('ott'):
-    #             if remap not in relabel:
-    #                 relabel[remap] = []
-    #         relabel[remap].append("{} {}".format(ottid_to_genus[taxon], taxon))
-    #     backuptree = copy.deepcopy(response.tree)
-    #     for taxon in backuptree.taxon_namespace:
-    #         if taxon.label.startswith('mrca'):
-    #             taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
-    #         else:
-    #             ott = taxon.label.split()[-1]
-    #             if ott in relabel:
-    #                 added_taxa = 'and MRCA of taxa in '+' '.join(relabel[ott])
-    #                 taxon.label = taxon.label + added_taxa
-    #     return(backuptree)
-
-    # def get_induced_from_taxlist(self, list_of_taxa, relabel_mrca=True):
-    #     matches, failed = get_matchdict_from_taxlist(list_of_taxa)
-    #     output = self.synth_induced_tree(ott_ids=list(matches.values()),
-    #                                      label_format='name_and_id')
