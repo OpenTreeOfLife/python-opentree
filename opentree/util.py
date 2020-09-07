@@ -4,7 +4,7 @@ import logging
 import sys
 
 _TAXONOMY_WIKI_URL = "https://github.com/OpenTreeOfLife/reference-taxonomy/wiki"
-_TAXON_FLAGS_WIKI_URL = "{}/Taxon-flags"
+_TAXON_FLAGS_WIKI_URL = "{}/Taxon-flags".format(_TAXONOMY_WIKI_URL)
 _SUPPRESSED_TAXON_FLAGS_WIKI_URL = _TAXON_FLAGS_WIKI_URL + '#flags-leading-to-taxa-being-unavailable-for-tnrs'
 
 
@@ -37,7 +37,7 @@ def _create_link_from_node_info_conf_key_value_pair(key, value):
         return "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(value)
     study_id, tree_id = key.split('@')
     node_id = str(value)
-    if node_id.startswith('ott'):
+    if node_id.startswith('ott'): ##todo Check if link is possible
         logging.debug("node highlighting will not work for ({}, {}, {})\n".format(study_id, tree_id, node_id))
         # # This node does not occur in the input tree, it is a result of exemplification...
         # #   link to its parent node in the input study
