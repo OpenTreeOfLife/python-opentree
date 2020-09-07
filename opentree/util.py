@@ -4,7 +4,7 @@ import logging
 import sys
 
 _TAXONOMY_WIKI_URL = "https://github.com/OpenTreeOfLife/reference-taxonomy/wiki"
-_TAXON_FLAGS_WIKI_URL = "{}/Taxon-flags"
+_TAXON_FLAGS_WIKI_URL = "{}/Taxon-flags".format(_TAXONOMY_WIKI_URL)
 _SUPPRESSED_TAXON_FLAGS_WIKI_URL = _TAXON_FLAGS_WIKI_URL + '#flags-leading-to-taxa-being-unavailable-for-tnrs'
 
 
