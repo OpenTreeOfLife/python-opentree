@@ -26,6 +26,7 @@ class TestSynthNodeInfo(object):
     def test_synth_node_info(self):
         resp = OT.synth_node_info(node_id='mrcaott354607ott374748')
         assert resp.response_dict['supported_by'] == {'ot_1344@Tr105486': 'Tn16531763'}
+        
 
 
 if __name__ == '__main__':
