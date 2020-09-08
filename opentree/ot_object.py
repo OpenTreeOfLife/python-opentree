@@ -310,7 +310,7 @@ class OpenTree(object):
         return self.ws.tnrs_contexts()
 
     def tnrs_infer_context(self, names):
-        """Infer taxonomic context for a TNRS (Taxonomic Name Resolution Service) match.
+        """Infer taxonomic context for names via a TNRS (Taxonomic Name Resolution Service) match.
         """
         return self.ws.tnrs_infer_context(names)
 
