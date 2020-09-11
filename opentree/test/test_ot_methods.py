@@ -9,7 +9,8 @@ bos = 1066581
 
 class TestOT(unittest.TestCase):
     def test_about(self):
-        assert 'taxonomy_about', 'synth_tree_about' in OT.about()
+        ret = OT.about()
+        assert 'taxonomy_about', 'synth_tree_about' in ret
 
     def test_get_tree_newick(self):
         res = OT.get_tree(study_id=study_id, tree_id=tree_id, tree_format='newick')
