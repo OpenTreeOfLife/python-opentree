@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""Allows you to investigate the phylogenetic inputs, and subproblems traversing node in the synthetioc tree.
+e.g., for the genus 'Bos' 
+python examples/diagnose_solution_for.py --ott-id 1066581"""
 import logging
 import re
 import sys
