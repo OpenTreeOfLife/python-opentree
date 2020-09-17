@@ -83,5 +83,9 @@ class TestOT(unittest.TestCase):
     def test_tnrs_match(self):
         matches = OT.tnrs_match(["Bufo", "Rana", "Hyla"])
 
+    def test_gbif_to_ott(self):
+        matchid = OT.get_ottid_from_gbifid(2441017)
+        assert matchid == bos
+
 if __name__ == '__main__':
     unittest.main()

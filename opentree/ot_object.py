@@ -112,7 +112,7 @@ class OpenTree(object):
 
     def get_study(self, study_id):
         """
-        Get citation of a study and its associated metadata.
+        Get a study and its associated metadata.
 
         Parameters
         ----------
@@ -273,7 +273,7 @@ class OpenTree(object):
         return self.ws.taxonomy_taxon_info(ott_id=ott_id, source_id=source_id,
                                            include_lineage=include_lineage,
                                            include_children=include_children,
-                                           include_terminal_descendants=include_terminal_descendant)
+                                           include_terminal_descendants=include_terminal_descendants)
 
     def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
         """
