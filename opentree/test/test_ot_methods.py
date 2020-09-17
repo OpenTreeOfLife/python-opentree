@@ -1,13 +1,32 @@
 import unittest
 
 from opentree import OT
-
+from opentree.ws_wrapper import OTWebServicesError
 
 study_id = 'ot_1979'
 tree_id = 'tree1'
 bos = 1066581
+homo = 770309
 
 class TestOT(unittest.TestCase):
+    def test_synth_files(self):
+        FS = OT.files_server
+        scaff_tree = OT.get_subproblem_scaffold_tree('opentree12.3')
+        sub_size = OT.get_subproblem_size_info('opentree12.3')
+
+
+    def test_subproblems_fail(self):
+        with self.assertRaises(OTWebServicesError):
+            ## Bos is not in the synth tree
+            sol = OT.get_subproblem_solution('opentree12.3', bos)
+            sol_trees = OT.get_subproblem_trees('opentree12.3', bos)
+            rev_sol = OT.get_reversed_subproblem_solution('opentree12.3', bos)
+
+    def test_subproblems(self):
+        sol = OT.get_subproblem_solution('opentree12.3', homo)
+        sol_trees = OT.get_subproblem_trees('opentree12.3', homo)
+        rev_sol = OT.get_reversed_subproblem_solution('opentree12.3', homo)
+
     def test_about(self):
         ret = OT.about()
         assert 'taxonomy_about', 'synth_tree_about' in ret
@@ -63,7 +82,6 @@ class TestOT(unittest.TestCase):
 
     def test_tnrs_match(self):
         matches = OT.tnrs_match(["Bufo", "Rana", "Hyla"])
-
 
 if __name__ == '__main__':
     unittest.main()

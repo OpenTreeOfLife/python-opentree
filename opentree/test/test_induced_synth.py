@@ -1,6 +1,7 @@
 import unittest
 from dendropy import Tree
 from opentree import OT
+from opentree.ws_wrapper import OTWebServicesError
 
 
 class TestInducedSynth(unittest.TestCase):
@@ -20,6 +21,10 @@ class TestInducedSynth(unittest.TestCase):
     
     def test_success_mixed_ids(self):
         OT.synth_induced_tree(node_ids=['ott770315'], ott_ids=[417950])
+
+    def test_unknown_ids(self):
+        with self.assertRaises(OTWebServicesError):
+            OT.synth_induced_tree(node_ids=['ott770315'], ott_ids=[417950, 999999999], ignore_unknown_ids=False)
 
 class TestSynthNodes(object):
     """docstring for TestSynthNodeInfo"""

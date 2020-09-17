@@ -104,8 +104,8 @@ class OpenTree(object):
         """
         Get information about the Open Tree of Life taxonomy and the synthetic tree.
         """
-        tax_about = self.ws.taxonomy_about()
-        tree_about = self.ws.tree_of_life_about()
+        tax_about = self.ws.taxonomy_about().response_dict
+        tree_about = self.ws.tree_of_life_about().response_dict
         return {'taxonomy_about': tax_about,
                 'synth_tree_about': tree_about
                 }
