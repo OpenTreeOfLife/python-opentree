@@ -5,6 +5,8 @@ from opentree import OT
 
 
 class TestCLI(unittest.TestCase):
+    def test_python_versions(self):
+        assert 'python' in sys.executable, sys.executable
     def test_diagnose_solution(self):
         url = 'https://tree.opentreeoflife.org/curator/study/view/ot_1344?tab=trees&tree=Tr105486&node=Tn16531763'
         p = subprocess.run([sys.executable, "examples/diagnose_solution_for.py",
