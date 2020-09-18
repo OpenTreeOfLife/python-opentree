@@ -72,6 +72,8 @@ class TestOT(unittest.TestCase):
         res = OT.taxon_subtree(ott_id=bos)
         nwk = res.response_dict['newick']
         assert isinstance(nwk, str)
+        curl = res.curl_call
+        tax = res.taxon
 
     def test_taxon_info(self):
         res = OT.taxon_info(ott_id = bos).response_dict
