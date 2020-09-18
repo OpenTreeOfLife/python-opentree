@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+"""
+to run:
+python examples/synth_induced_subtree.py --ott-ids 770309,913932 --node-ids mrcaott354607ott374748
 
+"""
 import sys
 from opentree import OTCommandLineTool, process_ott_and_node_id_list_args
 

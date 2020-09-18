@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""to run
+python ???"""
 import sys
 
 from opentree import OTCommandLineTool, process_ott_or_node_id_arg
