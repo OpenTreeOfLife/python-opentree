@@ -135,7 +135,7 @@ def main(args):
     write_node_info_links_to_input_trees(output.response_dict)
     about_info = OT.about()
     synth_tree_about = about_info['synth_tree_about']
-    synth_id = synth_tree_about.response_dict['synth_id']
+    synth_id = synth_tree_about['synth_id']
     subproblem_scaffold = OT.get_subproblem_scaffold_tree(synth_id)
     scaf_newick = subproblem_scaffold.response.text
     subprob_size_dict = OT.get_subproblem_size_info(synth_id).response_dict
