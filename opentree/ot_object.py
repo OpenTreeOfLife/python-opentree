@@ -275,7 +275,7 @@ class OpenTree(object):
                                            include_children=include_children,
                                            include_terminal_descendants=include_terminal_descendants)
 
-    def taxon_mrca(self, ott_ids=None, ignore_unknown_ids=True):
+    def taxon_mrca(self, ott_ids=None):
         """
         Get the node corresponding to the most recent commom ancestor (mrca) of
           a taxon in the synthetic Open Tree of Life tree.
@@ -286,18 +286,18 @@ class OpenTree(object):
         Parameters
         ----------
         ott_ids : maybe single character value
-        ignore_unknown_ids : boolean
-            Default to TRUE.
+
         """
         while True:
             call_record = self.ws.taxonomy_mrca(ott_ids=ott_ids)
             if call_record:
                 return call_record
-            if not ignore_unknown_ids:
+            else:
                 msgtemplate = 'Call to taxonomy/mrca failed with the message "{}"'
                 message = call_record.response_dict['message']
                 raise OTWebServicesError(msgtemplate.format(message))
-            self._cull_unknown_ids_from_args(call_record, [], ott_ids)
+            ## cull_unknown_ids_from_args does not work on taxon_mrca call_record
+            # self._cull_unknown_ids_from_args(call_record, [], ott_ids) 
 
     def taxon_subtree(self, ott_id=None, label_format="name_and_id"):
         """Get a subtree of a particular taxon

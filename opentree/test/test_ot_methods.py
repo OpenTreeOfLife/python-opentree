@@ -36,7 +36,6 @@ class TestOT(unittest.TestCase):
         nwk = res.response_dict['content'].decode("utf-8")
         assert isinstance(nwk, str)
 
-
     def test_get_tree_bad_format(self):
         with self.assertRaises(ValueError):
             res = OT.get_tree(study_id=study_id, tree_id=tree_id, tree_format='newrk')
@@ -74,6 +73,18 @@ class TestOT(unittest.TestCase):
         nwk = res.response_dict['newick']
         assert isinstance(nwk, str)
 
+    def test_taxon_info(self):
+        res = OT.taxon_info(ott_id = bos).response_dict
+        assert 'Taurus' in res['synonyms']
+
+    def test_taxon_mrca(self):
+        res = OT.taxon_mrca(ott_ids = [bos, homo]).response_dict
+        assert res['mrca']['name'] == 'Boreoeutheria'
+
+    def test_taxon_mrca_fail(self):
+        with self.assertRaises(OTWebServicesError):
+            res = OT.taxon_mrca(ott_ids = [bos, homo, 9999999])
+
     def test_contexts(self):
         contexts = OT.tnrs_contexts()
         amph = OT.tnrs_infer_context(["Bufo", "Rana", "Hyla"])
@@ -82,6 +93,8 @@ class TestOT(unittest.TestCase):
 
     def test_tnrs_match(self):
         matches = OT.tnrs_match(["Bufo", "Rana", "Hyla"])
+
+
 
     def test_gbif_to_ott(self):
         matchid = OT.get_ottid_from_gbifid(2441017)
