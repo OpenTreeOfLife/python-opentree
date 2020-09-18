@@ -94,11 +94,20 @@ class TestOT(unittest.TestCase):
     def test_tnrs_match(self):
         matches = OT.tnrs_match(["Bufo", "Rana", "Hyla"])
 
-
-
     def test_gbif_to_ott(self):
         matchid = OT.get_ottid_from_gbifid(2441017)
         assert matchid == bos
+        with self.assertRaises(OTWebServicesError):
+            matchid = OT.get_ottid_from_gbifid(999999999)
+
+    def test_get_citations(self):
+        cites = OT.get_citations(studies = ['ot_1000@tree1', 'ot_1984'])
+
+    def test_matchdict(self):
+        matches, failed = OT.get_matchdict_from_taxlist(['Homo', 'Bos', 'Meep'])
+        assert matches['Bos'] == 'ott{}'.format(bos)
+        assert 'Meep' in failed
+
 
 if __name__ == '__main__':
     unittest.main()

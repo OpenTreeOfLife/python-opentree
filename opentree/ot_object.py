@@ -410,10 +410,9 @@ class OpenTree(object):
             ott_id = int(res.response_dict['ott_id'])
             return ott_id
         if res.status_code == 400:
-            return None
-        msgtemplate = 'Call to taxon_info failed with the message "{}"'
-        message = res.response_dict['message']
-        raise OTWebServicesError(msgtemplate.format(message))
+            msgtemplate = 'Call to taxon_info failed with the message "{}"'
+            message = res.response_dict['message']
+            raise OTWebServicesError(msgtemplate.format(message))
 
     def get_citations(self, studies):
         """Returns study citations from a list of study or tree ids
@@ -437,17 +436,18 @@ class OpenTree(object):
                              new_cite[0].get('ot:studyPublication', '') + '\n')
         return "\n".join(cites)
 
-    def get_ottid_from_name(self, spp_name, exact=True):
+    def get_ottid_from_name(self, spp_name, exact=True, ignore_unknown=True):
         """Returns an ott id for a string
         ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
         """
-        res = self.tnrs_match([spp_name], do_approximate_matching=not exact)
+        approx = not exact
+        res = self.tnrs_match([spp_name], do_approximate_matching=approx)
         if res.status_code == 200:
-            if len(res.response_dict['results']) > 0:
-                if res.response_dict['results'][0]['matches'] == None:
-                    return None
-                ott_id = int(res.response_dict['results'][0]['matches'][0]['taxon']['ott_id'])
+            if len(res.response_dict['results'][0]['matches']) > 0:
+                tax = res.response_dict['results'][0]['matches'][0].get('taxon')
+                ott_id = int(tax.get('ott_id'))
                 return ott_id
+        if ignore_unknown:
             return None
         msgtemplate = 'Call to tnrs_match failed with the message "{}"'
         message = res.response_dict['message']
@@ -464,10 +464,9 @@ class OpenTree(object):
         for tax in list_of_taxa:
             tax = tax.strip()
             if tax != '':
-                try:
-                    ott_id = self.get_ottid_from_name(tax)
-                    matches[tax] = 'ott{}'.format(ott_id)
-                except IndexError:
+                ott_id = self.get_ottid_from_name(tax, ignore_unknown=True)
+                if ott_id is None:
                     failed.add(tax)
-                    sys.stderr.write("Failed to get an ottid for {}".format(tax))
+                else:
+                    matches[tax] = 'ott{}'.format(ott_id)
         return matches, failed
