@@ -4,11 +4,11 @@ Example scripts
 
 About
 -----
-An about call returns the current version of the OpenTree synthtic tree and taxonomy
+An about call returns the current version of the OpenTree synthtic tree and taxonomy::
 
     python examples/about.py
 
-Response:
+Response::
 
     taxonomy_about
     {
@@ -90,7 +90,7 @@ Property can be any of the above listed 'study properties', but the most common 
 
 
 
-Response:
+Response::
 
     "matched_studies": [
     {
