@@ -12,6 +12,7 @@ Welcome to Python-OpenTree's documentation.
 
    readme
    running_examples
+   notebooks
    apidocs
 
 
@@ -19,6 +20,4 @@ Welcome to Python-OpenTree's documentation.
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
