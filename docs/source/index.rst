@@ -11,7 +11,7 @@ Welcome to Python-OpenTree's documentation.
    :caption: Contents:
 
    readme
-   runninf_examples
+   running_examples
    apidocs
 
 
