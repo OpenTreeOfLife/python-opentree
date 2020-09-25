@@ -2,7 +2,8 @@
 """to run
 python ???"""
 import sys
-
+import argparse
+import json
 from opentree import OTCommandLineTool, process_ott_or_node_id_arg
 
 def main(arg_list, out, list_for_results=None):
@@ -14,6 +15,8 @@ def main(arg_list, out, list_for_results=None):
                             help='"name_and_id", "name", or "id" style of labeling newick nodes')
     cli.parser.add_argument('--height-limit', default=None, type=int,
                             help='number of levels to return. -1 for unlimited (newick only)')
+    cli.parser.add_argument('--outfile', nargs='?', type=argparse.FileType('w'),
+                            default=None)
     OT, args = cli.parse_cli(arg_list)
 
     tree_format = args.format.strip().lower()
@@ -48,8 +51,15 @@ def main(arg_list, out, list_for_results=None):
     if list_for_results is not None:
         list_for_results.append(output)
     if out is not None:
-        sp = output.tree.as_ascii_plot()
-        out.write('{}\n'.format(sp))
+        if tree_format == 'newick':
+            sp = output.tree.as_ascii_plot()
+            out.write('{}\n'.format(sp))
+            new = (output.response_dict['newick'])
+            args.outfile.write('{}\n'.format(new))
+        else:
+            sf = json.dumps(output.response_dict, indent=2, sort_keys=True)
+            out.write('{}\n'.format(sp))
+            args.outfile.write('{}\n'.format(sf))
     return 0
 
 if __name__  == '__main__':
