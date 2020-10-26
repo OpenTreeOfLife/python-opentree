@@ -347,7 +347,7 @@ class OpenTree(object):
 
     def synth_induced_tree(self, node_ids=None,
                            ott_ids=None, label_format="name_and_id",
-                           ignore_unknown_ids=True):
+                           ignore_unknown_ids=False):
         """Get an induced subtree
         """
         while True:
@@ -359,6 +359,9 @@ class OpenTree(object):
             if not ignore_unknown_ids:
                 msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
                 message = call_record.response_dict['message']
+                if call_record.response_dict['unknown']:
+                    unknown_ids = call_record.response_dict['unknown']
+                    message = message + "\nFull list of unknown/unrecognized query ids:\n {}".format("\n".join(unknown_ids))
                 raise OTWebServicesError(msgtemplate.format(message))
             msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
@@ -383,20 +386,21 @@ class OpenTree(object):
                 raise OTWebServicesError(msgtemplate)
 
     # noinspection PyMethodMayBeStatic
-    def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids):
+    def _cull_unknown_ids_from_args(self, call_record, node_ids, ott_ids, output='err'):
         """Cull unknown ids from arguments
         """
         assert ('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
+        sys.stderr.write("Unknown/unrecognized query ids (skipped):\n {}".format("\n".join(unknown_ids)))
         for u in unknown_ids:
             if node_ids and u in node_ids:
                 node_ids.remove(u)
             else:
                 assert u.startswith('ott')
                 ui = int(u[3:])
-                if ott_ids and (ui in ott_ids):### What if it is a astinrg
+                if ott_ids and (ui in ott_ids):
                     ott_ids.remove(ui)
-                if ott_ids and (str(ui) in ott_ids):### What if it is a astinrg
+                if ott_ids and (str(ui) in ott_ids):
                     ott_ids.remove(ui)
 
     def get_ottid_from_gbifid(self, gbif_id):
@@ -435,6 +439,7 @@ class OpenTree(object):
                              + '\n' +
                              new_cite[0].get('ot:studyPublication', '') + '\n')
         return "\n".join(cites)
+        
 
     def get_ottid_from_name(self, spp_name, exact=True, ignore_unknown=True):
         """Returns an ott id for a string
