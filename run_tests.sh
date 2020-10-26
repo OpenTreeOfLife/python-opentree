@@ -15,3 +15,5 @@ else
     fi
 fi
 
+## To run tests in a virual environemnt and avoid conflicts with system level nose install:
+## python -m nose opentree/test/

@@ -440,7 +440,6 @@ class OpenTree(object):
                              new_cite[0].get('ot:studyPublication', '') + '\n')
         return "\n".join(cites)
         
-
     def get_ottid_from_name(self, spp_name, exact=True, ignore_unknown=True):
         """Returns an ott id for a string
         ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
