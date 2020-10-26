@@ -18,10 +18,10 @@ class TestTaxonomyHelpers(unittest.TestCase):
         cfi = taxonomy_helpers.clean_taxonomy_file(taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
     def test_get_by_rank(self):
         ids = taxonomy_helpers.get_ott_ids_for_rank(rank="family", taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
-        assert len(ids) == 14885, len(ids)
+        assert len(ids) == 21979, len(ids)
     def test_get_by_group(self):
         aves = taxonomy_helpers.get_ott_ids_for_group(group_ott_id=81461)
         assert len(aves) == 27465, len(aves)
     def test_rank_in_taxon(self):
-        bird_genera = taxonomy_helpers.get_ott_ids_group_and_rank(group_ott_id=81461, rank='family', taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
-        assert len(bird_genera) == 237, len(bird_genera)
+        bird_families = taxonomy_helpers.get_ott_ids_group_and_rank(group_ott_id=81461, rank='family', taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
+        assert len(bird_families) == 390, len(bird_genera)

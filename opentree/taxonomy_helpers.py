@@ -68,7 +68,7 @@ def get_ott_ids_for_rank(rank, taxonomy_file):
     taxon_dir = os.path.dirname(taxonomy_file)
     output_path = "{}/{}.tsv".format(taxon_dir, rank)
     if not os.path.exists(output_path):
-        os.system('cat {tf} | awk "$7 == {r}" > {op}'.format(tf=taxonomy_file, r=rank, op=output_path))
+        os.system("""cat {tf} | awk '$7 == "{r}"' > {op}""".format(tf=taxonomy_file, r=rank, op=output_path))
         # clean taxonomy file
 #        os.system('grep -a "' + rank + '" ' + taxonomy_file + ' | egrep -v "Incertae" | egrep -v "no rank" | egrep -v "major_rank_conflict" | egrep -v "uncultured" | egrep -v "barren" | egrep -v "extinct" | egrep -v "incertae" | egrep -v "unplaced" | egrep -v "hidden" | egrep -v "inconsistent"  | egrep -v "synonym" | egrep -v "in ' + rank + '" | egrep -v "species" | egrep -v "genus" | egrep -v "super' + rank + '" | egrep -v "sub' + rank + '" > {}'.format(output_path))
     # extract ott ids from taxonomy reduced file
