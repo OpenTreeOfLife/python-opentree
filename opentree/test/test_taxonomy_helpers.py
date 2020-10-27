@@ -2,7 +2,7 @@ import unittest
 
 from opentree import taxonomy_helpers
 
-ott_loc = "../ott/"
+ott_loc = "./"
 corr_tax_path = ott_loc + "/ott3.2"
 
 class TestTaxonomyHelpers(unittest.TestCase):
