@@ -11,7 +11,6 @@ install:
 script:
   - wget "http://files.opentreeoflife.org/ott/ott3.2/ott3.2.tgz"
   - tar -xzvf ott3.2.tgz
-  - cd -
   - ./run_tests.sh
 
 after_success:
