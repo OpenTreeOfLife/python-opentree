@@ -1,4 +1,4 @@
-Interactive examples
+Tutorials and Interactive examples
 ====================
 
 We have developed Jupypter notebooks demonstrating how to use python-opentree

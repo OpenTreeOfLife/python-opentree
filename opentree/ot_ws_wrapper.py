@@ -81,6 +81,9 @@ class OTWebServiceWrapper(WebServiceWrapper):
 
     def taxonomy_taxon_info(self, ott_id=None, source_id=None, include_lineage=False,
                             include_children=False, include_terminal_descendants=False):
+        if isinstance(ott_id, str):
+            ott_id=ott_id.strip('ott')
+            ott_id = int(ott_id)
         cdict = {"source_id": source_id, "ott_id": ott_id}
         id_spec, id_arg = self._one_and_only_one("taxonomy/taxon_info", cdict)
         d = {id_spec: id_arg,

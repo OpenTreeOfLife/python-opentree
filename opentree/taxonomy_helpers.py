@@ -52,7 +52,7 @@ def clean_taxonomy_file(taxonomy_file):
     output_path = "{}/taxonomy_clean.tsv".format(taxon_dir)
     if not os.path.exists(output_path):
         # clean taxonomy file, writes cleaned file to taxonomy_clean.tsv
-        os.system('grep -a -v "major_rank_conflict" ' + taxonomy_file + ' | egrep -a -v "varietas" | egrep -a -v "no rank" | egrep -a -v "Incertae" | egrep -a -v "incertae" | egrep -a -v "uncultured" | egrep -a -v "barren" | egrep -a -v "extinct" | egrep -a -v "unplaced" | egrep -a -v "hidden" | egrep -a -v "inconsistent" | egrep -a -v "synonym" > {}'.format(output_path))
+        os.system('grep -a -v "major_rank_conflict" ' + taxonomy_file + ' | egrep -a -v "sibling_higher" | egrep -a -v "varietas" | egrep -a -v "no rank" | egrep -a -v "Incertae" | egrep -a -v "incertae" | egrep -a -v "uncultured" | egrep -a -v "barren" | egrep -a -v "extinct" | egrep -a -v "unplaced" | egrep -a -v "hidden" | egrep -a -v "inconsistent" | egrep -a -v "synonym" > {}'.format(output_path))
     assert os.path.exists(output_path)
     return output_path
 
@@ -67,8 +67,8 @@ def get_ott_ids_for_rank(rank, taxonomy_file):
     assert os.path.exists(taxonomy_file)
     taxon_dir = os.path.dirname(taxonomy_file)
     output_path = "{}/{}.tsv".format(taxon_dir, rank)
-    if not os.path.exists(output_path):
-        os.system("""cat {tf} | awk '$7 == "{r}"' > {op}""".format(tf=taxonomy_file, r=rank, op=output_path))
+    #if not os.path.exists(output_path):
+    os.system("""cat {tf} | awk '$7 == "{r}"' > {op}""".format(tf=taxonomy_file, r=rank, op=output_path))
         # clean taxonomy file
 #        os.system('grep -a "' + rank + '" ' + taxonomy_file + ' | egrep -v "Incertae" | egrep -v "no rank" | egrep -v "major_rank_conflict" | egrep -v "uncultured" | egrep -v "barren" | egrep -v "extinct" | egrep -v "incertae" | egrep -v "unplaced" | egrep -v "hidden" | egrep -v "inconsistent"  | egrep -v "synonym" | egrep -v "in ' + rank + '" | egrep -v "species" | egrep -v "genus" | egrep -v "super' + rank + '" | egrep -v "sub' + rank + '" > {}'.format(output_path))
     # extract ott ids from taxonomy reduced file
@@ -104,3 +104,58 @@ def get_ott_ids_group_and_rank(group_ott_id, rank, taxonomy_file):
         if item in rank_ott_ids:
             ott_ids.append(item)
     return(ott_ids)
+
+
+def standardize_labels(tree, prob_char = "():#", replace_w = '?'):
+    """While parens in labels is acceptable Newick, some tree viewers (e.g. itol) cannot deal
+    This takes a tree and removes troublsesome characters"""
+    for taxon in tree.taxon_namespace:
+        taxon.label = remove_problem_characters(taxon.label, prob_char, replace_w)
+    for node in tree:
+        if node.label:
+            node.label = remove_problem_characters(node.label, prob_char, replace_w)
+
+def remove_problem_characters(instr, prob_char = "():#", replace_w = '?'):
+    problem_characters = set(prob_char)
+    for char in problem_characters:
+        instr = instr.replace(char,replace_w)
+    return instr
+
+def label_broken_taxa(synth_resp, label_format = 'id'):
+    """Interpreting node ids from a search on taxa can be challenging.
+    This relabeles MRCA based tips with what broken taxa they were replacing.
+    Sometimes several query taxa map to the same synth node.
+    """
+    assert label_format in ('id', 'name', 'name_and_id')
+    relabel = dict()
+    broken = synth_resp.response_dict['broken']
+    for taxon in broken:
+        if label_format == 'name':
+            taxon_name = OT.taxon_info(ott_id=taxon).response_dict.get('name', taxon)
+        elif label_format == 'name_and_id':
+            name = OT.taxon_info(ott_id=taxon).response_dict.get('name', taxon)
+            taxon_name = "{} {}".format(name, taxon)
+        else:
+            taxon_name = taxon
+        remap = broken[taxon]
+        if remap not in relabel:
+            relabel[remap] = []
+        relabel[remap].append("{}".format(taxon_name))
+    for taxon in synth_resp.tree.taxon_namespace:
+        if taxon.label.startswith('mrca'):
+            taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
+        else:
+            ott = taxon.label.split()[-1]
+            if ott in relabel:
+                added_taxa = ' MRCA of taxa in '+' '.join(relabel[ott])
+                taxon.label = taxon.label + added_taxa
+    for node in synth_resp:
+        if node.label.startswith('mrca'):
+            if node.label in relabel:
+                taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
+        else:
+            ott = taxon.label.split()[-1]
+            if ott in relabel:
+                added_taxa = ' MRCA of taxa in '+' '.join(relabel[ott])
+                taxon.label = taxon.label + added_taxa
+    return synth_resp.tree

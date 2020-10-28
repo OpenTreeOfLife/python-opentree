@@ -1,6 +1,6 @@
 import unittest
 
-from opentree import taxonomy_helpers
+from opentree import taxonomy_helpers, util
 
 ott_loc = "./"
 corr_tax_path = ott_loc + "/ott3.2"

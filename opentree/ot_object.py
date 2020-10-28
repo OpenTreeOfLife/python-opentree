@@ -401,7 +401,7 @@ class OpenTree(object):
                 if ott_ids and (ui in ott_ids):
                     ott_ids.remove(ui)
                 if ott_ids and (str(ui) in ott_ids):
-                    ott_ids.remove(ui)
+                    ott_ids.remove(str(ui))
 
     def get_ottid_from_gbifid(self, gbif_id):
         """Returns an ott id for a gbif id
