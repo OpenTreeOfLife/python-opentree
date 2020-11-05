@@ -1,0 +1,159 @@
+\documentclass[oupdraft]{sysbio_sse}
+%\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
+\usepackage{url}
+\usepackage{indentfirst}
+
+% Add history information for the article if required
+%\history{Received Month X, 20XX;
+%revised Month X, 20XX}
+
+\begin{document}
+
+% Title of paper
+\title{OpenTree: A Python package for Accessing and Analyzing data from the Open Tree of Life}
+% Each important word in the title should begin with a capital letter
+
+% List of authors, with corresponding author marked by asterisk
+\author{Emily Jane McTavish$^{1,\ast}$, Luna Luisa Sanchez Reyes$^{1}$, and
+Mark T. Holder,$^{3}$\\[4pt]
+% Author addresses
+\textit{$^{1}$~University of California, Merced}
+\\
+\textit{$^{2}$~University of Kansas}
+\\[2pt]
+% E-mail address for correspondence
+\textit{*Corresponding author details here}}
+% Identify the name, address, telephone/fax numbers, and e-mail address for the author who will receive proofs and be designated the "corresponding author" in text.
+
+% Running headers of paper:
+\markboth%
+% First field is the short list of authors
+{McTavish, Sanchez-Reyes, Holder}
+% Second field is the short title of the paper
+{python-opentree}
+% This should be shortened version of the title and no greater than 50 characters
+
+\maketitle
+
+\begin{abstract}
+{The Open Tree of Life project constructs a comprehensive, dynamic and digitally-available tree of life by synthesizing published phylogenetic trees along with taxonomic data.
+We Open Tree of Life provides web-service APIs to make the tree estimates, unified taxonomy, and input phylogenetic data available to anyone.
+\texttt{opentree} provides a python wrapper for theses APIs and downstream data analysis functionality.
+}
+
+{Python, phylogenetics, taxonomy, evolution, open science.}
+\end{abstract}
+\newline
+
+Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Te
+\bigskip
+% Each important word in the heading level 1 should begin with a capital letter; no heading for the introduction
+% Please note that the level 1 headings given here, e.g. Description, are suggestions only
+\section{Description}
+\label{sec2}
+
+\texttt{opentree} is a Python package for accessing and analyzing data from the OpenTree of Life project.
+Open Tree of Life stores a wealth of taxonomic and phylogenetic data gathered together in an open-access interoperable framework.
+The current synthetic tree \citep{opentreeoflife_open_2019} comprises 2.4 million tips (largely species).
+The framework of this tree is provided by a unified taxonomy \citep{opentreeoflife_open_2019-1, rees_automated_2017}.
+This taxonomy links unique identifiers across many online taxonomic resources, including NCBI [CITE], GBIF [CITE], as well as user contributed taxonomic amendments contained in [https://github.com/OpenTreeOfLife/amendments-1].
+These taxonomic relationships are refined by evolutionary estimates from 	1,216 published papers including 87,000 tips taxa \citep{opentreeoflife_open_2019, redelings_supertree_2017}.
+The Open Tree data store, `Phylesystem` \citep{mctavish_phylesystem:_2015} contains all of those publishes studies, including the mappings between the tips in these published studies, and unique taxonomic identifiers.
+
+All of there data are freely accessible via API calls [https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs].
+\texttt{opentree}  provides an user-friendly wrapper for calling these APIs.
+In addition, in converts these between commonly used file formats and data types.
+This package allows allows users to generate to data objects in DendroPy, a phylogenetic computing library \citep{sukumaran_dendropy_2010}.
+
+
+\texttt{opentree} incorporates in python the functionality available in rotl: an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl:_2016}, as well as additional downstream analysis and interoperability tools.
+\texttt{rotl}  has been cited 127 times in the 4 years since its publication, demonstrating a demand for accessible user access to these data.
+By providing a python package to interact with these data, we make it straightforward for python users to access and analyze these data.
+A python wrapper for Open Tree of Life also makes linking these data with the stable of other Python biodiversity informatics tools such as ETC ETC, much easier.
+
+In addition, \texttt{opentree} expands the toolset available for working with the OpenTree unified taxonomy \citep{rees_automated_2017}.
+
+
+
+
+% Each important word in the heading level 2 should begin with a capital letter
+\subsection{Second Level Heading}
+
+
+\bigskip
+\section{Benchmark}
+\label{sec3}
+
+\subsection{Services provided by opentree}
+
+Text Text 
+% First word and proper nouns only should begin with a capital letter in heading level 3
+\subsubsection{Study search.---}The OpenTree datastore contains
+\subsubsection{Synthetic tree.---}Text Text Text 
+\subsubsection{Taxonomy.---}Text Text Text 
+\subsubsection{Taxonomic Name Resolution.---}Text Text Text 
+
+\bigskip
+
+\section{Biological Examples}
+\label{sec4}
+
+\subsection{A phylogeny of all bird genera}
+
+
+\subsection{Linking data from GBIF with phylogenetic information from Open Tree of Life}
+
+\bigskip
+
+\section{Availability}
+\label{sec5}
+
+\texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. Documentation and tutorials are available with the code, and is posted to \url{https://opentree.readthedocs.io}.
+
+%If you have any acknowledgements, please include them here.
+\section{Acknowledgements}
+
+%If your paper has accompanying supplementary data, please include the below statement in your PDF.
+%\section{Supplementary Material}
+%Data available from the Dryad Digital Repository:
+% \href{http://dx.doi.org/10.5061/dryad.[NNNN]}%
+% {http://dx.doi.org/10.5061/dryad.[NNNN]}.
+%\url{http://dx.doi.org/10.5061/dryad.[NNNN]}.
+
+\bigskip\bigskip
+
+%%%%%%%%%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%%%%
+
+% The best way to enter references is to use BibTeX.
+\bibliographystyle{plainnat}
+\bibliography{paper}
+
+% 1. All authors should be listed i.e. no use of et al.
+% 2. Dashes should not be used to replace author names in repeat entries
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Please include any figure captions on a separate page after the references. Figures themselves should be embedded in the text.
+
+%\begin{figure}[!p]
+%\centering\includegraphics{fig1}
+%\caption{Figure caption}
+%\label{Fig1}
+%\end{figure}
+
+
+%\begin{table}[!p]
+% 1. Table titles should be in caps and lowercase
+% 2. Footnotes can be used in Tables (a,b,c)}
+%\tblcaption{Table title
+%\label{Table1}}
+%{\tabcolsep=4.25pt
+%\begin{tabular}{@{}cccccccccc@{}}
+%\tblhead{Heading & Heading & Heading & Heading & Heading}
+%Value & Value & Value & Value & Value 
+%\lastline
+%\end{tabular}}
+%\end{table}
+
+%If you have any print appendices, please include them at the end of the document.
+
+\end{document}

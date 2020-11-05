@@ -1,4 +1,13 @@
+*.pyc
 opentree.egg-info
 .coverage
 cover
 dist
+.ipynb_checkpoints
+docs/draft/python-opentree.blg
+docs/draft/python-opentree.bbl
+docs/draft/python-opentree.aux
+docs/draft/python-opentree.synctex.gz
+docs/draft/python-opentree.pdf
+docs/draft/python-opentree.log
+venv*
