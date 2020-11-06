@@ -36,6 +36,6 @@ class TestTaxonomyHelpers(unittest.TestCase):
                 ott_ids.add(int(tip))
             except:
                 pass
-        tree, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name')
-
+        labelled_tree, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name')
+#        assert
 
