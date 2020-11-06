@@ -4,6 +4,7 @@ import re
 import sys
 import gzip
 import shutil
+import copy
 from opentree import OT
 
 
@@ -27,22 +28,16 @@ def download_taxonomy_file(version, loc):
     return path
 
 
-def get_forwarded_ids(ott_ids, forwards_file):
+def get_forwards_dict(forwards_file):
     """Returns a dictionary with new ott_ids for forwarded ott_ids
     """
-    assert isinstance(ott_ids, list)
-    resp_dict = {}
     fwd_dict = {}
     fi=open(forwards_file)
     header = fi.readline()
     for lin in fi:
         lii = lin.split()
         fwd_dict[int(lii[0])]=lii[1]
-    for ott_id in ott_ids:
-        if 'ott' in ott_id:
-            ott_id = ott_id.strip('ott')
-        resp_dict[ott_id] = fwd_dict.get(int(ott_id))
-    return resp_dict
+    return fwd_dict
 
 def clean_taxonomy_file(taxonomy_file):
     """Geneartes a pruned taxonomy.
@@ -121,41 +116,84 @@ def remove_problem_characters(instr, prob_char = "():#", replace_w = '?'):
         instr = instr.replace(char,replace_w)
     return instr
 
-def label_broken_taxa(synth_resp, label_format = 'id'):
+def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=False):
     """Interpreting node ids from a search on taxa can be challenging.
     This relabeles MRCA based tips with what broken taxa they were replacing.
     Sometimes several query taxa map to the same synth node.
     """
-    assert label_format in ('id', 'name', 'name_and_id')
+    # Otcertra is not forwarding ids right not - tmp fix
+
+    # call synth tree
+    curr_ids = copy.deepcopy(ott_ids) #track who we lost
+    call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
+                                                 label_format='id')#This needs to be id
+    # often some ids are not found - cull but track
+    if call_record.response_dict.get('unknown'):
+        unknown_ids = call_record.response_dict['unknown'].keys()
+        OT._cull_unknown_ids_from_args(call_record, node_ids=None, ott_ids=curr_ids)
+
+    call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
+                                                 label_format='name_and_id')
+
     relabel = dict()
-    broken = synth_resp.response_dict['broken']
+    assert label_format in ['name', 'id', 'name_and_id'] ##this only apply's to the re-labeled output, not the first call
+    broken = call_record.response_dict['broken']
     for taxon in broken:
         if label_format == 'name':
             taxon_name = OT.taxon_info(ott_id=taxon).response_dict.get('name', taxon)
         elif label_format == 'name_and_id':
             name = OT.taxon_info(ott_id=taxon).response_dict.get('name', taxon)
-            taxon_name = "{} {}".format(name, taxon)
+            taxon_name = "{}_{}".format(name, taxon)
         else:
             taxon_name = taxon
-        remap = broken[taxon]
+        remap = broken[taxon] # What is that taxon now?
         if remap not in relabel:
-            relabel[remap] = []
-        relabel[remap].append("{}".format(taxon_name))
-    for taxon in synth_resp.tree.taxon_namespace:
+            relabel[remap] = [] #Sometimes multiple taxa map to the same node or id
+            relabel[remap].append("{}".format(taxon_name))
+
+    labelled_tree = copy.deepcopy(call_record.tree)
+    all_labels = set()
+    for taxon in labelled_tree.taxon_namespace:
+        all_labels.add(taxon.label)
         if taxon.label.startswith('mrca'):
             taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
         else:
+            ott_taxon_name = " ".join(taxon.label.split()[:-1])
             ott = taxon.label.split()[-1]
+            if label_format == 'name':
+                new_label = ott_taxon_name
+            elif label_format == 'name_and_id':
+                new_label = taxon.label
+            else:
+                new_label = ott
             if ott in relabel:
-                added_taxa = ' MRCA of taxa in '+' '.join(relabel[ott])
-                taxon.label = taxon.label + added_taxa
-    for node in synth_resp:
-        if node.label.startswith('mrca'):
-            if node.label in relabel:
-                taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
-        else:
-            ott = taxon.label.split()[-1]
-            if ott in relabel:
-                added_taxa = ' MRCA of taxa in '+' '.join(relabel[ott])
-                taxon.label = taxon.label + added_taxa
-    return synth_resp.tree
+                added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
+                taxon.label = new_label + added_taxa
+
+    for node in labelled_tree:
+        if node.label:
+            all_labels.add(node.label)
+            if node.label.startswith('mrca'):
+                if node.label in relabel:
+                    node.label = 'MRCA of taxa in '+' '.join(relabel[node.label])
+                    sys.stderr.write("taxon {} is internal\n".format(node.label))
+                else:
+                    ott = node.label
+                    ott_taxon_name = "_".join(taxon.label.split()[:-1])
+                    ott = taxon.label.split()[-1]
+                    if label_format == 'name':
+                        new_label = ott_taxon_name
+                    elif label_format == 'name_and_id':
+                        new_label = taxon.label
+                    else:
+                        new_label = ott
+                    if ott in relabel:
+                        added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
+                        taxon.label = new_label + added_taxa
+
+    for ott_id in curr_ids:
+        if 'ott'+str(ott_id) not in all_labels:
+            if 'ott'+str(ott_id) not in broken.keys():
+                pass
+                #sys.stderr.write("{} was lost".format(ott_id))
+    return labelled_tree, unknown_ids
