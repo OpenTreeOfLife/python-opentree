@@ -37,5 +37,5 @@ class TestTaxonomyHelpers(unittest.TestCase):
             except:
                 pass
         labelled_tree, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name')
-#        assert
+        labelled_tree, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name_and_id')
 

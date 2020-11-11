@@ -109,6 +109,7 @@ def standardize_labels(tree, prob_char = "():#", replace_w = '_'):
     for node in tree:
         if node.label:
             node.label = remove_problem_characters(node.label, prob_char, replace_w)
+    return tree
 
 def remove_problem_characters(instr, prob_char = "():#", replace_w = '_'):
     problem_characters = set(prob_char)
@@ -128,6 +129,7 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
     call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
                                                  label_format='id')#This needs to be id
     # often some ids are not found - cull but track
+    unknown_ids = []
     if call_record.response_dict.get('unknown'):
         unknown_ids = call_record.response_dict['unknown'].keys()
         OT._cull_unknown_ids_from_args(call_record, node_ids=None, ott_ids=curr_ids)
@@ -136,7 +138,6 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
                                                  label_format='name_and_id')
 
     relabel = dict()
-    print(label_format)
     assert label_format in ['name', 'id', 'name_and_id'] ##this only apply's to the re-labeled output, not the first call
     broken = call_record.response_dict['broken']
     for taxon in broken:
@@ -174,37 +175,37 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
                 taxon.label = new_label + added_taxa
             else:
                 taxon.label =  new_label
-                print(taxon.label)
+            print(taxon.label)
 
     for node in labelled_tree:
         if node.label and node.label != '':
-            print(node.label)
-            all_labels.add(node.label)
-            if node.label.startswith('mrca'):
-                if node.label in relabel:
-                    node.label = 'MRCA of taxa in '+' '.join(relabel[node.label])
-                    sys.stderr.write("taxon {} is internal\n".format(node.label))
-                elif inc_unlabelled_mrca:
-                    pass
-                else:
-                    node.label = None            
+            if node.taxon:
+                node.label = None
             else:
-                ott_taxon_name = " ".join(node.label.split()[:-1])
-                ott_taxon_name = remove_problem_characters(ott_taxon_name)
-                ott = node.label.split()[-1]
-                if label_format == 'name':
-                    new_label = ott_taxon_name
-                elif label_format == 'name_and_id':
-                    new_label = node.label
-                    print(new_label)
+                all_labels.add(node.label)
+                if node.label.startswith('mrca'):
+                    if node.label in relabel:
+                        node.label = 'MRCA of taxa in '+' '.join(relabel[node.label])
+                        sys.stderr.write("taxon {} is an internal node\n".format(node.label))
+                    elif inc_unlabelled_mrca:
+                        pass
+                    else:
+                        node.label = None            
                 else:
-                    new_label = ott
-                if ott in relabel:
-                    added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
-                    node.label = new_label + added_taxa
-                else:
-                    node.label =  new_label
-                    print(node.label)
+                    ott_taxon_name = " ".join(node.label.split()[:-1])
+                    ott_taxon_name = remove_problem_characters(ott_taxon_name)
+                    ott = node.label.split()[-1]
+                    if label_format == 'name':
+                        new_label = ott_taxon_name
+                    elif label_format == 'name_and_id':
+                        new_label = node.label
+                    else:
+                        new_label = ott
+                    if ott in relabel:
+                        added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
+                        node.label = new_label + added_taxa
+                    else:
+                        node.label =  new_label
 
     for ott_id in curr_ids:
         if 'ott'+str(ott_id) not in all_labels:
