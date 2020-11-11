@@ -361,7 +361,7 @@ class OpenTree(object):
                 message = call_record.response_dict['message']
                 if call_record.response_dict['unknown']:
                     unknown_ids = call_record.response_dict['unknown']
-                    message = message + "\nFull list of unknown/unrecognized query ids:\n {}".format("\n".join(unknown_ids))
+                    message = message + "\nFull list of unknown/unrecognized query ids:\n {} \n".format("\n".join(unknown_ids))
                 raise OTWebServicesError(msgtemplate.format(message))
             msgtemplate = 'Call to tree_of_life/induced_subtree failed with the message "{}"'
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
@@ -391,7 +391,7 @@ class OpenTree(object):
         """
         assert ('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
-        sys.stderr.write("Unknown/unrecognized query ids (skipped):\n {}".format("\n".join(unknown_ids)))
+        sys.stderr.write("\nUnknown/unrecognized query ids (skipped):\n {} \n".format("\n".join(unknown_ids)))
         for u in unknown_ids:
             if node_ids and u in node_ids:
                 node_ids.remove(u)

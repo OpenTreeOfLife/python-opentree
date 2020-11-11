@@ -101,7 +101,7 @@ def get_ott_ids_group_and_rank(group_ott_id, rank, taxonomy_file):
     return(ott_ids)
 
 
-def standardize_labels(tree, prob_char = "():#", replace_w = '?'):
+def standardize_labels(tree, prob_char = "():#", replace_w = '_'):
     """While parens in labels is acceptable Newick, some tree viewers (e.g. itol) cannot deal
     This takes a tree and removes troublsesome characters"""
     for taxon in tree.taxon_namespace:
@@ -116,7 +116,7 @@ def remove_problem_characters(instr, prob_char = "():#", replace_w = '_'):
         instr = instr.replace(char,replace_w)
     return instr
 
-def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=False):
+def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=False, standardize=True):
     """Interpreting node ids from a search on taxa can be challenging.
     This relabeles MRCA based tips with what broken taxa they were replacing.
     Sometimes several query taxa map to the same synth node.
@@ -211,4 +211,7 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
             if 'ott'+str(ott_id) not in broken.keys():
                 pass
                 #sys.stderr.write("{} was lost".format(ott_id))
+    if standardize == True:
+        labelled_tree = standardize_labels(labelled_tree)
+
     return labelled_tree, unknown_ids
