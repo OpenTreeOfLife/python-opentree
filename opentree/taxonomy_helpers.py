@@ -176,7 +176,7 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
         remap = broken[taxon] # What is that taxon now?
         if remap not in relabel:
             relabel[remap] = [] #Sometimes multiple taxa map to the same node or id
-            relabel[remap].append("{}".format(taxon_name))
+        relabel[remap].append("{}".format(taxon_name))
 
     labelled_tree = copy.deepcopy(call_record.tree)
     all_labels = set()
