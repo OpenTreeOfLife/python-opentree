@@ -332,6 +332,10 @@ class OpenTree(object):
     def synth_node_info(self, node_ids=None, node_id=None, ott_id=None, include_lineage=False):
         """Get information of a node
         """
+        if isinstance(node_ids, str):
+            node_ids = [node_ids]
+        if ott_id:
+            ott_id = ott_id.strip('ott')
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)
 

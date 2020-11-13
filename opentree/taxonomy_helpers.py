@@ -87,6 +87,7 @@ def get_ott_ids_for_group(group_ott_id, write_file = 'children_ott_ids.txt'):
 def get_ott_ids_group_and_rank(group_ott_id, rank, taxonomy_file):
     """Get all ott_ids of rank 'rank' in group 'group_ott_id'
     e.g. get all genera in Aves
+
     """
     # clean taxonomy file
     # get group ott ids
@@ -112,6 +113,18 @@ def standardize_labels(tree, prob_char = "():#", replace_w = '_'):
     return tree
 
 def remove_problem_characters(instr, prob_char = "():#", replace_w = '_'):
+    """While colons, parens, etc are leagal in newick labels, 
+    many tree viewers won't read or misread trees with them.
+    This function replaces problem characters in a string with a replacement char.
+
+    Args:
+        instr: The input string
+        prob_char: String containing problematic characters. Default  is"():#"
+        replace_w: Character to replace problem characters with. Default  is "_"
+
+    Returns:
+        String with problem characters replaced."""
+
     problem_characters = set(prob_char)
     for char in problem_characters:
         instr = instr.replace(char,replace_w)
@@ -119,11 +132,23 @@ def remove_problem_characters(instr, prob_char = "():#", replace_w = '_'):
 
 def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=False, standardize=True):
     """Interpreting node ids from a search on taxa can be challenging.
-    This relabeles MRCA based tips with what broken taxa they were replacing.
+    This relabels MRCA based tips with what broken taxa they were replacing.
     Sometimes several query taxa map to the same synth node.
-    """
-    # Otcertra is not forwarding ids right not - tmp fix
 
+    Args:
+        ott_ids: The search taxa, as ott_ids. Can be integers or strings prefixed with "ott"
+        label_format: One of 'name', 'id', 'name_and_id'. Default  is "name"
+        inc_unlabelled_mrca: Whether to include node labels form synth that do not correspond to taxa
+                             Default  is False
+        standardize: Whether to standardize taxon labels by removing problem characters. Default is True
+
+    Returns:
+        tree, unknown_ids
+        tree: a dendropy tree object with taxa labelled acrording to 'label_format'
+        unknown_ids: a list of the input ott_ids that were not found
+
+    """
+    
     # call synth tree
     curr_ids = copy.deepcopy(ott_ids) #track who we lost
     call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
@@ -175,7 +200,6 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
                 taxon.label = new_label + added_taxa
             else:
                 taxon.label =  new_label
-            print(taxon.label)
 
     for node in labelled_tree:
         if node.label and node.label != '':
