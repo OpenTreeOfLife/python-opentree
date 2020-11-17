@@ -152,15 +152,21 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
     # call synth tree
     curr_ids = copy.deepcopy(ott_ids) #track who we lost
     call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
-                                                 label_format='id')#This needs to be id
+                                                     label_format='id')#This needs to be id
     # often some ids are not found - cull but track
     unknown_ids = []
     if call_record.response_dict.get('unknown'):
         unknown_ids = call_record.response_dict['unknown'].keys()
         OT._cull_unknown_ids_from_args(call_record, node_ids=None, ott_ids=curr_ids)
+        call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
+                                                         label_format='name_and_id')
+# What is intuitive for handling broken taxa??
+# What are end users goals.
+# One option is to remove all broken taxa, return list of broken taxa
+# Or return full synth subtree from any brok taxa mrca
+# Or return a random subset of tips
+# Is it ok to return query taxa as internal nodes?
 
-    call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
-                                                 label_format='name_and_id')
 
     relabel = dict()
     assert label_format in ['name', 'id', 'name_and_id'] ##this only apply's to the re-labeled output, not the first call
@@ -180,7 +186,7 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
 
     labelled_tree = copy.deepcopy(call_record.tree)
     all_labels = set()
-    for taxon in labelled_tree.taxon_namespace:
+    for taxon in labelled_tree.taxon_namespace:#Are these necessarily tips???
         all_labels.add(taxon.label)
         if taxon.label.startswith('mrca'):
             assert taxon.label in relabel
@@ -196,7 +202,7 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
             else:
                 new_label = ott
             if ott in relabel:
-                added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
+                added_taxa = 'and MRCA of taxa in '+' '.join(relabel[ott])
                 taxon.label = new_label + added_taxa
             else:
                 taxon.label =  new_label

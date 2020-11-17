@@ -36,6 +36,10 @@ class TestTaxonomyHelpers(unittest.TestCase):
                 ott_ids.add(int(tip))
             except:
                 pass
-        labelled_tree, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name')
-        labelled_tree, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name_and_id')
-
+        labelled_tree_name, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name')
+        tips = [tip.taxon.label for tip in labelled_tree_name.leaf_node_iter() if tip.taxon]
+        assert len(tips) == 6624
+        
+        labelled_tree_name_id, unknown_ids = taxonomy_helpers.synth_label_broken_taxa(ott_ids = list(ott_ids), label_format='name_and_id')
+        nodes = [node.taxon.label for node in labelled_tree_name_id if node.taxon]
+        assert 'MRCA of taxa in Amazona auropalliata_ott1118 Amazona oratrix_ott1119' in nodes
