@@ -130,6 +130,7 @@ def remove_problem_characters(instr, prob_char = "():#", replace_w = '_'):
         instr = instr.replace(char,replace_w)
     return instr
 
+
 def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=False, standardize=True):
     """Interpreting node ids from a search on taxa can be challenging.
     This relabels MRCA based tips with what broken taxa they were replacing.
@@ -155,34 +156,44 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
                                                      label_format='id')#This needs to be id
     # often some ids are not found - cull but track
     unknown_ids = []
+    unknown_dict = {}
     if call_record.response_dict.get('unknown'):
         unknown_ids = call_record.response_dict['unknown'].keys()
         OT._cull_unknown_ids_from_args(call_record, node_ids=None, ott_ids=curr_ids)
-        call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
-                                                         label_format='name_and_id')
-# What is intuitive for handling broken taxa??
-# What are end users goals.
-# One option is to remove all broken taxa, return list of broken taxa
-# Or return full synth subtree from any brok taxa mrca
-# Or return a random subset of tips
-# Is it ok to return query taxa as internal nodes?
+        for unk in unknown_ids:
+            uid = unk.strip('ott') #URL for taxonomy needs integer
+            tax_inf = OT.taxon_info(ott_id=uid).response_dict
+            tax_inf['url'] = "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(uid)
+            unknown_dict[unk] = tax_inf
 
+    call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
+                                                     label_format='name_and_id')
 
     relabel = dict()
+    relabel_ott_ids = dict()
     assert label_format in ['name', 'id', 'name_and_id'] ##this only apply's to the re-labeled output, not the first call
+    broken_dict = {}
     broken = call_record.response_dict['broken']
     for taxon in broken:
+        remap = broken[taxon] # Where on the tree is that taxon now?
+        ott_id = taxon.strip('ott')
+        tax_inf = OT.taxon_info(ott_id=ott_id).response_dict
+        tax_inf['url'] = "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(ott_id)
+        tax_inf['MRCA_location_in_synth'] = remap
+        taxon_name = tax_inf.get('name', taxon)
         if label_format == 'name':
-            taxon_name = OT.taxon_info(ott_id=taxon).response_dict.get('name', taxon)
+            taxon_label = "{}_{}".format(taxon_name, taxon)
         elif label_format == 'name_and_id':
-            name = OT.taxon_info(ott_id=taxon).response_dict.get('name', taxon)
-            taxon_name = "{}_{}".format(name, taxon)
+            taxon_label = "{}_{}".format(taxon_name, taxon)
         else:
-            taxon_name = taxon
-        remap = broken[taxon] # What is that taxon now?
+            taxon_label = taxon
         if remap not in relabel:
             relabel[remap] = [] #Sometimes multiple taxa map to the same node or id
-        relabel[remap].append("{}".format(taxon_name))
+            relabel_ott_ids[remap] = []
+        relabel[remap].append("{}".format(taxon_label))
+        relabel_ott_ids[remap].append(ott_id)
+        tax_inf['all_taxa_mapping_to_same_node'] = relabel[remap]
+        broken_dict[ott_id] = tax_inf
 
     labelled_tree = copy.deepcopy(call_record.tree)
     all_labels = set()
@@ -190,6 +201,8 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
         all_labels.add(taxon.label)
         if taxon.label.startswith('mrca'):
             assert taxon.label in relabel
+            for brok_taxon in relabel_ott_ids[taxon.label]:
+                broken_dict[brok_taxon]['is_tip'] = True
             taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
         else:
             ott_taxon_name = " ".join(taxon.label.split()[:-1])
@@ -202,8 +215,10 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
             else:
                 new_label = ott
             if ott in relabel:
-                added_taxa = 'and MRCA of taxa in '+' '.join(relabel[ott])
+                added_taxa = ' and MRCA of taxa in '+' '.join(relabel[ott])
                 taxon.label = new_label + added_taxa
+                for brok_taxon in relabel_ott_ids[ott]:
+                    broken_dict[brok_taxon]['is_tip'] = True
             else:
                 taxon.label =  new_label
 
@@ -215,8 +230,9 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
                 all_labels.add(node.label)
                 if node.label.startswith('mrca'):
                     if node.label in relabel:
+                        for brok_taxon in relabel_ott_ids[node.label]:
+                            broken_dict[brok_taxon]['is_tip'] = False
                         node.label = 'MRCA of taxa in '+' '.join(relabel[node.label])
-                        sys.stderr.write("taxon {} is an internal node\n".format(node.label))
                     elif inc_unlabelled_mrca:
                         pass
                     else:
@@ -234,6 +250,8 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
                     if ott in relabel:
                         added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
                         node.label = new_label + added_taxa
+                        for brok_taxon in relabel_ott_ids[ott]:
+                            broken_dict[brok_taxon]['is_tip'] = False
                     else:
                         node.label =  new_label
 
@@ -245,4 +263,4 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
     if standardize == True:
         labelled_tree = standardize_labels(labelled_tree)
 
-    return labelled_tree, unknown_ids
+    return {'labelled_tree':labelled_tree,'original_tree':call_record.tree, 'unknown_ids':unknown_dict, 'non-monophyletic_taxa':broken_dict}

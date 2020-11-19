@@ -104,6 +104,7 @@ The OpenTree taxonomy \citep{rees_automated_2017, opentreeoflife_open_2019b} pro
 The OpenTree taxonomic name resolution service (TNRS) searches this full taxonomy and returns exact or fuzzy matches from input names string to taxa and their unique identifiers.
 This TNRS forms a link between human readble name strings, and rigorous unique identifiers.
 
+`2opentree` wraps the OpenTree taxonomy and TNRS APIs for ease of intergarting taoxnomy and TNRS queries with downstream anlyses. In addition, `opentree` provides helpers for quickly searching the text download of the taxonomy,using the  which can be more efficient for some bulk queries.
 
 
 \subsubsection{Study search.---} The OpenTree datastore contains XXX published phylogenetic studies, including XX phylogenetic trees.
@@ -111,7 +112,7 @@ These studies and trees are indexed on a number of properties including author n
 In addition, the tips of these trees are mapped to the unified Open Tree taxonomy making comparisons among estimates, and searching for taxa of interest straightforward.
 This allows searching of studies based on taxa contained in the study.
 Importantly, this search does not rely on string-matching of what the taxonomic name was at the time of publication - rather it leverages the full suite of synonomies gathered across the input taxonomies to find equivalent taxa across studies, even if the canonical name has changed between publications.
-The indexing of these trees is taxonomically explicit as well, so, for example, a search for 'canidae' will find trees with taxa contained in the taxonomic group \textit{canidae}, even if the term 'canidae' does not itself appear in the tree or tips.
+The indexing of these trees is taxonomically explicit as well, so, for example, a search for `canidae' will find trees with taxa contained in the taxonomic group \textit{canidae}, even if the term 'canidae' does not itself appear in the tree or tips.
 Based on the results of these searches, studies can be viewed in a browser on the OpenTree curator site, or the phylogenies themselves maybe downloaded for comparisons or other downstream use.
 
 In addition, as the tips of each study are mapped by curators to identifiers in the OpenTree taxonomy, comparing the relationships represented in input trees to taxonomic relationships and to taxonomy is straightforward. The browser based tree viewer has a graphical visualization of this concordance and conflict. `opentree` provides a wrapper for this conflict functionality, which makes it straightforward to assess what taxon definitions and evolutionary relationships a tree estimate agrees with and conflicts with. This functionality can also be applied to local phylogenies for which the tips have been matched to taxonomy. This allows users to assess concordance and conflict in pre-publication trees, without sharing them to the publicly available OpenTree data store \citep{mctavish_phylesystem}.
@@ -123,7 +124,12 @@ In addition, as the tips of each study are mapped by curators to identifiers in 
 \section{Biological Examples}
 \label{sec4}
 
+There are a plethora of downstream applications of this linked set of resources.
+We highlight two exmples based on user queries.
+
+
 \subsection{A phylogeny of all bird genera}
+While the OpenTree taxonomy is not rank focused, it does track rank information from component taxonomies. 
 
 
 \subsection{Linking data from GBIF with phylogenetic information from Open Tree of Life}
@@ -133,7 +139,7 @@ In addition, as the tips of each study are mapped by curators to identifiers in 
 \section{Availability}
 \label{sec5}
 
-\texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. Documentation and tutorials are available with the code, and is posted to \url{https://opentree.readthedocs.io}.
+\texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. The code is packaged with an automated test suite which is maintained to cover at minimum 75\% of the code. Documentation and tutorials are available with the code, and is posted to \url{https://opentree.readthedocs.io}.
 
 %If you have any acknowledgements, please include them here.
 \section{Acknowledgements}
