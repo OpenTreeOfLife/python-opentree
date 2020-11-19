@@ -156,6 +156,16 @@ def _gather_broken_taxa_info(broken_response, label_format):
         broken_dict[ott_id] = tax_inf
     return relabel, relabel_ott_ids, broken_dict
 
+
+def _gather_unknown_taxa_info(unknown_ids):
+    unknown_dict = {}
+    for unk in unknown_ids:
+            uid = unk.strip('ott') #URL for taxonomy needs integer
+            tax_inf = OT.taxon_info(ott_id=uid).response_dict
+            tax_inf['url'] = "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(uid)
+            unknown_dict[unk] = tax_inf
+    return unknown_dict
+
 def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=False, standardize=True):
     """Interpreting node ids from a search on taxa can be challenging.
     This relabels MRCA based tips with what broken taxa they were replacing.
@@ -178,21 +188,15 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
     # call synth tree
     curr_ids = copy.deepcopy(ott_ids) #track who we lost
     call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
-                                                     label_format='id')#This needs to be id
+                                                     label_format='name_and_id')#This needs to be id
     # often some ids are not found - cull but track
-    unknown_ids = []
-    unknown_dict = {}
     if call_record.response_dict.get('unknown'):
-        unknown_ids = call_record.response_dict['unknown'].keys()
+        unknown_dict = _gather_unknown_taxa_info(call_record.response_dict['unknown'].keys())
         OT._cull_unknown_ids_from_args(call_record, node_ids=None, ott_ids=curr_ids)
-        for unk in unknown_ids:
-            uid = unk.strip('ott') #URL for taxonomy needs integer
-            tax_inf = OT.taxon_info(ott_id=uid).response_dict
-            tax_inf['url'] = "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(uid)
-            unknown_dict[unk] = tax_inf
-
-    call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
+        call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
                                                      label_format='name_and_id')
+    else:
+        unknown_dict = {}
 
     
     assert label_format in ['name', 'id', 'name_and_id'] ##this only apply's to the re-labeled output, not the first call
