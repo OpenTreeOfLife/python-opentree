@@ -130,6 +130,31 @@ def remove_problem_characters(instr, prob_char = "():#", replace_w = '_'):
         instr = instr.replace(char,replace_w)
     return instr
 
+def _gather_broken_taxa_info(broken_response, label_format):
+    broken_dict = {}
+    relabel = {}
+    relabel_ott_ids = {}
+    for taxon in broken_response:
+        remap = broken_response[taxon] # Where on the tree is that taxon now?
+        ott_id = taxon.strip('ott')
+        tax_inf = OT.taxon_info(ott_id=ott_id).response_dict
+        tax_inf['url'] = "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(ott_id)
+        tax_inf['MRCA_location_in_synth'] = remap
+        taxon_name = tax_inf.get('name', taxon)
+        if label_format == 'name':
+            taxon_label = "{}_{}".format(taxon_name, taxon)
+        elif label_format == 'name_and_id':
+            taxon_label = "{}_{}".format(taxon_name, taxon)
+        else:
+            taxon_label = taxon
+        if remap not in relabel:
+            relabel[remap] = [] #Sometimes multiple taxa map to the same node or id
+            relabel_ott_ids[remap] = []
+        relabel[remap].append("{}".format(taxon_label))
+        relabel_ott_ids[remap].append(ott_id)
+        tax_inf['all_taxa_mapping_to_same_node'] = relabel[remap]
+        broken_dict[ott_id] = tax_inf
+    return relabel, relabel_ott_ids, broken_dict
 
 def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=False, standardize=True):
     """Interpreting node ids from a search on taxa can be challenging.
@@ -169,31 +194,9 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
     call_record = OT.ws.tree_of_life_induced_subtree(ott_ids=curr_ids,
                                                      label_format='name_and_id')
 
-    relabel = dict()
-    relabel_ott_ids = dict()
+    
     assert label_format in ['name', 'id', 'name_and_id'] ##this only apply's to the re-labeled output, not the first call
-    broken_dict = {}
-    broken = call_record.response_dict['broken']
-    for taxon in broken:
-        remap = broken[taxon] # Where on the tree is that taxon now?
-        ott_id = taxon.strip('ott')
-        tax_inf = OT.taxon_info(ott_id=ott_id).response_dict
-        tax_inf['url'] = "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(ott_id)
-        tax_inf['MRCA_location_in_synth'] = remap
-        taxon_name = tax_inf.get('name', taxon)
-        if label_format == 'name':
-            taxon_label = "{}_{}".format(taxon_name, taxon)
-        elif label_format == 'name_and_id':
-            taxon_label = "{}_{}".format(taxon_name, taxon)
-        else:
-            taxon_label = taxon
-        if remap not in relabel:
-            relabel[remap] = [] #Sometimes multiple taxa map to the same node or id
-            relabel_ott_ids[remap] = []
-        relabel[remap].append("{}".format(taxon_label))
-        relabel_ott_ids[remap].append(ott_id)
-        tax_inf['all_taxa_mapping_to_same_node'] = relabel[remap]
-        broken_dict[ott_id] = tax_inf
+    relabel, relabel_ott_ids, broken_dict = _gather_broken_taxa_info(call_record.response_dict['broken'], label_format)
 
     labelled_tree = copy.deepcopy(call_record.tree)
     all_labels = set()
@@ -255,11 +258,6 @@ def synth_label_broken_taxa(ott_ids, label_format = 'name', inc_unlabelled_mrca=
                     else:
                         node.label =  new_label
 
-    for ott_id in curr_ids:
-        if 'ott'+str(ott_id) not in all_labels:
-            if 'ott'+str(ott_id) not in broken.keys():
-                pass
-                #sys.stderr.write("{} was lost".format(ott_id))
     if standardize == True:
         labelled_tree = standardize_labels(labelled_tree)
 
