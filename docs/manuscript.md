@@ -29,7 +29,7 @@ bibliography: paper.bib
 # Summary
 
 The Open Tree of Life project constructs a comprehensive, dynamic and digitally-available tree of life by synthesizing published phylogenetic trees along with taxonomic data.
-We Open Tree of Life provides web-service APIs to make the tree setimates, unified taxonomy, and input phylogenetic data available to anyone.
+We Open Tree of Life provides web-service APIs to make the tree estimates, unified taxonomy, and input phylogenetic data available to anyone.
 `OpenTree` provides a python wrapper for theses APIs and downstream data analysis functionality.
 
 

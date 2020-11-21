@@ -1,9 +1,15 @@
 import unittest
+
 from opentree import OT, util
 
 class TestUtil(unittest.TestCase):
     def test_taxon_flag(self):
         corr_url = 'https://github.com/OpenTreeOfLife/reference-taxonomy/wiki/Taxon-flags#flags-leading-to-taxa-being-unavailable-for-tnrs'
+
+        util.get_suppressed_taxon_flag_expl_url()
+
+
+
         assert util.get_suppressed_taxon_flag_expl_url() == corr_url, util.get_suppressed_taxon_flag_expl_url()
 
 
@@ -22,5 +28,6 @@ class TestUtil(unittest.TestCase):
         blob = OT.synth_node_info(node_id='mrcaott177ott29310').response_dict
         util.write_node_info_links_to_input_trees(blob)
         
+
 if __name__ == '__main__':
     unittest.main()

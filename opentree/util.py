@@ -100,3 +100,4 @@ def write_node_info_links_to_input_trees(blob, out=sys.stdout):
         out.write("The existence of this node in the synthetic tree is conflicts with:\n")
         for n, line in enumerate(_format_link_to_input_tree(x)):
             out.write(" {c:3d}: {l}\n".format(c=n + 1, l=line))
+

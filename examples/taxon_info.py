@@ -45,6 +45,7 @@ def main(arg_list, out, list_for_results=None):
         sp = json.dumps(output.response_dict, indent=2, sort_keys=True)
         out.write('{}\n'.format(sp))
     return 0
+
 if __name__  == '__main__':
     try:
         rc = main(sys.argv[1:], sys.stdout)

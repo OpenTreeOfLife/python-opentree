@@ -5,9 +5,12 @@ python:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install -e .
   - pip install codecov
 # command to run tests
 script:
+  - wget "http://files.opentreeoflife.org/ott/ott3.2/ott3.2.tgz"
+  - tar -xzvf ott3.2.tgz
   - ./run_tests.sh
 
 after_success:

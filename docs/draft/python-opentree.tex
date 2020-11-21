@@ -1,0 +1,190 @@
+\documentclass[oupdraft]{sysbio_sse}
+%\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
+\usepackage{url}
+\usepackage{indentfirst}
+
+% Add history information for the article if required
+%\history{Received Month X, 20XX;
+%revised Month X, 20XX}
+
+\begin{document}
+
+% Title of paper
+\title{OpenTree: A Python package for Accessing and Analyzing data from the Open Tree of Life}
+% Each important word in the title should begin with a capital letter
+
+% List of authors, with corresponding author marked by asterisk
+\author{Emily Jane McTavish$^{1,\ast}$, Luna Luisa Sanchez Reyes$^{1}$, and
+Mark T. Holder,$^{3}$\\[4pt]
+% Author addresses
+\textit{$^{1}$~University of California, Merced}
+\\
+\textit{$^{2}$~University of Kansas}
+\\[2pt]
+% E-mail address for correspondence
+\textit{*Corresponding author details here}}
+% Identify the name, address, telephone/fax numbers, and e-mail address for the author who will receive proofs and be designated the "corresponding author" in text.
+
+% Running headers of paper:
+\markboth%
+% First field is the short list of authors
+{McTavish, Sanchez-Reyes, Holder}
+% Second field is the short title of the paper
+{opentree python package}
+% This should be shortened version of the title and no greater than 50 characters
+
+\maketitle
+
+\begin{abstract}
+{The Open Tree of Life project constructs a comprehensive, dynamic and digitally-available tree of life by synthesizing published phylogenetic trees along with taxonomic data.
+Open Tree of life provides web-service APIs to make the tree estimates, unified taxonomy, and input phylogenetic data available to anyone.
+\texttt{opentree} provides a user friendly python wrapper for theses APIs and a set of scripts and tutorials for straightforward downstream data analysis functionality. 
+We demonstrate the utility of these tools by generating an estimate of the phylogenetic relationships of all bird genera based on XX published studies, and by capturing a phylogenetic estimate for all taxon observation records available on GBIF for the Merced Vernal Pools Reserve.
+}
+
+{Python, phylogenetics, taxonomy, evolution, open science.}
+\end{abstract}
+\newline
+
+Evolutionary history provides a framework to link all life on earth. However, it is not easy to access accurate, up-to-date phylogenetic relationships for arbitrary sets of taxa of interest, even when estimates for those taxa have been made and published (cite various paperssss). Individual phylogenetic estimates are not comprehensive, and therefore seldom contain all taxa of interest. Taxonomic relationships provide a coarse, and often outdated, picture of shared ancestry. 
+The Open Tree of Life project (OpenTree) provides a reproducible framework for accessing up-to-date evolutionary relationships for arbitrary sets of taxa across the tree of life.
+All data in OpenTree is freely available via API's.
+`opentree` provides a user friendly python interface to access these data. In addition `opentree` is packaged with a set of tutorials and scripts to make common downstream analyses straightforward.
+
+\bigskip
+% Each important word in the heading level 1 should begin with a capital letter; no heading for the introduction
+% Please note that the level 1 headings given here, e.g. Description, are suggestions only
+\section{Description}
+\label{sec2}
+
+\texttt{opentree} is a Python package for accessing and analyzing data from the OpenTree of Life project.
+Open Tree of Life stores a wealth of taxonomic and phylogenetic data gathered together in an open-access interoperable framework.
+The current synthetic tree \citep{opentreeoflife_open_2019} comprises 2.4 million tips (largely species).
+The framework of this tree is provided by a unified taxonomy \citep{opentreeoflife_open_2019-1, rees_automated_2017}.
+This taxonomy links unique identifiers across many online taxonomic resources, including NCBI [CITE], GBIF [CITE], as well as user contributed taxonomic amendments contained in [https://github.com/OpenTreeOfLife/amendments-1].
+These taxonomic relationships are refined by evolutionary estimates from 1,216 published papers including 87,000 tip taxa \citep{opentreeoflife_open_2019, redelings_supertree_2017}.
+The Open Tree data store, `Phylesystem' \citep{mctavish_phylesystem:_2015} contains all of those published studies, including the mappings between the tips in these published studies, and unique taxonomic identifiers.
+
+All of there data are freely accessible via API calls [https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs].
+\texttt{opentree}  provides an user-friendly wrapper for calling these APIs.
+In addition, in converts these between commonly used file formats and data types.
+This package allows allows users to generate to data objects in DendroPy, a phylogenetic computing library \citep{sukumaran_dendropy_2010}.
+
+
+\texttt{opentree} incorporates in python the functionality available in rotl: an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl:_2016}, as well as additional downstream analysis and interoperability tools.
+\texttt{rotl}  has been cited 127 times in the 4 years since its publication, demonstrating a demand for accessible user access to these data.
+By providing a python package to interact with these data, we make it straightforward for python users to access and analyze these data.
+A python wrapper for Open Tree of Life also makes linking these data with the stable of other Python biodiversity informatics tools such as  `pygbif` (cite).
+
+In addition, \texttt{opentree} expands the toolset available for working with the OpenTree unified taxonomy \citep{rees_automated_2017}.
+
+
+\bigskip
+\section{Services provided by `opentree`}
+\label{sec3}
+
+
+The OpenTree APIs are divided into four main categories, synthetic tree, study search, taxonomy and taxonomic name resolution.
+Many analyses integrate calls to each of these subcomponents. 
+The `opentree` package links across these services to make common API calls easier.
+Some example calls are described here, but all methods and scripts are fully documented, including examples and return formats at \url{https://opentree.readthedocs.io/en/latest/}.
+
+\subsubsection{Synthetic tree.---} The OpenTree synthetic tree contains all XX taxa in the OpenTree taxonomy, with relationships informed by XX studies.
+Each branch in the tree is informed by published phylogenetic relationships, where they are present in the curated data store, or by taxonomic relationships where no phylogenetic data is available.
+For each node in the synthetic tree, the API also returns which trees in the synthesis pipeline support or conflict with that node, or if the node placement is informed only by taxonomic information.
+Each node is uniquely labeled, either by a taxon identifier, when the descendants of that node aligned with named taxonomic group, or by a phyloreference describing that node as the mrca of two identified taxa.
+Using `opentree` users can easily access evolutionary estimates for arbitrary sets of taxa. The response also includes the published phylogenetics estimates which underlie those inferences. The `opentree` wrapper captures and formats these citations to make providing appropriate credit for these synthetic induced subtree estimates straightforward.
+In addition, users can access full synthetic subtrees subtending any individual node.
+
+
+\subsubsection{Taxonomy and Taxonomic Name Resolution..---} The OpenTree taxonomy not only provides a scaffold for the synthetic tree, but is also a valuable resource in its own right.
+Correct taxon names change through time, and spelling and typographical errors can propagate through bioinformatic resources. However, truly different names can be very close in spelling to one another. Capturing these differences while reconciling synonomies and name variants is a key hurdle to large scale bioinformatic progress.
+The OpenTree taxonomy \citep{rees_automated_2017, opentreeoflife_open_2019b} provides a link between the unique identifiers generated by several large scale online taxonomic resources [GBIF, NCBI, Silva, Worms], as well as all known name synonomies provided by those resources.
+
+The OpenTree taxonomic name resolution service (TNRS) searches this full taxonomy and returns exact or fuzzy matches from input names string to taxa and their unique identifiers.
+This TNRS forms a link between human readble name strings, and rigorous unique identifiers.
+
+`2opentree` wraps the OpenTree taxonomy and TNRS APIs for ease of intergarting taoxnomy and TNRS queries with downstream anlyses. In addition, `opentree` provides helpers for quickly searching the text download of the taxonomy,using the  which can be more efficient for some bulk queries.
+
+
+\subsubsection{Study search.---} The OpenTree datastore contains XXX published phylogenetic studies, including XX phylogenetic trees.
+These studies and trees are indexed on a number of properties including author name, curator name, and publication information. 
+In addition, the tips of these trees are mapped to the unified Open Tree taxonomy making comparisons among estimates, and searching for taxa of interest straightforward.
+This allows searching of studies based on taxa contained in the study.
+Importantly, this search does not rely on string-matching of what the taxonomic name was at the time of publication - rather it leverages the full suite of synonomies gathered across the input taxonomies to find equivalent taxa across studies, even if the canonical name has changed between publications.
+The indexing of these trees is taxonomically explicit as well, so, for example, a search for `canidae' will find trees with taxa contained in the taxonomic group \textit{canidae}, even if the term 'canidae' does not itself appear in the tree or tips.
+Based on the results of these searches, studies can be viewed in a browser on the OpenTree curator site, or the phylogenies themselves maybe downloaded for comparisons or other downstream use.
+
+In addition, as the tips of each study are mapped by curators to identifiers in the OpenTree taxonomy, comparing the relationships represented in input trees to taxonomic relationships and to taxonomy is straightforward. The browser based tree viewer has a graphical visualization of this concordance and conflict. `opentree` provides a wrapper for this conflict functionality, which makes it straightforward to assess what taxon definitions and evolutionary relationships a tree estimate agrees with and conflicts with. This functionality can also be applied to local phylogenies for which the tips have been matched to taxonomy. This allows users to assess concordance and conflict in pre-publication trees, without sharing them to the publicly available OpenTree data store \citep{mctavish_phylesystem}.
+
+
+
+\bigskip
+
+\section{Biological Examples}
+\label{sec4}
+
+There are a plethora of downstream applications of this linked set of resources.
+We highlight two exmples based on user queries.
+
+
+\subsection{A phylogeny of all bird genera}
+While the OpenTree taxonomy is not rank focused, it does track rank information from component taxonomies. 
+
+
+\subsection{Linking data from GBIF with phylogenetic information from Open Tree of Life}
+
+\bigskip
+
+\section{Availability}
+\label{sec5}
+
+\texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. The code is packaged with an automated test suite which is maintained to cover at minimum 75\% of the code. Documentation and tutorials are available with the code, and is posted to \url{https://opentree.readthedocs.io}.
+
+%If you have any acknowledgements, please include them here.
+\section{Acknowledgements}
+
+%If your paper has accompanying supplementary data, please include the below statement in your PDF.
+%\section{Supplementary Material}
+%Data available from the Dryad Digital Repository:
+% \href{http://dx.doi.org/10.5061/dryad.[NNNN]}%
+% {http://dx.doi.org/10.5061/dryad.[NNNN]}.
+%\url{http://dx.doi.org/10.5061/dryad.[NNNN]}.
+
+\bigskip\bigskip
+
+%%%%%%%%%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%%%%
+
+% The best way to enter references is to use BibTeX.
+\bibliographystyle{plainnat}
+\bibliography{paper}
+
+% 1. All authors should be listed i.e. no use of et al.
+% 2. Dashes should not be used to replace author names in repeat entries
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Please include any figure captions on a separate page after the references. Figures themselves should be embedded in the text.
+
+%\begin{figure}[!p]
+%\centering\includegraphics{fig1}
+%\caption{Figure caption}
+%\label{Fig1}
+%\end{figure}
+
+
+%\begin{table}[!p]
+% 1. Table titles should be in caps and lowercase
+% 2. Footnotes can be used in Tables (a,b,c)}
+%\tblcaption{Table title
+%\label{Table1}}
+%{\tabcolsep=4.25pt
+%\begin{tabular}{@{}cccccccccc@{}}
+%\tblhead{Heading & Heading & Heading & Heading & Heading}
+%Value & Value & Value & Value & Value 
+%\lastline
+%\end{tabular}}
+%\end{table}
+
+%If you have any print appendices, please include them at the end of the document.
+
+\end{document}
