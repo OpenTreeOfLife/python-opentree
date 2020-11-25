@@ -23,9 +23,13 @@ class TestTaxonomyHelpers(unittest.TestCase):
     def test_get_by_group(self):
         aves = taxonomy_helpers.get_ott_ids_for_group(group_ott_id=81461)
         assert len(aves) == 27465, len(aves)
+        aves_synth = taxonomy_helpers.get_ott_ids_for_group(group_ott_id=81461, synth_only = True)
+        assert len(aves) == 23618, len(aves_synth)
     def test_rank_in_taxon(self):
-        bird_families = taxonomy_helpers.get_ott_ids_group_and_rank(group_ott_id=81461, rank='family', taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
-        assert len(bird_families) == 390, len(bird_genera)
+        bird_families = taxonomy_helpers.get_ott_ids_group_and_rank(group_ott_id=81461, rank='family', synth_only = False, taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
+        assert len(bird_families) == 390, len(bird_families)
+        bird_families_synth = taxonomy_helpers.get_ott_ids_group_and_rank(group_ott_id=81461, rank='family', taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
+        assert len(bird_families) == 196, len(bird_families_synth)
     def test_relabel(self): ## JUST PUT A LIST OF IDS TO SIMPLIFY
         jetz = OT.get_tree(study_id='ot_809', tree_id = 'tree1', tree_format="newick", label_format="ot:ottId")
         jetz_tree = Tree.get(string=jetz.response_dict['content'].decode(), schema='newick', suppress_internal_node_taxa=True, suppress_leaf_node_taxa=True)

@@ -23,7 +23,7 @@ You can deactivate the virtual environment by running
     deactivate
     
 
-If you plan to run the example jupyter notebooks, install jpuyter within the virtual environment as well using:
+If you plan to run the example jupyter notebooks, install jupyter within the virtual environment as well using:
 
 Create and activate the virtual environment as shown above
 

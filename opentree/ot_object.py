@@ -444,19 +444,22 @@ class OpenTree(object):
                              new_cite[0].get('ot:studyPublication', '') + '\n')
         return "\n".join(cites)
         
-    def get_ottid_from_name(self, spp_name, exact=True, ignore_unknown=True):
-        """Returns an ott id for a string
-        ott_id is set to 'None' if the gbif id is not found in the Open Tree Txanomy
+    def get_ottid_from_name(self, spp_name):
+        """Returns an ott id for a string - requires exact match.
+        ott_id is set to 'None' if the name is not found in the Open Tree Txanomy
         """
-        approx = not exact
-        res = self.tnrs_match([spp_name], do_approximate_matching=approx)
+        res = self.tnrs_match([spp_name], do_approximate_matching=False)
         if res.status_code == 200:
             if len(res.response_dict['results'][0]['matches']) > 0:
                 tax = res.response_dict['results'][0]['matches'][0].get('taxon')
                 ott_id = int(tax.get('ott_id'))
                 return ott_id
-        if ignore_unknown:
-            return None
+            else:
+                sys.stderr.write("Exact match to name {} not found in taxonomy.\n".format(spp_name))
+                sys.stderr.write("""Try using `resp = OT.tnrs_match([{}], do_approximate_matching=True)`\n
+                                                   resp.response_dict \n
+                                        to find fuzzy matches\n""".format(spp_name))
+                return None
         msgtemplate = 'Call to tnrs_match failed with the message "{}"'
         message = res.response_dict['message']
         raise OTWebServicesError(msgtemplate.format(message))
