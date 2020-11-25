@@ -475,7 +475,7 @@ class OpenTree(object):
         for tax in list_of_taxa:
             tax = tax.strip()
             if tax != '':
-                ott_id = self.get_ottid_from_name(tax, ignore_unknown=True)
+                ott_id = self.get_ottid_from_name(tax)
                 if ott_id is None:
                     failed.add(tax)
                 else:
