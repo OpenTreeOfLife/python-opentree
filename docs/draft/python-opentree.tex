@@ -138,24 +138,48 @@ These families can be included in later synthetic trees if data is added to the 
 Other taxa are excluded form synthesis if issues have been raised about their taxonomic validity, such as if they are a family that is 'barren', i.e. contains no species.
 
 If we request an induced subtree from the synthesis for these 164 taxa, we get back a tree that has 150 tips. The return value also includes a list of non-monophyletic taxa.
-Some of the non-monophyletic taxa map to internal nodes on our output tree. Input phylogenies are telling us that these 'families' are paraphyletic with respect to other families.
+Some of the non-monophyletic taxa map to internal nodes on our output tree. Input phylogenies are telling us that these 'families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the `opentree` wrapper using queries to 'synth\_subtree'. Figure \ref{birdfams} shows the shows the topology of the 130 monophyletic bird families plus MRCA's of 20 additional families as tips. The other 14 taxa are non monophyletic families for which the MRCA is an internal node on the output tree.
+
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{bird_fam_fig}
-\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families with are not monopphonetic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?)}
-\label{Fig1}
+\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?)}
+\label{birdfams}
+\end{figure}
+
+These families contain from 1 to 920 total descendants tip taxa (species and subspecies), and across all 150 families, 10357 tip taxa  are captured by the relationships shown in this tree. The figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendents on the right. This display certainly demonstrates that 'families' is not a very even way to break up biodiversity across birds.
+
+Based on the phylogenetic synthesis algorithm, each branch in the tree is supported by either taxonomy alone, where there are no input studies that traverse that branch, or by one or more input phylogenetic studies. The support for each node in the tree can be interrogated using an `opentree.synth\_node\_info` call. While each branch must be supported by taxonomy or at least one input study from phylesystem, where multiple inputs traverse a branch, there can be conflict among studies. The synthesis algorithm is greedy, and the output tree will display the branch supported by the highest ranked study included in synthesis, but the node info call will return not only which studies support that branch, but also which studies have relationships which conflict with that branch. In \ref{birdfams} support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this tree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this tree, 422 are supported by at least one input phylogenetic study. 
+
+This tree shows only topology. When combing taxonomy, and phylogenetic branches form across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies  in the phylesystem corpus.
+
+\subsection{Linking data from the Global Biodiversity Information Facility (GBIF) with phylogenetic information from Open Tree of Life}
+
+\bigskip
+
+
+The University's of California, Merced has a natural reserve directly adjacent to campus, at contains several vernal pools. These vernal pools create a unique habitat which allows native species to thrive, and the proximity to campus allows undergraduate classes to experience this ecosystem on field trips which can be accomplished during class time. As part of a class exercise on vernal pools ecology and evolution, we created an evolutionary tree of all the animal species observed at the UC Merced Vernal Pools natural preserve. 
+
+We accessed a species list for the reserve and adjacent campus ares using Global Biodiversity Information Facility (GBIF) website. GBIF provides a repository for species occurrence data stored in a variety of repositories, including bird observations from eBird (cite), community science observations from iNaturalist (cite), and several other resources. A full tutorial demonstrating how to access a tree for a GBIF data download is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/gbif/GBIF_to_OpenTree.ipynb}.
+
+
+We downloaded the full list of animal observations from the UC Merced Vernal pools reserve from GBIF \citep{global_biodiversity_information_facility_gbif_2019}. This data download comprised 6,709 records from 223 species. Using the GBIF unique taxon identifiers, 201 of these species could be directly matched to taxa in the opentree taxonomy using 'opentree.taxon\_info(source\_id = {gbif unique identifier})'. This direct matching captures exact one to one relationships between these taxonomies, and avoids slow and potentially error prone string matching. 19 taxa had updated identifiers in GBIF since the most recent reconciliation between the GBIF taxonomy and the OpenTree taxonomy, and were assigned OpenTree taxon identifiers based on exact string matches. There were two taxa \textit{P. abortivum St.} and \textit{Ichneumon cupitus Cresson 1877}, which were not found in the OpenTree taxonomy, and were dropped form the analysis.
+ 
+Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for these taxa can be downloaded. This tree is supported by 104 individual published trees (supplemental cites).
+
+We used this phylogeney to discuss the diversity of life of animal life in introductory biology and evolution classes on campus.
+There are several threatened and endangered species on the vernal pools reserve, including the \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
+By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get studnts to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
+
+For researchers, this tree also provides the necessary information for community phylogenetic analyses. \citet{li_for_2019} domesticated that synthetic phylogenies from the OpenTree project perform well in community phylogenetic studies. By providing ready access to these estimates, based on 160 previously published trees, OpenTree makes basing ecological analyses in an accurate evolutionary framework straightforward.
+
+\begin{figure}[!p]
+\centering\includegraphics[width=\textwidth]{vernal_tree}
+\caption{Evolutionary relationships between all taxon records in the UC Merced Vernal Pools Natural reserve. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?)}
+\label{vernalanimals}
 \end{figure}
 
 
-These families contain from X to Y descendent total taxa, and XXX tip taxa (generally species or subspecies) are captured by the relationships shown in this tree/
-
-
-
-
-
-\subsection{Linking data from GBIF with phylogenetic information from Open Tree of Life}
-
-\bigskip
 
 \section{Availability}
 \label{sec5}
@@ -164,7 +188,7 @@ These families contain from X to Y descendent total taxa, and XXX tip taxa (gene
 
 %If you have any acknowledgements, please include them here.
 \section{Acknowledgements}
-This package relies on the OpenTree API's and the team that continues to develop and improve them, currently Jim Allman, Karen Cranston, Ben Redelings, and the authors of this package. Funding for this porject was provided by NSF ABI 1759846 and NSF ABI 1759838.
+This package relies on the OpenTree API's and the team that continues to develop and improve them, currently Jim Allman, Karen Cranston, Ben Redelings, and the authors of this package. Funding for this project was provided by NSF ABI 1759846 and NSF ABI 1759838.
 
 %If your paper has accompanying supplementary data, please include the below statement in your PDF.
 %\section{Supplementary Material}
