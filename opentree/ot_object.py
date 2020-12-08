@@ -456,7 +456,7 @@ class OpenTree(object):
                 return ott_id
             else:
                 sys.stderr.write("Exact match to name {} not found in taxonomy.\n".format(spp_name))
-                sys.stderr.write("""Try using `resp = OT.tnrs_match([{}], do_approximate_matching=True)`\n
+                sys.stderr.write("""Try using `resp = OT.tnrs_match(["{}"], do_approximate_matching=True)`\n
                                                    resp.response_dict \n
                                         to find fuzzy matches\n""".format(spp_name))
                 return None
