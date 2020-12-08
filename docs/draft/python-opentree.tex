@@ -2,11 +2,12 @@
 %\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
 \usepackage{url}
 \usepackage{indentfirst}
-
+\usepackage{color}
+%\usepackage{hyperref}
 % Add history information for the article if required
 %\history{Received Month X, 20XX;
 %revised Month X, 20XX}
-
+%\hypersetup{linkcolor=black, citecolor=black, colorlinks=true, hyperindex=true}
 \begin{document}
 
 % Title of paper
@@ -122,8 +123,9 @@ These studies and trees are indexed on a number of properties including author n
 In addition, the tips of these trees are mapped to the unified Open Tree taxonomy making comparisons among estimates, and searching for taxa of interest straightforward.
 This allows searching of studies based on taxa contained in the study.
 Importantly, this search does not rely on string-matching of what the taxonomic name was at the time of publication - rather it leverages the full suite of synonomies gathered across the input taxonomies to find equivalent taxa across studies, even if the canonical name has changed between publications.
-The indexing of these trees is taxonomically explicit as well, so, for example, a search for `canidae' will find trees with taxa contained in the taxonomic group \textit{canidae}, even if the term 'canidae' does not itself appear in the tree or tips.
-Based on the results of these searches, studies can be viewed in a browser on the OpenTree curator site, or the phylogenies themselves maybe downloaded for comparisons or other downstream use.
+The indexing of these trees is taxonomically explicit.
+So, for example, a search for `canidae' will find trees with taxa contained in the taxonomic group \textit{canidae}, even if the term `canidae' does not itself appear in the tree or tips.
+Based on the results of these searches, studies can be viewed in a browser on the OpenTree curator site, or the phylogenies themselves can be downloaded for comparisons or other downstream use.
 
 In addition, as the tips of each study are mapped by curators to identifiers in the OpenTree taxonomy, comparing the relationships represented in input trees to taxonomic relationships and to taxonomy is straightforward. The browser based tree viewer has a graphical visualization of this concordance and conflict. \texttt{opentree} provides a wrapper for this conflict functionality, which makes it straightforward to assess what taxon definitions and evolutionary relationships a tree estimate agrees with and conflicts with. This functionality can also be applied to local phylogenies for which the tips have been matched to taxonomy. This allows users to assess concordance and conflict in pre-publication trees, without sharing them to the publicly available OpenTree data store \citep{mctavish_phylesystem_2015}.
 
@@ -141,25 +143,33 @@ We highlight two examples based on user queries.
 \subsection{A phylogeny of all bird families}
 A full tutorials demonstrating how to access a tree of all bird families is packed with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/TreeOfBirdGenera.ipynb}.
 Capturing evolutionary information at large scales is often simplified by using arbitrary taxonomic cutoffs.
-While the OpenTree taxonomy is not rank focused, it does track rank information from component taxonomies. By searching the OpenTree taxonomy for families in birds, we find that there are 390 listed bird families, 194 of which are included in the synthetic tree.
+While the OpenTree taxonomy is not rank focused, it does track rank information from component taxonomies.
+By searching the OpenTree taxonomy for families in birds, we find that there are 390 listed bird families, 196 {\color{red} MTH changed this to 196, because that is what I got when running it - perhaps the recent updated by BDR to the server?} of which are included in the synthetic tree.
 Groups that are excluded from the synthetic tree for a few potential reasons, the most common of which is that all members of the group are extinct, and we have no curated published studies providing information about the correct evolutionary relationships.
-Placements of fossil taxa based only on taxonomy tend to be unstable, and we exclude them from synthesis without phylogenetic information (Cite? Or more reasoning here??) .
+Placements of fossil taxa based only on taxonomy tend to be unstable, and the OpenTree synthesis procedure excludes if the fossil is not present in at least one  phylogenetic input.
 These families can be included in later synthetic trees if data is added to the study corpus providing information on their relationships.
-Other taxa are excluded form synthesis if issues have been raised about their taxonomic validity, such as if they are a family that is 'barren', i.e. contains no species.
+Other taxa are excluded form synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy because the name was judged to be invalid by the OpenTree taxonomy merging software\citep{rees_automated_2017}.
 
 If we request an induced subtree from the synthesis for these 164 taxa, we get back a tree that has 150 tips. The return value also includes a list of non-monophyletic taxa.
-Some of the non-monophyletic taxa map to internal nodes on our output tree. Input phylogenies are telling us that these 'families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the shows the topology of the 130 monophyletic bird families plus MRCA's of 20 additional families as tips. The other 14 taxa are non monophyletic families for which the MRCA is an internal node on the output tree.
+Some of the non-monophyletic taxa map to internal nodes on our output tree. Input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the shows the topology of the 130 monophyletic bird families plus MRCA's of 20 additional families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output tree.
 
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{bird_fam_fig}
-\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?)}
+\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?)}
 \label{birdfams}
 \end{figure}
 
-These families contain from 1 to 920 total descendants tip taxa (species and subspecies), and across all 150 families, 10357 tip taxa  are captured by the relationships shown in this tree. The figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendents on the right. This display certainly demonstrates that 'families' is not a very even way to break up biodiversity across birds.
+These families contain from 1 to 920 total descendants tip taxa (species and subspecies).
+Across all 150 families, 10,357 tip taxa  are captured by the relationships shown in this tree.
+The figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendents on the right.
+This display demonstrates that `families' is not a very even way to break up biodiversity across birds.
 
-Based on the phylogenetic synthesis algorithm, each branch in the tree is supported by either taxonomy alone, where there are no input studies that traverse that branch, or by one or more input phylogenetic studies. The support for each node in the tree can be interrogated using an \texttt{opentree.synth\_node\_info} call. While each branch must be supported by taxonomy or at least one input study from phylesystem, where multiple inputs traverse a branch, there can be conflict among studies. The synthesis algorithm is greedy, and the output tree will display the branch supported by the highest ranked study included in synthesis, but the node info call will return not only which studies support that branch, but also which studies have relationships which conflict with that branch. In \ref{birdfams} support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this tree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this tree, 422 are supported by at least one input phylogenetic study. 
+Based on the phylogenetic synthesis algorithm, each branch in the tree is supported by either taxonomy alone, where there are no input studies that traverse that branch, or by one or more input phylogenetic studies. 
+The support for each node in the tree can be interrogated using an \texttt{opentree.synth\_node\_info} call.
+While each branch must be supported by taxonomy or at least one input study from phylesystem, where multiple inputs traverse a branch, there can be conflict among studies.
+The synthesis algorithm is greedy, and the output tree will display the branch supported by the highest ranked study included in synthesis, but the node info call will return not only which studies support that branch, but also which studies have relationships which conflict with that branch.
+In \ref{birdfams} support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this tree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this tree, 422 are supported by at least one input phylogenetic study. 
 
 This tree shows only topology. When combing taxonomy, and phylogenetic branches form across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies  in the phylesystem corpus.
 
@@ -173,11 +183,11 @@ The University of California, Merced has a natural reserve directly adjacent to 
 We accessed a species list for the reserve and adjacent campus ares using Global Biodiversity Information Facility (GBIF) website \citep{global_biodiversity_information_facility_gbif_2019}. GBIF provides a repository for species occurrence data stored in a variety of repositories, including bird observations from eBird (cite), community science observations from iNaturalist (cite), and several other resources. A full tutorial demonstrating how to access a tree for a GBIF data download is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/gbif/GBIF_to_OpenTree.ipynb}.
 
 
-We downloaded the full list of animal observations from the UC Merced Vernal pools reserve from GBIF \citep{global_biodiversity_information_facility_gbif_2019}. This data download comprised 6,709 records from 223 species. Using the GBIF unique taxon identifiers, 201 of these species could be directly matched to taxa in the opentree taxonomy using \texttt{opentree.taxon\_info(source\_id = {gbif unique identifier})}. This direct matching captures exact one to one relationships between these taxonomies, and avoids slow and potentially error prone string matching. 19 taxa had updated identifiers in GBIF since the most recent reconciliation between the GBIF taxonomy and the OpenTree taxonomy, and were assigned OpenTree taxon identifiers based on exact string matches. There were two taxa \textit{P. abortivum St.} and \textit{Ichneumon cupitus Cresson 1877}, which were not found in the OpenTree taxonomy, and were dropped form the analysis.
+We downloaded the full list of animal observations from the UC Merced Vernal pools reserve from GBIF \citep{global_biodiversity_information_facility_gbif_2019}. This data download comprised 6,709 records from 223 species. Using the GBIF unique taxon identifiers, 201 of these species could be directly matched to taxa in the opentree taxonomy using \texttt{opentree.taxon\_info(source\_id = {gbif unique identifier})}. This direct matching captures exact one to one relationships between these taxonomies, and avoids slow and potentially error prone string matching. 19 taxa had updated identifiers in GBIF since the most recent reconciliation between the GBIF taxonomy and the OpenTree taxonomy, and were assigned OpenTree taxon identifiers based on exact string matches. There were two taxa ``\textit{P. abortivum} St.'' and ``\textit{Ichneumon cupitus} Cresson 1877'', which were not found in the OpenTree taxonomy, and were dropped form the analysis.
  
 Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for these taxa can be downloaded. This tree is supported by 104 individual published trees (supplemental cites).
 
-We used this phylogeney to discuss the diversity of life of animal life in introductory biology and evolution classes on campus.
+One of us (EJM) used this phylogeney to discuss the diversity of life of animal life in introductory biology and evolution classes on campus.
 There are several threatened and endangered species on the vernal pools reserve, including the \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
 By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get studnts to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
 
