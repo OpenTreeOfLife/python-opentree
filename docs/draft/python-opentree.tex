@@ -92,7 +92,7 @@ Many analyses integrate calls to each of these subcomponents.
 The `opentree' package links across these services to make common API calls easier.
 Some example calls are described here, but all methods and scripts are fully documented, including examples and return formats at \url{https://opentree.readthedocs.io/en/latest/}.
 
-\subsubsection{Synthetic tree.---} The OpenTree synthetic tree contains all XX taxa in the OpenTree taxonomy, with relationships informed by XX studies.
+\subsubsection{Synthetic tree.---} The OpenTree synthetic tree contains all 2.4 million taxa in the OpenTree taxonomy, with relationships for 87,000 taxa informed by 1,216 studies.
 Each branch in the tree is informed by published phylogenetic relationships, where they are present in the curated data store, or by taxonomic relationships where no phylogenetic data is available.
 For each node in the synthetic tree, the API returns identifiers for
 all the trees in the synthesis pipeline which support or conflict with that node.
@@ -118,7 +118,7 @@ This TNRS forms a link between human readable name strings, and rigorous unique 
 \texttt{opentree} wraps the OpenTree taxonomy and TNRS APIs for ease of integrating taxonomy and TNRS queries with downstream analyses. In addition, \texttt{opentree} provides helpers for quickly searching the text download of the taxonomy, which can be more efficient for bulk queries.
 
 
-\subsubsection{Study search.---} The OpenTree datastore contains XXX published phylogenetic studies, including XX phylogenetic trees.
+\subsubsection{Study search.---} The OpenTree datastore contains 4,468 published phylogenetic studies, including 9395 phylogenetic trees (as of Dec 4, 2020).
 These studies and trees are indexed on a number of properties including author name, curator name, and publication information. 
 In addition, the tips of these trees are mapped to the unified Open Tree taxonomy making comparisons among estimates, and searching for taxa of interest straightforward.
 This allows searching of studies based on taxa contained in the study.
@@ -156,7 +156,8 @@ Some of the non-monophyletic taxa map to internal nodes on our output tree. Inpu
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{bird_fam_fig}
-\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?)}
+
+\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?). Figure created using \citep{letunic_interactive_2019}}
 \label{birdfams}
 \end{figure}
 
@@ -177,25 +178,29 @@ This tree shows only topology. When combing taxonomy, and phylogenetic branches 
 
 \bigskip
 
-
-The University of California, Merced has a natural reserve directly adjacent to campus, at contains several vernal pools. These vernal pools create a unique habitat which allows native species to thrive, and the proximity to campus allows undergraduate classes to experience this ecosystem on field trips which can be accomplished during class time. As part of a class exercise on vernal pools ecology and evolution, we created an evolutionary tree of all the animal species observed at the UC Merced Vernal Pools natural preserve. 
-
+The University of California, Merced has a natural reserve directly adjacent to campus, at contains several vernal pools. These vernal pools create a unique habitat which allows native species to thrive, and the proximity to campus allows undergraduate classes to experience this ecosystem on field trips which can be accomplished during class time. 
 We accessed a species list for the reserve and adjacent campus ares using Global Biodiversity Information Facility (GBIF) website \citep{global_biodiversity_information_facility_gbif_2019}. GBIF provides a repository for species occurrence data stored in a variety of repositories, including bird observations from eBird (cite), community science observations from iNaturalist (cite), and several other resources. A full tutorial demonstrating how to access a tree for a GBIF data download is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/gbif/GBIF_to_OpenTree.ipynb}.
 
+<<<<<<< Updated upstream
 
 We downloaded the full list of animal observations from the UC Merced Vernal pools reserve from GBIF \citep{global_biodiversity_information_facility_gbif_2019}. This data download comprised 6,709 records from 223 species. Using the GBIF unique taxon identifiers, 201 of these species could be directly matched to taxa in the opentree taxonomy using \texttt{opentree.taxon\_info(source\_id = {gbif unique identifier})}. This direct matching captures exact one to one relationships between these taxonomies, and avoids slow and potentially error prone string matching. 19 taxa had updated identifiers in GBIF since the most recent reconciliation between the GBIF taxonomy and the OpenTree taxonomy, and were assigned OpenTree taxon identifiers based on exact string matches. There were two taxa ``\textit{P. abortivum} St.'' and ``\textit{Ichneumon cupitus} Cresson 1877'', which were not found in the OpenTree taxonomy, and were dropped form the analysis.
- 
+
+
 Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for these taxa can be downloaded. This tree is supported by 104 individual published trees (supplemental cites).
 
-One of us (EJM) used this phylogeney to discuss the diversity of life of animal life in introductory biology and evolution classes on campus.
-There are several threatened and endangered species on the vernal pools reserve, including the \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
-By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get studnts to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
 
-For researchers, this tree also provides the necessary information for community phylogenetic analyses. \citet{li_for_2019} domesticated that synthetic phylogenies from the OpenTree project perform well in community phylogenetic studies. By providing ready access to these estimates, based on 160 previously published trees, OpenTree makes basing ecological analyses in an accurate evolutionary framework straightforward.
+For researchers, working in the vernal pools reserve, this tree also provides the necessary information for community phylogenetic analyses. \citet{li_for_2019} domesticated that synthetic phylogenies from the OpenTree project perform well in community phylogenetic studies. By providing ready access to these estimates, based on 160 previously published trees, OpenTree makes basing ecological analyses in an accurate evolutionary framework straightforward.
+
+
+The ability to build a phylogeny of local taxa is also a valuable pedagogical tool. One of us (EJM) used this phylogeney to discuss the diversity of life of animal life as part of a class exercise on vernal pools ecology and evolution, in an undergraduate evolution class. 
+Students visited the Natural Reserve, and then explored the evolutionary tree of all the animal species observed at the UC Merced Vernal Pools natural preserve. 
+We used this phylogeny to discuss the diversity of life of animal life in introductory biology and evolution classes on campus.
+There are several threatened and endangered species on the vernal pools reserve, including the \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
+By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get students to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{vernal_animals}
-\caption{Evolutionary relationships between all taxon records in the UC Merced Vernal Pools Natural reserve. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?)}
+\caption{Evolutionary relationships between all taxon records in the UC Merced Vernal Pools Natural reserve. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (supplemental cites?). Figure created using \citep{letunic_interactive_2019}}
 \label{vernalanimals}
 \end{figure}
 
