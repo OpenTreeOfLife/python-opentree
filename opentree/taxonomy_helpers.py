@@ -17,6 +17,7 @@ def debug(msg):
 
 def download_taxonomy_file(version, loc):
     # download ott taxonomy
+    version = str(version)
     path = loc + '/' +'ott' + version
     if os.path.exists(path + '/' + 'taxonomy.tsv'):
         sys.stdout.write("Taxonomy already available at {}".format(path))
@@ -40,7 +41,7 @@ def get_forwards_dict(forwards_file):
     return fwd_dict
 
 def clean_taxonomy_file(taxonomy_file):
-    """Geneartes a pruned taxonomy.
+    """Generates a pruned taxonomy.
     cleans up the word 'species' and the flag 'no rank - terminal', which is not associated to higher taxonomic ranks
     """
     taxon_dir = os.path.dirname(taxonomy_file)
@@ -52,11 +53,14 @@ def clean_taxonomy_file(taxonomy_file):
     return output_path
 
 
-def get_ott_ids_for_rank(rank, taxonomy_file):
+def get_ott_ids_for_rank(rank, taxonomy_file, synth_only = True):
     """Returns all the ott_ids for a given rank.
     Args
     rank: (must be in ['species', 'genus', 'family', 'order', 'class'])
     taxonomy_file: path to taxonomy.tsv
+
+    If synth_only == True, will return only ids included in synth. 
+    (Does not assess if taxa actaully appear as monophyletic in synth, e.g. if  taxa are broken.)
     """
     assert rank in ['species', 'genus', 'family', 'order', 'class']
     assert os.path.exists(taxonomy_file)
@@ -72,19 +76,32 @@ def get_ott_ids_for_rank(rank, taxonomy_file):
     for lin in fi:
         lii = lin.split('\t')
         ott_ids.append(lii[0])
+    if synth_only == True:
+        nodes = ['ott' + idn for idn in ott_ids]
+        resp = OT.synth_node_info(node_ids = nodes)
+        if 'unknown' in resp.response_dict:
+            synth_ids = set(nodes).difference(set(resp.response_dict['unknown']))
+            ott_ids = [nodeid.strip('ott') for nodeid in synth_ids]
     return ott_ids
 
 
-def get_ott_ids_for_group(group_ott_id, write_file = 'children_ott_ids.txt'):
+def get_ott_ids_for_group(group_ott_id, write_file = 'children_ott_ids.txt', synth_only = False):
     """Returns all descendent ottids of a taxon"""
-    sys.stdout.write('Gathering ott ids from group with ott id {}...\n'.format(group_ott_id))
-    debug(group_ott_id)
+    sys.stdout.write('Gathering ott ids from group with ott id {}.\n'.format(group_ott_id))
+    #debug(group_ott_id)
     subtree = OT.taxon_subtree(ott_id = group_ott_id, label_format='name_and_id')
-    ott_ids =[taxon.label.split()[-1].strip('ott') for taxon in subtree.tree.taxon_namespace]
+    if synth_only == True:
+        nodes = [taxon.label.split()[-1] for taxon in subtree.tree.taxon_namespace]
+        resp = OT.synth_node_info(node_ids = nodes)
+        if 'unknown' in resp.response_dict:
+            synth_ids = set(nodes).difference(set(resp.response_dict['unknown']))
+            ott_ids = [nodeid.strip('ott') for nodeid in synth_ids]
+    else:
+        ott_ids =[taxon.label.split()[-1].strip('ott') for taxon in subtree.tree.taxon_namespace]
     return ott_ids
 
 
-def get_ott_ids_group_and_rank(group_ott_id, rank, taxonomy_file):
+def get_ott_ids_group_and_rank(group_ott_id, rank, taxonomy_file, synth_only=True):
     """Get all ott_ids of rank 'rank' in group 'group_ott_id'
     e.g. get all genera in Aves
 
@@ -93,7 +110,7 @@ def get_ott_ids_group_and_rank(group_ott_id, rank, taxonomy_file):
     # get group ott ids
     children_ott_ids = get_ott_ids_for_group(group_ott_id)
     # get rank ott ids
-    rank_ott_ids = get_ott_ids_for_rank(rank, taxonomy_file)
+    rank_ott_ids = get_ott_ids_for_rank(rank, taxonomy_file, synth_only = synth_only)
     # get rank ott ids that are in children ott ids:
     ott_ids = []
     for item in children_ott_ids:
@@ -112,7 +129,7 @@ def standardize_labels(tree, prob_char = "():#", replace_w = '_'):
             node.label = remove_problem_characters(node.label, prob_char, replace_w)
     return tree
 
-def remove_problem_characters(instr, prob_char = "():#", replace_w = '_'):
+def remove_problem_characters(instr, prob_char = "():#", replace_w = ''):
     """While colons, parens, etc are leagal in newick labels, 
     many tree viewers won't read or misread trees with them.
     This function replaces problem characters in a string with a replacement char.
@@ -235,15 +252,17 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
     relabel, relabel_ott_ids, broken_dict = _gather_broken_taxa_info(call_record.response_dict['broken'], label_format)
 
     labelled_tree = copy.deepcopy(call_record.tree)
-    all_labels = set()
+    label_matches = {}
     for taxon in labelled_tree.taxon_namespace:#Are these necessarily tips???
-        all_labels.add(taxon.label)
         if taxon.label.startswith('mrca'):
+            orig = taxon.label
             assert taxon.label in relabel
             for brok_taxon in relabel_ott_ids[taxon.label]:
                 broken_dict[brok_taxon]['is_tip'] = True
             taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
+            label_matches[orig] = taxon.label
         else:
+            orig = taxon.label
             ott_taxon_name = " ".join(taxon.label.split()[:-1])
             ott_taxon_name = remove_problem_characters(ott_taxon_name)
             ott = taxon.label.split()[-1]
@@ -260,22 +279,27 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
                     broken_dict[brok_taxon]['is_tip'] = False
             else:
                 taxon.label =  new_label
+            label_matches[orig] = taxon.label
 
     for node in labelled_tree:
         if node.label and node.label != '':
+            orig = node.label
             if node.taxon:
                 node.label = None
             else:
-                all_labels.add(node.label)
                 if node.label.startswith('mrca'):
                     if node.label in relabel:
                         for brok_taxon in relabel_ott_ids[node.label]:
                             broken_dict[brok_taxon]['is_tip'] = False
                         node.label = 'MRCA of taxa in '+' '.join(relabel[node.label])
+                        label_matches[orig] = node.label
                     elif inc_unlabelled_mrca:
+                        label_matches[orig] = node.label
                         pass
                     else:
-                        node.label = None            
+                        label_matches[orig] = node.label
+                        node.label = None
+                         
                 else:
                     ott_taxon_name = " ".join(node.label.split()[:-1])
                     ott_taxon_name = remove_problem_characters(ott_taxon_name)
@@ -293,6 +317,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
                             broken_dict[brok_taxon]['is_tip'] = False
                     else:
                         node.label =  new_label
+                    label_matches[orig] = node.label
 
     if standardize == True:
         labelled_tree = standardize_labels(labelled_tree)
@@ -300,4 +325,5 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
             'original_tree':call_record.tree,
             'unknown_ids':unknown_dict,
             'non-monophyletic_taxa':broken_dict,
-            'supporting_studies': call_record.response_dict["supporting_studies"]}
+            'supporting_studies': call_record.response_dict["supporting_studies"],
+            'label_map':label_matches}
