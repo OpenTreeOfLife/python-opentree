@@ -9,7 +9,7 @@ The git repo is at https://github.com/OpenTreeOfLife/python-opentree.
 
 
 
-Please refer to opentree’s documentation website https://opentree.readthedocs.io for more details on installation instructions, function usage, running tutorials, real life examples, and tools for developers.
+Please refer to opentree’s documentation website https://opentree.readthedocs.io/en/latest/readme.html#installation for more details on installation instructions, function usage, running tutorials, real life examples, and tools for developers.
 
 For examples scripts see: https://opentree.readthedocs.io/en/latest/running_examples.html
 
