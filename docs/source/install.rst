@@ -1,3 +1,1 @@
-INSTALL
-
 .. mdinclude:: ../../INSTALL.md
