@@ -8,13 +8,15 @@ project.
 The git repo is at https://github.com/OpenTreeOfLife/python-opentree.
 
 
-Prior work / design / road map
-==============================
 
-This package will use supersede [peyotl](http://opentreeoflife.github.io/peyotl/) at
-    some point.
+Please refer to opentree’s documentation website https://opentree.readthedocs.io for more details on installation instructions, function usage, running tutorials, real life examples, and tools for developers.
 
-The initial goal is provide client-side interface for an
+For examples scripts see: https://opentree.readthedocs.io/en/latest/running_examples.html
+
+
+For example Jupyter notebooks see: https://opentree.readthedocs.io/en/latest/notebooks.html
+
+SSB 2020 workshop curriculum is posted at:
 [Open Tree workshop](https://opentreeoflife.github.io/SSBworkshop)
 at the [2020 SSB Meeting](https://systbiol.github.io/ssb2020/) in Gainesville, FL.
 
