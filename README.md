@@ -9,7 +9,7 @@ The git repo is at https://github.com/OpenTreeOfLife/python-opentree.
 
 
 
-Please refer to opentree’s documentation website https://opentree.readthedocs.io/en/latest/readme.html#installation for more details on installation instructions, function usage, running tutorials, real life examples, and tools for developers.
+Please refer to [this markdown document](INSTALL.md) or opentree’s documentation website https://opentree.readthedocs.io/en/latest/readme.html#installation for more details on installation instructions, function usage, running tutorials, real life examples, and tools for developers.
 
 For examples scripts see: https://opentree.readthedocs.io/en/latest/running_examples.html
 
@@ -20,6 +20,3 @@ SSB 2020 workshop curriculum is posted at:
 [Open Tree workshop](https://opentreeoflife.github.io/SSBworkshop)
 at the [2020 SSB Meeting](https://systbiol.github.io/ssb2020/) in Gainesville, FL.
 
-Install
-=======
-See [here](INSTALL.md) for installation instructions.
