@@ -11,6 +11,7 @@ Welcome to Python-OpenTree's documentation.
    :caption: Contents:
 
    readme
+   install
    running_examples
    notebooks
    apidocs
