@@ -3,6 +3,7 @@
 \usepackage{url}
 \usepackage{indentfirst}
 \usepackage{color}
+\usepackage{float}
 %\usepackage{hyperref}
 % Add history information for the article if required
 %\history{Received Month X, 20XX;
@@ -154,7 +155,7 @@ If we request an induced subtree from the synthesis for these 164 taxa, we get b
 Some of the non-monophyletic taxa map to internal nodes on our output tree. In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the shows the topology of the 130 monophyletic bird families plus MRCA's of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output tree.
 
 
-\begin{figure}[!p]
+\begin{figure}[!h]
 \centering\includegraphics[width=\textwidth]{bird_fam_fig}
 
 \caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
@@ -187,6 +188,13 @@ We downloaded the full list of animal observations from the UC Merced Vernal poo
 
 Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for these taxa can be downloaded (Figure \ref{vernalanimals}). This synthetic tree is supported by 160 individual published trees (Citations in supplemental information)).
 
+\begin{figure}[!h]
+\centering\includegraphics[width=\textwidth]{vernal_animals}
+\caption{Evolutionary relationships between all animal taxon records in the UC Merced Vernal Pools and Grassland Reserve. Branch lengths are arbitrary. A total of 160 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
+\label{vernalanimals}
+\end{figure}
+
+
 
 For researchers, working in the vernal pools reserve, this tree also provides the necessary information for community phylogenetic analyses. \citet{li_for_2019} demonstrated that synthetic phylogenies from the OpenTree project perform well in community phylogenetic studies. By providing ready access to these estimates, based on 160 previously published trees, \texttt{opentree} makes basing ecological analyses in an accurate evolutionary framework straightforward.
 
@@ -195,12 +203,6 @@ The ability to build a phylogeny of local taxa is also a valuable pedagogical to
 Students visited the UC Merced Vernal Pools and Grassland Reserve, and then explored the evolutionary tree of all the animal species recorded as observed in the reserve. 
 There are several threatened and endangered species on the vernal pools reserve, including two species of fairy shrimp, \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
 By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree (Figure \ref{vernalanimals}) shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get students to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
-
-\begin{figure}[!p]
-\centering\includegraphics[width=\textwidth]{vernal_animals}
-\caption{Evolutionary relationships between all animal taxon records in the UC Merced Vernal Pools and Grassland Reserve. Branch lengths are arbitrary. A total of 160 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
-\label{vernalanimals}
-\end{figure}
 
 
 
