@@ -335,7 +335,9 @@ class OpenTree(object):
         if isinstance(node_ids, str):
             node_ids = [node_ids]
         if ott_id:
-            ott_id = ott_id.strip('ott')
+            if isinstance(ott_id, str):
+                ott_id=ott_id.strip('ott')
+                ott_id = int(ott_id)
         return self.ws.tree_of_life_node_info(node_ids=node_ids, node_id=node_id, ott_id=ott_id,
                                               include_lineage=include_lineage)
 
