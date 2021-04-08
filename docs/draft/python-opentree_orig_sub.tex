@@ -1,0 +1,475 @@
+\documentclass[oupdraft]{sysbio_sse}
+%\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
+\usepackage{url}
+\usepackage{indentfirst}
+\usepackage{color}
+\usepackage{float}
+%\usepackage{hyperref}
+% Add history information for the article if required
+%\history{Received Month X, 20XX;
+%revised Month X, 20XX}
+%\hypersetup{linkcolor=black, citecolor=black, colorlinks=true, hyperindex=true}
+\begin{document}
+
+% Title of paper
+\title{OpenTree: A Python package for Accessing and Analyzing data from the Open Tree of Life}
+% Each important word in the title should begin with a capital letter
+
+% List of authors, with corresponding author marked by asterisk
+\author{Emily Jane McTavish$^{1,\ast}$, Luna Luisa Sanchez Reyes$^{1}$, and
+Mark T. Holder,$^{3}$\\[4pt]
+% Author addresses
+\textit{$^{1}$~Dept.~Life and Environmental Sciences, University of California, Merced, CA, USA 95343}
+\\
+\textit{$^{2}$~Dept.~Ecology and Evolutionary Biology, University of Kansas, Lawrence, KS USA 66045}\\
+\textit{$^{3}$~Biodiversity Institute, University of Kansas, Lawrence, KS USA 66045}
+\\[2pt]
+% E-mail address for correspondence
+\textit{*Corresponding author details here}}
+% Identify the name, address, telephone/fax numbers, and e-mail address for the author who will receive proofs and be designated the "corresponding author" in text.
+
+% Running headers of paper:
+\markboth%
+% First field is the short list of authors
+{McTavish, Sanchez-Reyes, Holder}
+% Second field is the short title of the paper
+{opentree python package}
+% This should be shortened version of the title and no greater than 50 characters
+
+\maketitle
+
+\begin{abstract}
+{The Open Tree of Life project constructs a comprehensive, dynamic and digitally-available tree of life by synthesizing published phylogenetic trees along with taxonomic data.
+Open Tree of Life provides web-service application programming interfaces (APIs) to make the tree estimate, unified taxonomy, and input phylogenetic data available to anyone.
+Here, we describe the python package \texttt{opentree}, which provides a user friendly python wrapper for these APIs and a set of scripts and tutorials for straightforward downstream data analyses.
+We demonstrate the utility of these tools by generating an estimate of the phylogenetic relationships of all bird families, and by capturing a phylogenetic estimate for all taxa  observed at the University of California Merced Vernal Pools and Grassland Reserve.
+}
+
+{Python, phylogenetics, taxonomy, evolution, open science.}
+\end{abstract}
+\newline
+
+Evolutionary history provides a framework to link all life on earth. However, it is not easy to access accurate, up-to-date phylogenetic relationships for arbitrary sets of taxa of interest, even if phylogenetic estimates for those taxa have been made and published \citep{drew_lost_2013, mctavish_how_2017}. Individual phylogenetic estimates are not comprehensive, and therefore seldom contain all taxa of interest. Taxonomic relationships, while comprehensive, provide a coarse, and often outdated, picture of shared ancestry. 
+The Open Tree of Life project (OpenTree) provides a reproducible framework for accessing up-to-date evolutionary relationships for arbitrary sets of taxa across the entire tree of life.
+All data in OpenTree is freely available via API's.
+The package \texttt{opentree} provides a user friendly python interface to access these data. In addition \texttt{opentree} is packaged with a set of tutorials and scripts to make common downstream analyses straightforward.
+
+\bigskip
+% Each important word in the heading level 1 should begin with a capital letter; no heading for the introduction
+% Please note that the level 1 headings given here, e.g. Description, are suggestions only
+\section{Description}
+\label{sec2}
+
+\texttt{opentree} is a Python package for accessing and analyzing data from the OpenTree of Life project.
+Open Tree of Life stores a wealth of taxonomic and phylogenetic data gathered together in an open-access interoperable framework.
+The current synthetic tree \citep{opentreeoflife_open_2019} comprises 2.4 million tips.
+Most of the tips of the tree represent species, but some are infraspecific taxa.
+The framework of this tree is provided by a unified taxonomy \citep{opentreeoflife_open_2019-1, rees_automated_2017}.
+This taxonomy links unique identifiers across many online taxonomic resources, including NCBI \citep{federhen_ncbi_2012}, GBIF \citep{gbif_secretariat_gbif_2019}, as well as user contributed taxonomic amendments contained in [https://github.com/OpenTreeOfLife/amendments-1].
+These taxonomic relationships are refined by evolutionary estimates from 1,216 published papers including 87,000 tip taxa \citep{opentreeoflife_open_2019, redelings_supertree_2017}.
+The Open Tree data store, `Phylesystem' \citep{mctavish_phylesystem_2015} contains 4,500 published studies, including those incorporated in the tree. Each tree has mappings between the tips in these published studies and unique taxonomic identifiers.
+
+All of these data are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
+\texttt{opentree}  provides an user-friendly wrapper for calling these APIs.
+In addition, it converts these data between commonly used file formats and data types.
+This package allows allows users to generate to data objects in DendroPy, a phylogenetic computing library \citep{sukumaran_dendropy_2010}.
+
+
+\texttt{opentree} incorporates in python the functionality available in rotl, an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl_2016}, as well as additional downstream analysis and interoperability tools.
+\texttt{rotl} has been already been cited 132 times in the 4 years since its publication, demonstrating a demand for accessible user access to these data.
+By providing a python package to interact with these data, we make it straightforward for python users to access and analyze these data.
+A python wrapper for Open Tree of Life also makes linking these data with the stable of other Python biodiversity informatics tools straightforward.
+
+In addition, \texttt{opentree} expands the toolset available for working with the OpenTree unified taxonomy \citep{rees_automated_2017}.
+
+
+\bigskip
+\section{Services provided by opentree}
+\label{sec3}
+
+
+The OpenTree APIs are divided into three main categories, synthetic tree,  taxonomy and taxonomic name resolution, and study search.
+Many analyses integrate calls to each of these subcomponents. 
+The \texttt{opentree} package links across these services to make common API calls easier.
+Some example calls are described here, but all methods and scripts are fully documented, including examples and return formats at \url{https://opentree.readthedocs.io}.
+
+\subsubsection{Synthetic tree.---} The OpenTree synthetic tree contains all 2.4 million taxa in the OpenTree taxonomy, with relationships for 87,000 taxa informed by 1,216 studies.
+Each branch in the tree is informed by published phylogenetic relationships, where they are present in the curated data store, or by taxonomic relationships where no phylogenetic data is available.
+For each node in the synthetic tree, the API returns identifiers for
+all the trees in the synthesis pipeline which support or conflict with that node.
+Each node is uniquely labeled.
+If the descendants of a node align with named taxonomic group, the taxon identifier is applied to the node.
+If the node does not correspond a taxon named in the OpenTree taxonomy, the node is labeled using a phyloreference \citep{parr_evolutionary_2012} describing that node as the most recent common ancestor of two identified taxa.
+\texttt{opentree} users can easily access evolutionary estimates for arbitrary sets of taxa.
+The web-service response also includes the published phylogenetics estimates which underlie those inferences.
+The \texttt{opentree} wrapper captures and formats these citations to make providing appropriate credit for these synthetic induced subtree estimates straightforward.
+Users can also access full synthetic subtrees subtending any individual node.
+
+
+\subsubsection{Taxonomy and Taxonomic Name Resolution.---} The OpenTree taxonomy not only provides a scaffold for the synthetic tree, but is also a valuable resource in its own right.
+Matching names is a key hurdle in bioinformatics.
+Correct taxon names change through time, and spelling and typographical errors can propagate through bioinformatic resources.
+Thus, demanding exact matching of names from different sources can be too stringent and fail to match the same taxon.
+However, different names can be very close in spelling to one another.
+So, tolerating misspellings makes it easy to accidentally match names that should refer to two distinct taxa.
+The OpenTree taxonomy \citep{rees_automated_2017, opentreeoflife_open_2019-1} provides a link between the unique identifiers generated by several large scale online taxonomic resources [GBIF, NCBI, Silva, Worms], as well as all known name synonomies provided by those resources.
+The OpenTree taxonomic name resolution service (TNRS) searches this full taxonomy and returns exact or fuzzy matches from input names string to taxa and their unique identifiers.
+This TNRS forms a link between human readable name strings, and rigorous unique identifiers.
+
+\texttt{opentree} wraps the OpenTree taxonomy and TNRS APIs for ease of integrating taxonomy and TNRS queries with downstream analyses. In addition, \texttt{opentree} provides helpers for quickly searching the text download of the taxonomy, which can be more efficient for bulk queries.
+
+
+\subsubsection{Study search.---} The OpenTree datastore contains 4,468 published phylogenetic studies, including 9,395 phylogenetic trees (as of Dec 4, 2020).
+These studies and trees are indexed on a number of properties including author name, curator name, and publication information. 
+In addition, the tips of these trees are mapped to the unified Open Tree taxonomy making comparisons among estimates of relationships and searching for taxa of interest straightforward.
+This allows searching of studies based on taxa contained in the study.
+Importantly, this search does not rely on string-matching of what the taxonomic name was at the time of publication - rather it leverages the full suite of synonomies gathered across the input taxonomies to find equivalent taxa across studies, even if the canonical name has changed between publications.
+The indexing of these trees is taxonomically explicit.
+So, for example, a search for `canidae' will find trees with taxa contained in the taxonomic group \textit{canidae}, even if the term `canidae' does not itself appear in the tree or tips.
+Based on the results of these searches, studies can be viewed in a browser on the OpenTree curator site, or the phylogenies themselves can be downloaded for comparisons or other downstream use.
+
+In addition, as the tips of each study are mapped by curators to identifiers in the OpenTree taxonomy, comparing the relationships represented in input trees to taxonomic relationships and to taxonomy is straightforward. The browser based tree viewer has a graphical visualization of this concordance and conflict. \texttt{opentree} provides a wrapper for this conflict functionality, which makes it straightforward to assess what taxon definitions and evolutionary relationships a tree estimate agrees with and conflicts with. This functionality can also be applied to local phylogenies for which the tips have been matched to taxonomy. This allows users to assess concordance and conflict with previous inferences in pre-publication trees, even without sharing them to the publicly available OpenTree data store \citep{reyes_physcraper_2020, mctavish_phylesystem_2015}.
+
+
+
+\bigskip
+
+\section{Biological Examples}
+\label{sec4}
+
+There are a plethora of downstream applications of this linked set of resources.
+We highlight two examples based on user queries.
+
+
+\subsection{A phylogeny of all bird families}
+A full Jupyter notebook tutorial demonstrating how to access a tree of all bird families is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/TreeOfBirdGenera.ipynb}.
+Capturing evolutionary information at large scales is often simplified by using arbitrary taxonomic cutoffs.
+While the OpenTree taxonomy is not rank focused, it does track rank information from component taxonomies.
+By searching the OpenTree taxonomy for families in birds, we find that there are 390 listed bird families, 196 of which are included in the synthetic tree.
+Groups that are excluded from the synthetic tree for a few potential reasons, the most common of which is that all members of the group are extinct, and we have no curated published studies providing information about the correct evolutionary relationships.
+Placements of fossil taxa based only on taxonomy tend to be unstable, and the OpenTree synthesis procedure excludes taxa if the taxon is not present in at least one  phylogenetic input.
+These families can be included in later synthetic trees if data is added to the study corpus providing information on their relationships.
+Other taxa are excluded from synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy, or because the name was judged to be invalid by the OpenTree taxonomy merging software\citep{rees_automated_2017}.
+
+If we request an induced subtree from the synthesis for these 164 taxa, we get back a tree that has 150 tips. The return value also includes a list of non-monophyletic taxa.
+Some of the non-monophyletic taxa map to internal nodes on our output tree. In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the shows the topology of the 130 monophyletic bird families plus MRCA's of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output tree.
+
+
+\begin{figure}[!h]
+\centering\includegraphics[width=\textwidth]{bird_fam_fig}
+
+\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
+\label{birdfams}
+\end{figure}
+
+These families contain from 1 to 920 total descendant tip taxa (species and subspecies).
+Across all 150 families, 10,357 descendent tip taxa  are captured by the relationships shown in this tree.
+Figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendents on the right.
+This display demonstrates that `families' is not a very even way to break up biodiversity across birds.
+
+Based on the phylogenetic synthesis algorithm, each branch in the tree is supported by either taxonomy alone, where there are no input studies that traverse that branch, or by one or more input phylogenetic studies. 
+The support for each node in the tree can be interrogated using an \texttt{opentree.synth\_node\_info} call.
+While each branch must be supported by taxonomy or at least one input study from phylesystem, where multiple inputs traverse a branch, there can be conflict among studies.
+The synthesis algorithm is greedy, and the output tree will display the branch supported by the highest ranked study included in synthesis.
+The node info call will return not only which studies support that branch, but also which studies have relationships which conflict with that branch.
+In figure \ref{birdfams} support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this tree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this tree, 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships. 
+
+This tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies  in the phylesystem corpus.
+
+\subsection{Linking data from the Global Biodiversity Information Facility (GBIF) with phylogenetic information from Open Tree of Life}
+
+\bigskip
+
+The University of California, Merced has a natural reserve directly adjacent to campus, which contains several vernal pools. These vernal pools create a unique habitat which allows native species to thrive, and the proximity to campus allows undergraduate classes to experience this ecosystem on field trips which can be accomplished during class time. 
+A species list for the reserve and adjacent campus areas is available through Global Biodiversity Information Facility (GBIF) website \citep{gbif_secretariat_gbif_2019}. GBIF provides a repository for species occurrence data tracked in a variety of data stores, including bird observations from eBird \citep{sullivan_ebird_2009}, community science observations from iNaturalist (\url{www.inaturalist.org}), and several other resources. A full tutorial demonstrating how to access a tree for a GBIF data download is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/gbif/GBIF_to_OpenTree.ipynb}.
+
+We downloaded the full list of animal observations from the UC Merced Vernal pools reserve from GBIF \citep{gbif_secretariat_gbif_2019}. This data download comprised 6,709 records from 223 species. Using the GBIF unique taxon identifiers, 201 of these species could be directly matched to taxa in the OpenTree taxonomy using \texttt{opentree.taxon\_info(source\_id = {gbif unique identifier})}. This direct matching captures exact one to one relationships between these taxonomies, and avoids slow and potentially error prone string matching. Nineteen taxa had updated identifiers in GBIF since the most recent reconciliation between the GBIF taxonomy and the OpenTree taxonomy, and were assigned OpenTree taxon identifiers based on exact string matches. There were two taxa ``\textit{P. abortivum} St.'' and ``\textit{Ichneumon cupitus} Cresson 1877'', which were not found in the OpenTree taxonomy, and were dropped from the analysis.
+
+
+Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for these taxa can be downloaded (Figure \ref{vernalanimals}). This synthetic tree is supported by 160 individual published trees (Citations in supplemental information)).
+
+\begin{figure}[!h]
+\centering\includegraphics[width=\textwidth]{vernal_animals}
+\caption{Evolutionary relationships between all animal taxon records in the UC Merced Vernal Pools and Grassland Reserve. Branch lengths are arbitrary. A total of 160 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
+\label{vernalanimals}
+\end{figure}
+
+
+
+For researchers, working in the vernal pools reserve, this tree also provides the necessary information for community phylogenetic analyses. \citet{li_for_2019} demonstrated that synthetic phylogenies from the OpenTree project perform well in community phylogenetic studies. By providing ready access to these estimates, based on 160 previously published trees, \texttt{opentree} makes basing ecological analyses in an accurate evolutionary framework straightforward.
+
+
+The ability to build a phylogeny of local taxa is also a valuable pedagogical tool. One of us (EJM) used this phylogeny to discuss the diversity of life of animal life as part of a class exercise on vernal pools ecology and evolution, in an undergraduate evolution class. 
+Students visited the UC Merced Vernal Pools and Grassland Reserve, and then explored the evolutionary tree of all the animal species recorded as observed in the reserve. 
+There are several threatened and endangered species on the vernal pools reserve, including two species of fairy shrimp, \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
+By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree (Figure \ref{vernalanimals}) shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get students to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
+
+
+
+\section{Availability}
+\label{sec5}
+
+\texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. The code is packaged with an automated test suite which is maintained to cover at minimum 75\% of the code. Testing reports are generated on \url{travis.io} and posted to {codecov.io} and reflected on the GitHub readme with each commit. Documentation and tutorials are available with the code, and is posted to \url{https://opentree.readthedocs.io}.
+
+
+\section{Conflict of Interest}
+None
+
+\section{Funding}
+Funding for this project was provided by NSF ABI 1759846 and NSF ABI 1759838. 
+
+%If you have any acknowledgements, please include them here.
+\section{Acknowledgements}
+This package relies on the OpenTree API's and the team that continues to develop and improve them, currently Jim Allman, Karen Cranston, Ben Redelings, and the authors of this package. We acknowledge logistical support provided by the UC Merced Vernal Pools and Grassland Reserve.
+Thank you to Emily Sessa and the organizers of the Society of Systematic Biologists SSB 2020 meeting for supporting the workshop where we tested and demonstrated this package. 
+
+%If your paper has accompanying supplementary data, please include the below statement in your PDF.
+%\section{Supplementary Material}
+%Data available from the Dryad Digital Repository:
+% \href{http://dx.doi.org/10.5061/dryad.[NNNN]}%
+% {http://dx.doi.org/10.5061/dryad.[NNNN]}.
+%\url{http://dx.doi.org/10.5061/dryad.[NNNN]}.
+
+\bigskip\bigskip
+
+%%%%%%%%%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%%%%
+
+% The best way to enter references is to use BibTeX.
+\bibliographystyle{plainnat}
+\begin{thebibliography}{18}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ballen and Greene(2017)]{ballen_walking_2017}
+Cissy~J. Ballen and Harry~W. Greene.
+\newblock Walking and talking the tree of life: {Why} and how to teach about
+  biodiversity.
+\newblock \emph{PLOS Biology}, 15\penalty0 (3):\penalty0 e2001630, March 2017.
+\newblock ISSN 1545-7885.
+\newblock \doi{10.1371/journal.pbio.2001630}.
+\newblock URL
+  \url{https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2001630}.
+\newblock Publisher: Public Library of Science.
+
+\bibitem[Drew et~al.(2013)Drew, Gazis, Cabezas, Swithers, Deng, Rodriguez,
+  Katz, Crandall, Hibbett, and Soltis]{drew_lost_2013}
+Bryan~T. Drew, Romina Gazis, Patricia Cabezas, Kristen~S. Swithers, Jiabin
+  Deng, Roseana Rodriguez, Laura~A. Katz, Keith~A. Crandall, David~S. Hibbett,
+  and Douglas~E. Soltis.
+\newblock Lost branches on the tree of life.
+\newblock \emph{PLOS Biol}, 11\penalty0 (9):\penalty0 e1001636, September 2013.
+\newblock ISSN 1545-7885.
+\newblock \doi{10.1371/journal.pbio.1001636}.
+\newblock URL
+  \url{http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1001636}.
+\newblock Number: 9.
+
+\bibitem[Federhen(2012)]{federhen_ncbi_2012}
+Scott Federhen.
+\newblock The {NCBI} {Taxonomy} database.
+\newblock \emph{Nucleic Acids Research}, 40\penalty0 (D1):\penalty0 D136--D143,
+  January 2012.
+\newblock ISSN 0305-1048.
+\newblock \doi{10.1093/nar/gkr1178}.
+\newblock URL \url{https://academic.oup.com/nar/article/40/D1/D136/2903327}.
+\newblock Publisher: Oxford Academic.
+
+\bibitem[Letunic and Bork(2019)]{letunic_interactive_2019}
+Ivica Letunic and Peer Bork.
+\newblock Interactive {Tree} {Of} {Life} ({iTOL}) v4: recent updates and new
+  developments.
+\newblock \emph{Nucleic Acids Research}, 47\penalty0 (W1):\penalty0 W256--W259,
+  July 2019.
+\newblock ISSN 0305-1048.
+\newblock \doi{10.1093/nar/gkz239}.
+\newblock URL \url{https://academic.oup.com/nar/article/47/W1/W256/5424068}.
+\newblock Publisher: Oxford Academic.
+
+\bibitem[Li et~al.(2019)Li, Trotta, Marx, Allen, Sun, Soltis, Soltis,
+  Guralnick, and Baiser]{li_for_2019}
+Daijiang Li, Lauren Trotta, Hannah~E. Marx, Julie~M. Allen, Miao Sun,
+  Douglas~E. Soltis, Pamela~S. Soltis, Robert~P. Guralnick, and Benjamin
+  Baiser.
+\newblock For common community phylogenetic analyses, go ahead and use
+  synthesis phylogenies.
+\newblock \emph{Ecology}, 100\penalty0 (9):\penalty0 e02788, 2019.
+\newblock ISSN 1939-9170.
+\newblock \doi{https://doi.org/10.1002/ecy.2788}.
+\newblock URL
+  \url{https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/ecy.2788}.
+\newblock \_eprint:
+  https://esajournals.onlinelibrary.wiley.com/doi/pdf/10.1002/ecy.2788.
+
+\bibitem[McTavish et~al.(2015)McTavish, Hinchliff, Allman, Brown, Cranston,
+  Holder, Rees, and Smith]{mctavish_phylesystem_2015}
+Emily~Jane McTavish, Cody~E. Hinchliff, James~F. Allman, Joseph~W. Brown,
+  Karen~A. Cranston, Mark~T. Holder, Jonathan~A. Rees, and Stephen~A. Smith.
+\newblock Phylesystem: a git-based data store for community-curated
+  phylogenetic estimates.
+\newblock \emph{Bioinformatics}, 31\penalty0 (17):\penalty0 2794--2800,
+  September 2015.
+\newblock ISSN 1367-4803.
+\newblock \doi{10.1093/bioinformatics/btv276}.
+\newblock URL
+  \url{https://academic.oup.com/bioinformatics/article/31/17/2794/183373/Phylesystem-a-git-based-data-store-for-community}.
+\newblock Number: 17.
+
+\bibitem[McTavish et~al.(2017)McTavish, Drew, Redelings, and
+  Cranston]{mctavish_how_2017}
+Emily~Jane McTavish, Bryan~T. Drew, Ben Redelings, and Karen~A. Cranston.
+\newblock How and {Why} to {Build} a {Unified} {Tree} of {Life}.
+\newblock \emph{BioEssays}, 39\penalty0 (11), November 2017.
+\newblock ISSN 1521-1878.
+\newblock \doi{10.1002/bies.201700114}.
+\newblock URL
+  \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/bies.201700114}.
+\newblock Number: 11.
+
+\bibitem[Michonneau et~al.(2016)Michonneau, Brown, and
+  Winter]{michonneau_rotl_2016}
+François Michonneau, Joseph~W. Brown, and David~J. Winter.
+\newblock rotl: an {R} package to interact with the {Open} {Tree} of {Life}
+  data.
+\newblock \emph{Methods in Ecology and Evolution}, 7\penalty0 (12):\penalty0
+  1476--1481, 2016.
+\newblock URL
+  \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12593/full}.
+\newblock Number: 12.
+
+\bibitem[{OpenTreeOfLife} et~al.(2019){OpenTreeOfLife}, {Benjamin Redelings},
+  {Luna Luisa Sanchez Reyes}, {Karen A. Cranston}, {Jim Allman}, {Mark T.
+  Holder}, and {Emily Jane McTavish}]{opentreeoflife_open_2019}
+{OpenTreeOfLife}, {Benjamin Redelings}, {Luna Luisa Sanchez Reyes}, {Karen A.
+  Cranston}, {Jim Allman}, {Mark T. Holder}, and {Emily Jane McTavish}.
+\newblock Open {Tree} of {Life} {Synthetic} {Tree}.
+\newblock December 2019.
+\newblock \doi{10.5281/zenodo.3937742}.
+\newblock URL \url{https://zenodo.org/record/3937742#.XxXISZJKhhH}.
+\newblock Publisher: Zenodo.
+
+\bibitem[{OpenTreeofLife} et~al.(2019){OpenTreeofLife}, {Karen A. Cranston},
+  {Benjamin Redelings}, {Luna Luisa Sanchez Reyes}, {Jim Allman}, {Emily Jane
+  McTavish}, and {Mark T. Holder}]{opentreeoflife_open_2019-1}
+{OpenTreeofLife}, {Karen A. Cranston}, {Benjamin Redelings}, {Luna Luisa
+  Sanchez Reyes}, {Jim Allman}, {Emily Jane McTavish}, and {Mark T. Holder}.
+\newblock Open {Tree} of {Life} {Taxonomy}.
+\newblock October 2019.
+\newblock \doi{10.5281/zenodo.3937751}.
+\newblock URL \url{https://zenodo.org/record/3937751#.XxXIwJJKhhE}.
+\newblock Publisher: Zenodo.
+
+\bibitem[Parr et~al.(2012)Parr, Guralnick, Cellinese, and
+  Page]{parr_evolutionary_2012}
+Cynthia~S. Parr, Robert Guralnick, Nico Cellinese, and Roderic D.~M. Page.
+\newblock Evolutionary informatics: unifying knowledge about the diversity of
+  life.
+\newblock \emph{Trends in Ecology \& Evolution}, 27\penalty0 (2):\penalty0
+  94--103, February 2012.
+\newblock ISSN 0169-5347.
+\newblock \doi{10.1016/j.tree.2011.11.001}.
+\newblock URL
+  \url{https://www.cell.com/trends/ecology-evolution/abstract/S0169-5347(11)00324-7}.
+\newblock Publisher: Elsevier.
+
+\bibitem[Redelings and Holder(2017)]{redelings_supertree_2017}
+Benjamin~D. Redelings and Mark~T. Holder.
+\newblock A supertree pipeline for summarizing phylogenetic and taxonomic
+  information for millions of species.
+\newblock \emph{PeerJ}, 5:\penalty0 e3058, March 2017.
+\newblock ISSN 2167-8359.
+\newblock \doi{10.7717/peerj.3058}.
+\newblock URL \url{https://peerj.com/articles/3058}.
+
+\bibitem[Rees and Cranston(2017)]{rees_automated_2017}
+Jonathan~A. Rees and Karen Cranston.
+\newblock Automated assembly of a reference taxonomy for phylogenetic data
+  synthesis.
+\newblock \emph{Biodiversity Data Journal}, \penalty0 (5), May 2017.
+\newblock ISSN 1314-2828.
+\newblock \doi{10.3897/BDJ.5.e12581}.
+\newblock URL \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5515096/}.
+\newblock Number: 5.
+
+\bibitem[Reyes et~al.(2020)Reyes, Kandziora, and
+  McTavish]{reyes_physcraper_2020}
+Luna L.~Sanchez Reyes, Martha Kandziora, and Emily~Jane McTavish.
+\newblock Physcraper: a python package for continual update of evolutionary
+  estimates using the {Open} {Tree} of {Life}.
+\newblock \emph{bioRxiv}, page 2020.09.15.299156, September 2020.
+\newblock \doi{10.1101/2020.09.15.299156}.
+\newblock URL
+  \url{https://www.biorxiv.org/content/10.1101/2020.09.15.299156v1}.
+\newblock Publisher: Cold Spring Harbor Laboratory Section: New Results.
+
+\bibitem[GBIF(2019)]{gbif_secretariat_gbif_2019}
+GBIF Secretariat.
+\newblock {GBIF} data download, October 2019.
+\newblock URL
+  \url{https://www.gbif.org/occurrence/download/0023214-190918142434337}.
+
+\bibitem[Sukumaran and Holder(2010)]{sukumaran_dendropy_2010}
+Jeet Sukumaran and Mark~T. Holder.
+\newblock {DendroPy}: a {Python} library for phylogenetic computing.
+\newblock \emph{Bioinformatics}, 26\penalty0 (12):\penalty0 1569--1571, June
+  2010.
+\newblock ISSN 1367-4803.
+\newblock \doi{10.1093/bioinformatics/btq228}.
+\newblock URL
+  \url{https://academic.oup.com/bioinformatics/article/26/12/1569/287181}.
+\newblock Number: 12 Publisher: Oxford Academic.
+
+\bibitem[Sullivan et~al.(2009)Sullivan, Wood, Iliff, Bonney, Fink, and
+  Kelling]{sullivan_ebird_2009}
+Brian~L. Sullivan, Christopher~L. Wood, Marshall~J. Iliff, Rick~E. Bonney,
+  Daniel Fink, and Steve Kelling.
+\newblock {eBird}: {A} citizen-based bird observation network in the biological
+  sciences.
+\newblock \emph{Biological Conservation}, 142\penalty0 (10):\penalty0
+  2282--2292, October 2009.
+\newblock ISSN 0006-3207.
+\newblock \doi{10.1016/j.biocon.2009.05.006}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S000632070900216X}.
+
+\bibitem[Sánchez-Reyes and O’Meara(2019)]{sanchez-reyes_datelife_2019}
+Luna~L. Sánchez-Reyes and Brian~C. O’Meara.
+\newblock {DateLife}: {Leveraging} databases and analytical tools to reveal the
+  dated {Tree} of {Life}.
+\newblock \emph{bioRxiv}, page 782094, October 2019.
+\newblock \doi{10.1101/782094}.
+\newblock URL \url{https://www.biorxiv.org/content/10.1101/782094v1}.
+\newblock Publisher: Cold Spring Harbor Laboratory Section: New Results.
+
+\end{thebibliography}
+% 1. All authors should be listed i.e. no use of et al.
+% 2. Dashes should not be used to replace author names in repeat entries
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Please include any figure captions on a separate page after the references. Figures themselves should be embedded in the text.
+
+%\begin{figure}[!p]
+%\centering\includegraphics{fig1}
+%\caption{Figure caption}
+%\label{Fig1}
+%\end{figure}
+
+
+%\begin{table}[!p]
+% 1. Table titles should be in caps and lowercase
+% 2. Footnotes can be used in Tables (a,b,c)}
+%\tblcaption{Table title
+%\label{Table1}}
+%{\tabcolsep=4.25pt
+%\begin{tabular}{@{}cccccccccc@{}}
+%\tblhead{Heading & Heading & Heading & Heading & Heading}
+%Value & Value & Value & Value & Value 
+%\lastline
+%\end{tabular}}
+%\end{table}
+
+%If you have any print appendices, please include them at the end of the document.
+
+\end{document}
