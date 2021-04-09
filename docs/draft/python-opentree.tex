@@ -148,24 +148,24 @@ While the OpenTree taxonomy is not rank focused, it does track rank information 
 By searching the OpenTree taxonomy for families in birds, we find that there are 390 listed bird families, 196 of which are included in the synthetic tree.
 Groups are excluded from the synthetic tree for a few potential reasons, the most common of which is that all members of the group are extinct, and we have no curated published studies providing information about the correct evolutionary relationships.
 Placements of fossil taxa based only on taxonomy tend to be unstable, and the OpenTree synthesis procedure excludes taxa if the taxon is not present in at least one  phylogenetic input.
-These families can be included in later synthetic trees if data is added to the study corpus providing information on their relationships.
-Other taxa are excluded from synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy, or because the name was judged to be invalid by the OpenTree taxonomy merging software\citep{rees_automated_2017}.
+These families can be included in later synthetic trees if new studies or trees are added to the Phylesystem data stores providing information on their relationships.
+Other taxa are excluded from synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy, or because the name was judged to be invalid by the OpenTree taxonomy merging software \citep{rees_automated_2017}.
 
 If we request an induced subtree from the synthesis for these 164 taxa, we get back a tree that has 150 tips. The return value also includes a list of non-monophyletic taxa.
-Some of the non-monophyletic taxa map to internal nodes on our output tree. In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the topology of the 130 monophyletic bird families plus MRCA's of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output tree.
+Some of the non-monophyletic taxa map to internal nodes on our output tree. In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the topology of 130 monophyletic bird families plus MRCA's of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output tree.
 
 
 \begin{figure}[!h]
 \centering\includegraphics[width=\textwidth]{bird_fam_fig}
 
-\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
+\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using the interactive Tree Of Life (iTOL) v4 \citep{letunic_interactive_2019}}
 \label{birdfams}
 \end{figure}
 
 These families contain from 1 to 920 total descendant tip taxa (species and subspecies).
 Across all 150 families, 10,357 descendent tip taxa  are captured by the relationships shown in this tree.
 Figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendents on the right.
-This display demonstrates that `families' is not a very even way to break up biodiversity across birds.
+This display demonstrates that the use of `families' is not a very even way to break up biodiversity across birds.
 
 Based on the phylogenetic synthesis algorithm, each branch in the tree is supported by either taxonomy alone, where there are no input studies that traverse that branch, or by one or more input phylogenetic studies.
 The support for each node in the tree can be interrogated using an \texttt{opentree.synth\_node\_info} call.
