@@ -67,7 +67,7 @@ Most of the tips of the tree represent species, but some are infraspecific taxa.
 The framework of this tree is provided by a unified taxonomy \citep{opentreeoflife_open_2019-1, rees_automated_2017}.
 This taxonomy links unique identifiers across many online taxonomic resources, including but not limited to NCBI \citep{federhen_ncbi_2012}, and GBIF \citep{gbif_secretariat_gbif_2019}, as well as user contributed taxonomic amendments contained in [https://github.com/OpenTreeOfLife/amendments-1].
 These taxonomic relationships are refined by evolutionary estimates from 1,216 published papers encompassing 87,000 tip taxa \citep{opentreeoflife_open_2019, redelings_supertree_2017}.
-The Open Tree of Life data store, `Phylesystem' \citep{mctavish_phylesystem_2015} contains 4,500 published studies, including those incorporated in the synthetic tree. Each tree has mappings between the tips in these published studies and unique Open Tree taxonomic identifiers.
+The Open Tree of Life database, `Phylesystem' \citep{mctavish_phylesystem_2015} contains 4,500 published studies, including those incorporated in the synthetic tree. Each tree has mappings between the tips in these published studies and unique Open Tree taxonomic identifiers.
 
 All of these data are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
 \texttt{opentree}  provides a user-friendly wrapper for calling these APIs.
@@ -148,7 +148,7 @@ While the OpenTree taxonomy is not rank focused, it does track rank information 
 By searching the OpenTree taxonomy for families in birds, we find that there are 390 listed bird families, 196 of which are included in the synthetic tree.
 Groups are excluded from the synthetic tree for a few potential reasons, the most common of which is that all members of the group are extinct, and we have no curated published studies providing information about the correct evolutionary relationships.
 Placements of fossil taxa based only on taxonomy tend to be unstable, and the OpenTree synthesis procedure excludes taxa if the taxon is not present in at least one  phylogenetic input.
-These families can be included in later synthetic trees if new studies or trees are added to the Phylesystem data stores providing information on their relationships.
+These families can be included in later synthetic trees if new studies or trees are added to the Phylesystem database, providing information on their relationships.
 Other taxa are excluded from synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy, or because the name was judged to be invalid by the OpenTree taxonomy merging software \citep{rees_automated_2017}.
 
 If we request an induced subtree from the synthesis for these 164 taxa, we get back a tree that has 150 tips. The return value also includes a list of non-monophyletic taxa.
