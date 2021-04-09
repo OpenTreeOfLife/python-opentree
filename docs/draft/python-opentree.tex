@@ -164,17 +164,18 @@ Some of the non-monophyletic taxa map to internal nodes on our output tree. In t
 
 These families contain from 1 to 920 total descendant tip taxa (species and subspecies).
 Across all 150 families, 10,357 descendent tip taxa  are captured by the relationships shown in this tree.
-Figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendents on the right.
+Figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendants on the right.
 This display demonstrates that the use of `families' is not a very even way to break up biodiversity across birds.
 
-Based on the phylogenetic synthesis algorithm, each branch in the tree is supported by either taxonomy alone, where there are no input studies that traverse that branch, or by one or more input phylogenetic studies.
-The support for each node in the tree can be interrogated using an \texttt{opentree.synth\_node\_info} call.
+Following OpenTree's phylogenetic synthesis algorithm \citep{redelings_supertree_2017}, each branch in the synthetic tree is supported
+by either taxonomy alone (where there are no input phylogenetic studies that traverse that branch), or by one or more input phylogenetic studies.
+The source of support for each node in the synthetic tree can be interrogated using a \texttt{synth\_node\_info} function call from the \texttt{OpenTree} class in the package here presented.
 While each branch must be supported by taxonomy or at least one input study from Phylesystem, where multiple inputs traverse a branch, there can be conflict among studies.
-The synthesis algorithm is greedy, and the output tree will display the branch supported by the highest ranked study included in synthesis.
-The node info call will return not only which studies support that branch, but also which studies have relationships which conflict with that branch.
-In figure \ref{birdfams} support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this tree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this tree, 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships.
+OpenTree's synthesis algorithm is greedy, and the synthetic tree will display the branch supported by the highest ranked study included in synthesis.
+The \texttt{synth\_node\_info} function will return not only which studies support any branch, but also which studies have relationships which conflict with that branch.
+In figure \ref{birdfams}, support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this tree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this tree, 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships.
 
-This tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies in the Phylesystem database.
+It is important to note that OpenTree's synthetic tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies in the Phylesystem database.
 
 \subsection{Linking data from the Global Biodiversity Information Facility (GBIF) with phylogenetic information from Open Tree of Life}
 
