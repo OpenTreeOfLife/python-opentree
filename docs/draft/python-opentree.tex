@@ -67,7 +67,14 @@ Most of the tips of the tree represent species, but some are infraspecific taxa.
 The framework of this tree is provided by a unified taxonomy \citep{opentreeoflife_open_2019-1, rees_automated_2017}.
 This taxonomy links unique identifiers across many online taxonomic resources, including NCBI \citep{federhen_ncbi_2012}, GBIF \citep{gbif_secretariat_gbif_2019}, as well as user contributed taxonomic amendments contained in [https://github.com/OpenTreeOfLife/amendments-1].
 These taxonomic relationships are refined by evolutionary estimates from 1,216 published papers including 87,000 tip taxa \citep{opentreeoflife_open_2019, redelings_supertree_2017}.
-The Open Tree data store, `Phylesystem' \citep{mctavish_phylesystem_2015} contains 4,500 published studies, including those incorporated in the tree. Each tree has mappings between the tips in these published studies and unique taxonomic identifiers.
+The Open Tree data store, `Phylesystem' \citep{mctavish_phylesystem_2015} contains 4,500 published studies, including those incorporated in the tree. 
+Each tree has mappings between the tips in these published studies and unique taxonomic identifiers.
+There are several reasons trees are included in the `Phylesystem' data store but not the synthetic tree.
+The complete curation of trees requires human intervention and confirmation at several steps, including vetting taxonomic name resolution service matches and correctly rooting trees, as many output files are shared as unrooted trees.
+In addition, some of the trees in Phylesystem descibe gene tree level or within species relationships, which are not appropriate for the species (and named subspecies) level relationships captured in the synthetic tree.
+There is also lag between study upload, which makes studies immediately available via the API, and the time to re-build the entire synthetic tree, which is released in versioned increments (current version, 12.3)
+The number of input studies increases in each successive syntis tree realease.
+
 
 All of these data are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
 \texttt{opentree}  provides an user-friendly wrapper for calling these APIs.
@@ -203,6 +210,8 @@ The ability to build a phylogeny of local taxa is also a valuable pedagogical to
 Students visited the UC Merced Vernal Pools and Grassland Reserve, and then explored the evolutionary tree of all the animal species recorded as observed in the reserve. 
 There are several threatened and endangered species on the vernal pools reserve, including two species of fairy shrimp, \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
 By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree (Figure \ref{vernalanimals}) shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get students to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
+
+Together, this toolkit provides easy access to evolutionary infomration across the entire tree of life.
 
 
 
