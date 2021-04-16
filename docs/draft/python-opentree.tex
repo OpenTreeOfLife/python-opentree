@@ -211,14 +211,34 @@ By working with a subtree of taxa found on and around campus, tree thinking exam
 
 \subsection{Comparison to other tools}
 
-There are several tools to generate phylogenies from DNA sequence data from genetic databases such as GenBank (Phylota, Phlawd, Supersmart). To generate “good” phylogenies de novo with these tools it is required significant expert knowledge about phylogenetic and comparative methods and of the organism of study, as well as significant training time. Meanwhile, there are already thousands of expert-based-knowledge peer-reviewed and published phylogenies that, if made available and accessible, can be reused and reanalyzed for many purposes, from scientific discovery in ecology and evolution to education, conservation and outreach.
+There are several tools to generate phylogenies from DNA sequence data from genetic
+databases such as GenBank, e.g., \citep{smith2009mega, sanderson2008phylota, antonelli2014supersmart}.
+To generate good quality phylogenies \textit{de novo} with these tools it is required
+significant expert knowledge about phylogenetic methods and of
+the organism of study, as well as significant training time. Meanwhile, there are
+already thousands of expert-based-knowledge peer-reviewed and published phylogenies
+that, if made available and accessible, can be reused and reanalyzed for many purposes,
+from scientific discovery in ecology and evolution to education, conservation and
+outreach \citep{stoltzfus2013phylotastic, mctavish_phylesystem_2015, li2019common}.
 
-TreeBase and STbase browse their own database
-While Phylofinder browses phylogenies from other databases.
-These databases and tools provide phylogenies as is, with no possibility of obtaining subset of phylogenies or combinations of them directly, and often with incomplete taxonomic sampling, requiring further processing from the users if they want to incorporate taxonomic information or subset or combine the trees.
+Resources such as TreeBase \citep{piel2000treebase} and STbase \citep{mcmahon2015stbase}
+store published phylogenies and have applications to browse and download Phylogenies
+from a group of interest in computer readable formats.
+Phylofinder \citep{chen2008phylofinder} is a tool that browses phylogenies from
+other databases by enabling taxonomic queries
+to identify trees in a database containing the exact name of the query taxon and
+synonomies, providing spelling suggestions for the query when there is no match.
+These resources however provide phylogenies as is (often with incomplete
+taxonomic sampling), with no possibility of obtaining
+subset of taxa within phylogenies or combinations of pyhlogenies directly from the database,
+requiring further processing from the users if their study requires incorporating
+missing taxa, extracting a phylogeny of a subset of taxa or combining the trees to match tips in
+a trait dataset for a comparative study, for example.
 
-Tools that generate trees from taxonomic data
-When taxon sampling is incomplete, a taxonomic tree can be generated and used for analysis. But this is not ideal.
+When studies require a particular set of taxa not represented in the same phylogeny,
+or require complete taxon sampling, trees generated from taxonomic data have been
+used for analyses \citep{tree2014tree}. 
+ However this is not ideal.
 
 Resources that combine taxonomic and phylogenetic knowledge
 The Angiosperm Phylogeny website is a very valuable resource because it combines available taxonomic and published phylogenetic information with the main goal to portray a phylogenetic context for all flowering and seed plants. Information is combined based on decisions and arguments from the author, that, while fully documented on the website, is not an informatically reproducible process. The phylogenies are also only available as image files, leaving users to the task of obtaining the phylogenies in a computer readable format, which, in many cases, are only available from the original authors upon request. The probability of success for that is only 30% (citation)
