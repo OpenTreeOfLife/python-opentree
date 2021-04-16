@@ -213,8 +213,8 @@ Comparative biology necessitates a phylogenetic context to make sense of biologi
 observations and better understand biological patterns and processes
 \citep{felsenstein1985phylogenies, soltis2003role}.
 Generally, the gold standard for comparative biology analyses is considered to be a phylogeny with branch lengths
-proportional to time inferred using properly curated fossil calibrations applied
-to a phylogeny reconstructed from genetic data. Still nowadays, obtaining such dated phylogenies requires
+proportional to time, inferred using properly curated fossil calibrations applied
+to a phylogeny reconstructed from genetic data. Still, nowadays, obtaining such dated phylogenies requires
 considerable more effort, resources, and expertise than reusing an expert-knowledge-based
 published phylogeny \citep{li2019common}.
 Phylogenies without branch lengths generated from existing phylogenetic knowledge
@@ -223,48 +223,77 @@ OpenTree's synthetic tree has been used to test the effect of different types
 of branch lengths in phylogenies on ecological community phylogenetic analyses and on estimates of
 phylogenetically based spatial biodiversity metrics \citep{allen2019spatial, li2019common}.
 \citep{allen2019spatial} found that synthetic trees without branch lengths can be used successfully
-to calculate phylogenetic distance and relative phylogenetic diversity metrics to understand
+to calculate phylogenetic distance and relative phylogenetic diversity to understand
 ecological and evolutionary processes that can guide conservation efforts.
 \citep{li2019common} dated OpenTree's synthetic tree using averaged age data from
 the TimeTree database \citep{} as fixed node ages to evenly distribute ages of remaining
 nodes using the BLADJ algorithm \citep{}. They concluded that phylogenetic diversity
-and phylogenetic signal measures estimated from OpenTree's synthetic tree are as good
+and phylogenetic signal estimates from OpenTree's synthetic tree are as good
 as those calculated from fossil-calibrated phylogenies based on DNA sequence data,
 and suggest using the latter for community ecology phylogenetic analyses when needed \citep{li2019common}.
+
+Comparative biology studies rely on trait datasets to then contextualize them phylogenetically
+to properly assess traits' evolutionary patterns and processes.
+Unless an exceptional research planning phase happens early at the onset of a project,
+most trait datasets are gathered without taking into account available phylogenetic information.
+Taxa in biological trait datasets are usually non-overlapping with existing phylogenies,
+and sparsely distributed across taxonomic groups that are rarely represented within
+a single phylogeny.
+
+OpenTree's subtree services allow getting a phylogeny for a targeted set of taxa
+that can be distributed across distantly related biological groups.
+OpenTree's taxon name matching services applied to taxon names in trait datasets
+allow direct connection of trait data with phylogenetic trees in OpenTree's databases
+and with the synthetic tree itself.
+
+These OpenTree services have been used to address interesting biological
+questions with comparative analyses, encompassing distantly related biological groups across the Tree of Life
+\citep{tarka2018sex, healy2019animal, herrera2015predicting, capdevila2020longevity, fisher2017evolution, boeckmann2015quest, uyeda2017evolution}.
+
+%% I think the following studies can be summarized into a single paragraph emphasizing
+%% that they were applied to distantly related groups rarely represented within the same phylogeny
+\citep{tarka2018sex} studied the evolution of sex differences in life history, behavior
+and physiological traits using an OpenTree's synthetic subtree of 70 metazoan species (vertebrates and invertebrates),
+encompassing marine polychaete worms, crayfish, spiders, amphibians, birds and mammals.
+% with branch lengths estimated using Grafen 1989 method assuming node heights were raised to the power of 0.5.
+
+\citep{healy2019animal} studied the phylogenetic distribution of life history strategies across metazoans
+using an OpenTree's synthetic subtree of 121 species including corals, clams,
+fish, crocodiles, birds and mammals.
+% they grafted dated phylogenies of fish, reptiles birds and mammals and calculated the remaining branch lengths with Grafen's method.
+
+\citep{capdevila2020longevity} examined differences in life history strategies between
+terrestrial and aquatic species using an OpenTree's synthetic subtree of 807 species,
+encompassing land plants, algae and animals.
+% branch lengths estimated with ape::compute.brlen R function using Grafen's method.
+
+\citep{herrera2015predicting} used an OpenTree's synthetic subtree of 434 species
+including fungi, metazoans and plants to predict RAD-seq marker cleavage site numbers
+across the eukaryotic tree of life to guide the design of genome-wide genotypic and
+sequencing projects.
+
+\citep{boeckmann2015quest} used an OpenTree's synthetic tree of 147 species encompassing
+prokaryotes and eukaryotes as a species tree hypothesis to understand the evolution
+of gene families and taxa to improve orthology prediction for phylogenetic applications.
+% they used topology only.
+
+\citep{uyeda2017evolution} used an OpenTree subtree of mammals and dated it using OpenTree
+chronograms. They then grafted it to published chronograms from birds, amphibians
+and reptiles into a single dated synthetic tree of 837 vertebrate species to study
+the evolution of metabolic energetic scaling in order to improve macroecological predictions.
+% branch lengths are proportional to time; they tested a model of trait evolution.
+
+\citep{fisher2017evolution} used a subtree of 89 species including insects, plants,
+fungi, molluscs, arachnids and worms, to study the evolution of host-symbiont
+dependence across the tree of life.
+% cited 117 times; used Bayesian phylogenetic mixed model to account for phylogenetic effects, seems like tree has no branch lengths, but data available upon request :/
+
 
 Community ecology studies often require phylogenetic context for thousands of
 species belonging to distantly related taxonomic groups across the tree of life \citep{}.
 Researchers have used subtrees derived from OpenTree's synthetic tree encompassing species present
 in specific ecological communities to use as backbone to estimate branch lengths
 based on genetic data \citep{}, or using age data from chronograms in the OpenTree database \citep{}.
-
-OpenTree's synthetic tree backbone has also been used to address interesting biological
-questions encompassing broad taxonomic groups across the Tree of Life for which generating a
-comprehensive fully sampled phylogeny based on genetic data is still unavailable
-\citep{tarka2018sex, healy2019animal, herrera2015predicting, capdevila2020longevity}.
-\citep{tarka2018sex} studied the evolution of sex differences in life history, behavior
-and physiological traits using an OpenTree's synthetic subtree of 70 metazoan species (vertebrates and invertebrates),
-encompassing marine polychaete worms, crayfish, spiders, amphibians, birds and mammals.
-% with branch lengths estimated using Grafen 1989 method assuming node heights were raised to the power of 0.5.
-\citep{healy2019animal} studied the phylogenetic distribution of life history strategies across metazoans
-using an OpenTree's synthetic subtree of 121 species including corals, clams,
-fish, crocodiles, birds and mammals.
-% they grafted dated phylogenies of fish, reptiles birds and mammals and calculated the remaining branch lengths with Grafen's method.
-\citep{capdevila2020longevity} examined differences in life history strategies between
-terrestrial and aquatic species using an OpenTree's synthetic subtree of 807 species,
-encompassing land plants, algae and animals.
-% branch lengths estimated with ape::compute.brlen R function using Grafen's method.
-\citep{herrera2015predicting} used an OpenTree's synthetic subtree of 434 species
-including fungi, metazoans and plants to predict RAD-seq marker cleavage site numbers
-across the eukaryotic tree of life to guide the design of genome-wide genotypic and
-sequencing projects.
-\citep{boeckmann2015quest} used an OpenTree's synthetic tree of 147 species encompassing
-prokaryotes and eukaryotes as a species tree hypothesis to understand the evolution
-of gene families and taxa to improve orthology prediction for phylogenetic applications.
-% they use topology only.
-\citep{uyeda2017evolution} used a subtree of
-
-
 
 
 
