@@ -205,10 +205,91 @@ Students visited the UC Merced Vernal Pools and Grassland Reserve, and then expl
 There are several threatened and endangered species on the vernal pools reserve, including two species of fairy shrimp, \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered).
 By working with a subtree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this subtree (Figure \ref{vernalanimals}) shows that the genus of dabbling ducks, \textit{Anas}, does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get students to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this subtree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
 
+\bigskip
+\section{Discussion}
+\label{sec5}
+
+Comparative biology necessitates a phylogenetic context to make sense of biological
+observations and better understand biological patterns and processes
+\citep{felsenstein1985phylogenies, soltis2003role}.
+Generally, the gold standard for comparative biology analyses is considered to be a phylogeny with branch lengths
+proportional to time inferred using properly curated fossil calibrations applied
+to a phylogeny reconstructed from genetic data. Still nowadays, obtaining such dated phylogenies requires
+considerable more effort, resources, and expertise than reusing an expert-knowledge-based
+published phylogeny \citep{li2019common}.
+Phylogenies without branch lengths generated from existing phylogenetic knowledge
+have been widely used in the field for different purposes.
+OpenTree's synthetic tree has been used to test the effect of different types
+of branch lengths in phylogenies on ecological community phylogenetic analyses and on estimates of
+phylogenetically based spatial biodiversity metrics \citep{allen2019spatial, li2019common}.
+\citep{allen2019spatial} found that synthetic trees without branch lengths can be used successfully
+to calculate phylogenetic distance and relative phylogenetic diversity metrics to understand
+ecological and evolutionary processes that can guide conservation efforts.
+\citep{li2019common} dated OpenTree's synthetic tree using averaged age data from
+the TimeTree database \citep{} as fixed node ages to evenly distribute ages of remaining
+nodes using the BLADJ algorithm \citep{}. They concluded that phylogenetic diversity
+and phylogenetic signal measures estimated from OpenTree's synthetic tree are as good
+as those calculated from fossil-calibrated phylogenies based on DNA sequence data,
+and suggest using the latter for community ecology phylogenetic analyses when needed \citep{li2019common}.
+
+Community ecology studies often require phylogenetic context for thousands of
+species belonging to distantly related taxonomic groups across the tree of life \citep{}.
+Researchers have used subtrees derived from OpenTree's synthetic tree encompassing species present
+in specific ecological communities to use as backbone to estimate branch lengths
+based on genetic data \citep{}, or using age data from chronograms in the OpenTree database \citep{}.
+
+OpenTree's synthetic tree backbone has also been used to address interesting biological
+questions encompassing broad taxonomic groups across the Tree of Life for which generating a
+comprehensive fully sampled phylogeny based on genetic data is still unavailable
+\citep{tarka2018sex, healy2019animal, herrera2015predicting, capdevila2020longevity}.
+\citep{tarka2018sex} studied the evolution of sex differences in life history, behavior
+and physiological traits using an OpenTree's synthetic subtree of 70 metazoan species (vertebrates and invertebrates),
+encompassing marine polychaete worms, crayfish, spiders, amphibians, birds and mammals.
+% with branch lengths estimated using Grafen 1989 method assuming node heights were raised to the power of 0.5.
+\citep{healy2019animal} studied the phylogenetic distribution of life history strategies across metazoans
+using an OpenTree's synthetic subtree of 121 species including corals, clams,
+fish, crocodiles, birds and mammals.
+% they grafted dated phylogenies of fish, reptiles birds and mammals and calculated the remaining branch lengths with Grafen's method.
+\citep{capdevila2020longevity} examined differences in life history strategies between
+terrestrial and aquatic species using an OpenTree's synthetic subtree of 807 species,
+encompassing land plants, algae and animals.
+% branch lengths estimated with ape::compute.brlen R function using Grafen's method.
+\citep{herrera2015predicting} used an OpenTree's synthetic subtree of 434 species
+including fungi, metazoans and plants to predict RAD-seq marker cleavage site numbers
+across the eukaryotic tree of life to guide the design of genome-wide genotypic and
+sequencing projects.
+\citep{boeckmann2015quest} used an OpenTree's synthetic tree of 147 species encompassing
+prokaryotes and eukaryotes as a species tree hypothesis to understand the evolution
+of gene families and taxa to improve orthology prediction for phylogenetic applications.
+% they use topology only.
+\citep{uyeda2017evolution} used a subtree of
+
+
+
+
+
+%%% In the absence of branch length data, phylogenies with arbitrary branch lengths
+%%% are a useful phylogenetic background to take into account phylogenetic structure
+%%% \citep{garland1992procedures}.
+%%% I probably need a more recent citation besides garland 1992.
+
+
+
+I also wanna say that Phylomatic \citep{webb2005phylomatic} is a tool that came before
+OpenTree was available, and it has been used for a wealth of plant community ecology
+studies (has been cited more than 1000 times).
+Phylomatic is still being used (cited more than 100 times since 2020) for mammals
+and plants because it is the only taxa available in there now.
+Studies have used Phylomatic trees as backbone and then dated them. One study used
+age data from chronograms in OpenTree to date a Phylomatic tree.
+OpenTree can be used for bacterial and fungal community ecology studies.
+
+
+
 
 
 \section{Availability}
-\label{sec5}
+\label{sec6}
 
 \texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. The code is packaged with an automated test suite which is maintained to cover at minimum 75\% of the code. Testing reports are generated on \url{travis.io} and posted to {codecov.io} and reflected on the GitHub readme with each commit. Documentation and tutorials are available with the code, and are posted to \url{https://opentree.readthedocs.io}.
 
