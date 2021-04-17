@@ -211,9 +211,11 @@ By working with a subtree of taxa found on and around campus, tree thinking exam
 
 \subsection{Comparison to other tools}
 
-There are several tools to generate phylogenies from DNA sequence data from genetic
-databases such as GenBank, e.g., \citep{smith2009mega, sanderson2008phylota, antonelli2014supersmart}.
-To generate good quality phylogenies \textit{de novo} with these tools it is required
+Tools that generate phylogenies from DNA sequence data mined from the GenBank genetic
+database \citep{smith2009mega, sanderson2008phylota, antonelli2014supersmart}
+have been widely used in the past decade. Still, the full phylogenetic history of the
+tree of life has not been attained.
+Generating good quality phylogenies \textit{de novo} using genetic data requires
 significant expert knowledge about phylogenetic methods and of
 the organism of study, as well as significant training time. Meanwhile, there are
 already thousands of expert-based-knowledge peer-reviewed and published phylogenies
@@ -221,24 +223,43 @@ that, if made available and accessible, can be reused and reanalyzed for many pu
 from scientific discovery in ecology and evolution to education, conservation and
 outreach \citep{stoltzfus2013phylotastic, mctavish_phylesystem_2015, li2019common}.
 
-Resources such as TreeBase \citep{piel2000treebase} and STbase \citep{mcmahon2015stbase}
-store published phylogenies and have applications to browse and download Phylogenies
-from a group of interest in computer readable formats.
-Phylofinder \citep{chen2008phylofinder} is a tool that browses phylogenies from
-other databases by enabling taxonomic queries
-to identify trees in a database containing the exact name of the query taxon and
-synonomies, providing spelling suggestions for the query when there is no match.
-These resources however provide phylogenies as is (often with incomplete
-taxonomic sampling), with no possibility of obtaining
+TreeBASE \citep{piel2000treebase} is a public resource that stores published
+phylogenies and underlying data with original taxon labels.
+All data in TreeBASE is downloadable in computer readable format for reuse and reanalysis.
+Phylogenies are searchable using study author names, study citations, accession numbers and taxon names.
+TreeBASE does not have a taxonomic classification system, which limits
+taxon name searches to exact matches of original study taxon labels \citep{anwar2009improved}.
+This misses many or all trees containing ancestor or descendant taxa of the search taxonomic
+name, especially when the taxon name used for search is a higher taxa \citep{chen2008phylofinder}.
+
+% tools to integrate NCBI's taxonomy to improve taxonomic name searches on TreeBASE
+% exist \citep{chen2008phylofinder, anwar2009improved, ranwez2009phyloexplorer}
+% but were never integrated to TreeBASE and are not available as web services.
+% OpenTree's taxonomy allows supports searches of phylogenies using taxon names
+% that will correct misspellings and found synonomies, as well as ancestors or
+% descendants of the search taxon.
+
+TreeBASE does not have the possibility of obtaining
 subset of taxa within phylogenies or combinations of pyhlogenies directly from the database,
 requiring further processing from the users if their study requires incorporating
 missing taxa, extracting a phylogeny of a subset of taxa or combining the trees to match tips in
 a trait dataset for a comparative study, for example.
 
+Dryad is also a repository of phylogenetic information, but it suffers from
+the same shortcomings as TreeBASE, as it lacks a taxonomic classification.
+Furthermore, trees are not always fully available as described because data is not curated.
+
+STbase \citep{mcmahon2015stbase} is a project that constructed 1 million trees of
+all eukaryotes for use on comparative analyses. The platform was meant to allow searching the
+trees in a taxonomically explicit way, as well as obtaining subtrees of custom sets of taxa.
+Unfortunately the website and the trees are not available at moment of writing of
+this manuscript, which could explain the small amount of citations it has (8 as of April 2020).
+
 When studies require a particular set of taxa not represented in the same phylogeny,
 or require complete taxon sampling, trees generated from taxonomic data have been
-used for analyses \citep{tree2014tree}. 
- However this is not ideal.
+used for analyses \citep{tree2014tree}.
+ However this is not ideal, especially when at least some phylogenetic information
+ can be used to resolve taxonomy.
 
 Resources that combine taxonomic and phylogenetic knowledge
 The Angiosperm Phylogeny website is a very valuable resource because it combines available taxonomic and published phylogenetic information with the main goal to portray a phylogenetic context for all flowering and seed plants. Information is combined based on decisions and arguments from the author, that, while fully documented on the website, is not an informatically reproducible process. The phylogenies are also only available as image files, leaving users to the task of obtaining the phylogenies in a computer readable format, which, in many cases, are only available from the original authors upon request. The probability of success for that is only 30% (citation)
@@ -254,7 +275,7 @@ It combines phylogenetic information from across all taxonomic groups of life, f
 Having all information integrated into a single evolutionary context, OpenTree is the only tool that can generate expert knowledge based trees of any combination of taxa, at any taxonomic level.
 
 
-\subsection{Applications of OpenTree services}
+\subsection{Application of OpenTree services}
 
 Comparative biology necessitates a phylogenetic context to make sense of biological
 observations and better understand biological patterns and processes
@@ -265,8 +286,10 @@ to a phylogeny reconstructed from carefully chosen genetic markers.
 Still, nowadays, obtaining such dated phylogenies requires
 considerable more effort, resources, and expertise than reusing an expert-knowledge-based
 published phylogeny \citep{li2019common}.
+
 Phylogenies without branch lengths generated from existing phylogenetic knowledge
 have been widely used in the field for different purposes.
+
 OpenTree's synthetic tree has been used to test the effect of different types
 of branch lengths in phylogenies used for ecological community analyses and on estimates of
 phylogenetically based spatial biodiversity metrics \citep{allen2019spatial, li2019common}.
@@ -336,6 +359,11 @@ fungi, molluscs, arachnids and worms, to study the evolution of host-symbiont
 dependence across the tree of life.
 % cited 117 times; used Bayesian phylogenetic mixed model to account for phylogenetic effects, seems like tree has no branch lengths, but data available upon request :/
 
+\citep{kunc2019effects} got OpenTree synthetic subtrees for arthropods, molluscs,
+amphibians, mammals, fish and birds to test the effect of anthropogenic noise on
+animal behavior. They found all groups display alterations to their behavior, meaning
+that anthropogenoc noise is not affecting any taxonomic groups selectively.
+% cited 21 times; obtained branch lengths using Grafen's method, too
 
 Community ecology studies often require phylogenetic context for thousands of
 species belonging to distantly related taxonomic groups across the tree of life \citep{}.
