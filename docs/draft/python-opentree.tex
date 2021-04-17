@@ -261,19 +261,38 @@ or require complete taxon sampling, trees generated from taxonomic data have bee
 used for analyses \citep{tree2014tree}.
  However this is not ideal, especially when at least some phylogenetic information
  can be used to resolve taxonomy.
+ % I need to look for more info on this, I think aybe Phylomatic allows this, I think.
 
-Resources that combine taxonomic and phylogenetic knowledge
-The Angiosperm Phylogeny website is a very valuable resource because it combines available taxonomic and published phylogenetic information with the main goal to portray a phylogenetic context for all flowering and seed plants. Information is combined based on decisions and arguments from the author, that, while fully documented on the website, is not an informatically reproducible process. The phylogenies are also only available as image files, leaving users to the task of obtaining the phylogenies in a computer readable format, which, in many cases, are only available from the original authors upon request. The probability of success for that is only 30% (citation)
+Resources that combine taxonomic and phylogenetic knowledge:
+The Angiosperm Phylogeny website \citep{stevens2001angiosperm} is a very valuable resource because it combines
+available taxonomic and published phylogenetic information with the main goal to
+portray a phylogenetic context for all flowering and seed plants. Information is
+combined based on decisions and arguments from the author, that, while fully documented
+on the website, is not an informatically reproducible process. The phylogenies are
+also only available as image files, leaving users to the task of obtaining the phylogenies
+in a computer readable format, which, in many cases, are only available from the
+original authors upon request. The probability of success for that is only 30% (citation)
 
-Resources that allow subsetting large phylogenies
+Resources that allow subsetting large phylogenies:
 
-Resources such as fish tree of life and vertlife allow subsetting within phylogenies of major taxonomic groups for fishes, mammals, amphibians, squamates and birds. These phylogenies have been constructed based on genetic data and with branches from missing taxa placed upon the phylogenetic backbone based on taxonomy. Fish tree of life only allows obtaining trees corresponding to families, while vertlife allows subsetting any combination of species, but not tips at higher taxonomic levels. The subtrees that can be obtained with these resources are limited in taxonomic scope.
+Resources such as fish tree of life \citep{chang2019r} and vertlife (https://vertlife.org/)
+allow subsetting phylogenies of major taxonomic groups for fishes, mammals, amphibians, squamates and birds.
+These phylogenies have been constructed based on genetic data and with branches
+from missing taxa placed upon the phylogenetic backbone based on taxonomy. Fish
+tree of life only allows obtaining trees corresponding to families, while vertlife
+allows subsetting any combination of species, but not tips at higher taxonomic levels.
+The subtrees that can be obtained with these resources are limited in taxonomic scope.
 
 None of these resources combine the information that they have into a single tree.
 In this sense, OpenTree is filling an empty niche in phylogenetics:
-It combines phylogenetic information from across all taxonomic groups of life, filling gaps in phylogenetic knowledge with expert taxonomic knowledge. The whole tree is downloadable in computer readable format, which means it is not only available but also accessible for reuse.
+It combines phylogenetic information from across all taxonomic groups of life,
+filling gaps in phylogenetic knowledge with expert taxonomic knowledge. The whole
+tree is downloadable in computer readable format, which means it is not only available
+but also accessible for reuse.
 
-Having all information integrated into a single evolutionary context, OpenTree is the only tool that can generate expert knowledge based trees of any combination of taxa, at any taxonomic level.
+Having all information integrated into a single evolutionary context, OpenTree
+is the only tool that can generate expert knowledge based trees of any combination
+of taxa, at any taxonomic level.
 
 
 \subsection{Application of OpenTree services}
@@ -363,42 +382,35 @@ dependence across the tree of life.
 \citep{kunc2019effects} got OpenTree synthetic subtrees for arthropods, molluscs,
 amphibians, mammals, fish and birds to test the effect of anthropogenic noise on
 animal behavior. They found all groups display alterations to their behavior, meaning
-that anthropogenoc noise is not affecting any taxonomic groups selectively.
+that anthropogenic noise is not affecting any taxonomic groups selectively.
 % cited 21 times; obtained branch lengths using Grafen's method, too
 
+
+
+--------------------------------
 Community ecology and comparative studies often require phylogenetic context for thousands of
 species belonging to distantly related taxonomic groups across the tree of life \citep{}.
-Researchers have used subtrees derived from OpenTree's synthetic tree encompassing species present
-in specific ecological communities to use as backbone to estimate branch lengths
-based on genetic data \citep{allen2019spatial, smith2018constructing}, or using
-age data from dated phylogenies in the OpenTree database \citep{uyeda2017evolution, geffroy2020evolutionary}.
-
-\citep{uyeda2017evolution} used an OpenTree subtree of mammals and dated it using OpenTree
-chronograms. They then grafted it to published chronograms from birds, amphibians
-and reptiles into a single dated synthetic tree of 837 vertebrate species to study
-the evolution of metabolic energetic scaling in order to improve macroecological predictions.
-% branch lengths are proportional to time; they tested a model of trait evolution.
-
-\citep{geffroy2020evolutionary} dated an OpenTree synthetic subtree gathering age data
-from dated phylogenies stored in OpenTree's Phylesystem database. They found that
-increased interactions with humans (indiced by captivity, urbanization, or domestication)
-reduce the overall mean of antipredator traits over time in a sample of 102 species
-of mammals, birds, reptiles, fish, amphibians, arthropods, and mollusks.
-% has been cited 6 times; used OpenTree synthetic tree and dated it using chronograms in Phylesystem.
-
-
-
 Sometimes, constructing a tree from available genetic data from GenBank for a group
-is not enough to address the goals of a study.
-Phylogenies generated with genetic data only are usually incomplete.
-Broad taxon sampling coverage is important to correctly estimate phylogenetic
-diversity \citep{jantzen2019effects, park2018taxon}
+is unfeasible due to the large amount of samples required.
+Other times, available genetic data on GenBank is not enough to address the goals
+of a study \citep{owen2015synthetic, brown2017development, ewers2019towards}.
+For example, broad taxon sampling coverage is key to correctly estimate phylogenetic
+diversity \citep{jantzen2019effects, park2018taxon}, and genetic data is usually
+not available for all taxa in a community or a biological group of study.
 % in \citep{bitomsky2020clade}
 
+
+Researchers have gathered published phylogenies reconstructed with genetic data
+and used OpenTree's services to standardize taxon names to OpenTree's reference taxonomy,
+synthesize the phylogenetic data with taxonomic data using OpenTree's synthesis algorithm,
+and generate a fully sampled synthetic tree for their taxa of interest
+\citep{owen2015synthetic, brown2017development, ewers2019towards}.
+
 \citep{owen2015synthetic} generated a 387 tip phylogeny of freshwater crayfish using DNA sequences
-data mined from GenBank with PHLAWD \citep{smith2009mega}. Then, they used OpenTree's phylogeny
-curation application to standradize that and 19 previously published phylogenies of freshwater crayfish
-with diverse taxon sampling sizes to Opentree's taxonomy, to generate an OpenTree synthetic tree for all 590 species
+data mined from GenBank with PHLAWD \citep{smith2009mega}. Then, they used OpenTree's services
+ to standardize that and 19 previously published phylogenies
+reconstructed from genetic data, with diverse taxon sampling within the freshwater crayfish
+ to Opentree's taxonomy, to generate an OpenTree synthetic tree for all 590 species
 of freshwater crayfish and 129 additional subspecies.
 % It would be superfun to know how many of these branches are supported by phylogenetic
 % data and how many by taxonomy, so maybe we can say that sometimes mining sequence data
@@ -421,15 +433,37 @@ conflict across the input phylogenies and the synthetic tree. They found that ea
  seem to have the more conflict, informing future research sequencing efforts to
  focus on getting markers to resolve those areas of the bird phylogeny.
 
+\citep{ewers2019towards} added 27 phylogenies of barnacles based on genetic data
+(the best sampled one encompassing 124 species) to OpenTree's database and generated
+a 2,070 synthetic tree of barnacle species and subspecies, containing phylogenetic
+data for 239 species, as opposed to the 124 species in the best sampled available
+phylogeny based on genetic data alone. They mapped geographic occurrence data unto
+the phylogeny and detected that phylogenetic information is especially lacking for
+deep sea and Arctic taxa.
 
-In the absence of branch length data, phylogenies with arbitrary branch lengths
-are a useful phylogenetic background to take into account phylogenetic structure
-\citep{garland1992procedures}.
-% I probably need a more recent citation besides garland 1992.
-\citep{jantzen2019effects} suggests that using OpenTree's synthetic subtree with
-branch lengths inferred from additional genetic data or time calibrating them directly
-will facilitate many more ecological community phylogenetic analyses, as it co-opts existing
-phylogenetic knowledge and can represent phylogenetic relationships of distantly related organisms.
+Moreover, having a larger phylogenetic framework allows tackling taxonomic questions,
+guiding future phylogenetic efforts and including large numbers of species into
+comparative studies \citep{ewers2019towards}.
+
+Researchers have used subtrees derived from OpenTree's synthetic tree encompassing species present
+in specific ecological communities or encompassing distantly related groups, to
+use as backbone to estimate branch lengths
+based on genetic data \citep{allen2019spatial, smith2018constructing}, or using
+age data from dated phylogenies in the OpenTree database \citep{uyeda2017evolution, geffroy2020evolutionary}.
+
+\citep{uyeda2017evolution} used an OpenTree subtree of mammals and dated it using OpenTree
+chronograms. They then grafted it to published chronograms from birds, amphibians
+and reptiles into a single dated synthetic tree of 837 vertebrate species to study
+the evolution of metabolic energetic scaling in order to improve macroecological predictions.
+% branch lengths are proportional to time; they tested a model of trait evolution.
+
+\citep{geffroy2020evolutionary} dated an OpenTree synthetic subtree gathering age data
+from dated phylogenies stored in OpenTree's Phylesystem database. They found that
+increased interactions with humans (indiced by captivity, urbanization, or domestication)
+reduce the overall mean of antipredator traits over time in a sample of 102 species
+of mammals, birds, reptiles, fish, amphibians, arthropods, and mollusks.
+% has been cited 6 times; used OpenTree synthetic tree and dated it using chronograms in Phylesystem.
+
 
 
 I also wanna say that Phylomatic \citep{webb2005phylomatic} is a tool that came before
@@ -439,9 +473,19 @@ Phylomatic is still being used (cited more than 100 times since 2020) for mammal
 and plants because it is the only taxa available in there now.
 Studies have used Phylomatic trees as backbone and then dated them. One study used
 age data from chronograms in OpenTree to date a Phylomatic tree \citep{}.
-OpenTree can be used for bacterial and fungal community ecology studies.
+OpenTree ha sthe potential to be used for bacterial and fungal community ecology studies.
 
+In the absence of branch length data, phylogenies with arbitrary branch lengths
+are a useful phylogenetic background to take into account phylogenetic structure
+\citep{garland1992procedures}.
+% I probably need a more recent citation besides garland 1992.
+% all comparative studies that used opentree's tree with branch lengths obtained
+% using Grafen's method can go in here!
 
+\citep{jantzen2019effects} suggests that using OpenTree's synthetic subtree with
+branch lengths inferred from additional genetic data or time calibrating them directly
+will facilitate many more ecological community phylogenetic analyses, as it co-opts existing
+phylogenetic knowledge and can represent phylogenetic relationships of distantly related organisms.
 
 
 
