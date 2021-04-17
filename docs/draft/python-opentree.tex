@@ -235,25 +235,26 @@ name, especially when the taxon name used for search is a higher taxa \citep{che
 % tools to integrate NCBI's taxonomy to improve taxonomic name searches on TreeBASE
 % exist \citep{chen2008phylofinder, anwar2009improved, ranwez2009phyloexplorer}
 % but were never integrated to TreeBASE and are not available as web services.
-% OpenTree's taxonomy allows supports searches of phylogenies using taxon names
+% OpenTree's taxonomy supports searches of phylogenies using taxon names
 % that will correct misspellings and found synonomies, as well as ancestors or
 % descendants of the search taxon.
 
-TreeBASE does not have the possibility of obtaining
-subset of taxa within phylogenies or combinations of pyhlogenies directly from the database,
-requiring further processing from the users if their study requires incorporating
-missing taxa, extracting a phylogeny of a subset of taxa or combining the trees to match tips in
-a trait dataset for a comparative study, for example.
+TreeBASE does not have the possibility of extracting phylogenies with a
+subset of taxa, or combining phylogenies with some or no overlapping taxa.
+requiring further processing of phylogenies by the users if their study requires a phylogeny
+with complete taxon sampling, a phylogeny containing a specific subset of taxa,
+ or combining phylogenies (to match tips in a trait dataset for a comparative study, for example).
 
 Dryad is also a repository of phylogenetic information, but it suffers from
 the same shortcomings as TreeBASE, as it lacks a taxonomic classification.
 Furthermore, trees are not always fully available as described because data is not curated.
 
 STbase \citep{mcmahon2015stbase} is a project that constructed 1 million trees of
-all eukaryotes for use on comparative analyses. The platform was meant to allow searching the
+all eukaryotes using sequence data for use on comparative analyses.
+The platform was meant to allow searching the
 trees in a taxonomically explicit way, as well as obtaining subtrees of custom sets of taxa.
-Unfortunately the website and the trees are not available at moment of writing of
-this manuscript, which could explain the small amount of citations it has (8 as of April 2020).
+Unfortunately the website and the trees are not available at the moment of writing of
+this manuscript, which could explain the small amount of citations it has (8 as of April 2021).
 
 When studies require a particular set of taxa not represented in the same phylogeny,
 or require complete taxon sampling, trees generated from taxonomic data have been
@@ -280,31 +281,35 @@ Having all information integrated into a single evolutionary context, OpenTree i
 Comparative biology necessitates a phylogenetic context to make sense of biological
 observations and better understand biological patterns and processes
 \citep{felsenstein1985phylogenies, soltis2003role}.
-Generally, the gold standard for comparative biology analyses is considered to be a phylogeny with branch lengths
+Ideally, evolutionary and ecological analyses require a dated phylogeny, with branch lengths
 proportional to time, inferred using properly curated fossil calibrations applied
-to a phylogeny reconstructed from carefully chosen genetic markers.
-Still, nowadays, obtaining such dated phylogenies requires
+to a phylogeny reconstructed from carefully chosen genetic markers \citep{webb2008phylocom, jantzen2019effects}.
+Still, nowadays, obtaining such good quality phylogenies requires
 considerable more effort, resources, and expertise than reusing an expert-knowledge-based
-published phylogeny \citep{li2019common}.
+published phylogenies \citep{li2019common}.
 
-Phylogenies without branch lengths generated from existing phylogenetic knowledge
-have been widely used in the field for different purposes.
+Phylogenies with and without branch lengths generated from
+existing phylogenetic knowledge have been widely and successfully used in the field
+for various studies.
 
-OpenTree's synthetic tree has been used to test the effect of different types
-of branch lengths in phylogenies used for ecological community analyses and on estimates of
-phylogenetically based spatial biodiversity metrics \citep{allen2019spatial, li2019common}.
-\citep{allen2019spatial} found that synthetic trees without branch lengths can be used successfully
+OpenTree's synthetic tree in particular has been used to test the effect of
+different types of branch lengths in phylogenies used to perform ecological community
+analyses and to estimate phylogenetically based spatial biodiversity metrics
+\citep{allen2019spatial, li2019common}.
+\citep{allen2019spatial} tested different synthetic trees without branch lengths,
+including OpenTree's synthetic tree, and concluded that they can be used successfully
 to calculate phylogenetic distance and relative phylogenetic diversity to understand
 ecological and evolutionary processes that can guide conservation efforts.
 \citep{li2019common} dated OpenTree's synthetic tree using averaged age data from
-the TimeTree database \citep{} as fixed node ages to evenly distribute ages of remaining
-nodes using the BLADJ algorithm \citep{}. They concluded that phylogenetic diversity
+the TimeTree database \citep{kumar2017timetree} as fixed node ages to evenly distribute ages of remaining
+nodes using the BLADJ algorithm \citep{webb2008phylocom}. They concluded that phylogenetic diversity
 and phylogenetic signal estimates from OpenTree's synthetic tree are as good
 as those calculated from fossil-calibrated phylogenies based on DNA sequence data,
-and suggest using the latter for community ecology phylogenetic analyses when needed \citep{li2019common}.
+and suggest using the former for community ecology phylogenetic analyses when the
+latter are unavailable \citep{li2019common}.
 
-Comparative biology studies rely on trait datasets to then contextualize them phylogenetically
-to properly assess traits' evolutionary patterns and processes.
+Comparative biology studies rely on trait datasets to contextualize them phylogenetically
+and properly assess traits' evolutionary patterns and processes.
 Unless an exceptional research planning phase happens early at the onset of a project,
 most trait datasets are gathered without taking into account available phylogenetic information.
 Taxa in biological trait datasets are usually non-overlapping with existing phylogenies,
@@ -348,16 +353,12 @@ prokaryotes and eukaryotes as a species tree hypothesis to understand the evolut
 of gene families and taxa to improve orthology prediction for phylogenetic applications.
 % they used topology only.
 
-\citep{uyeda2017evolution} used an OpenTree subtree of mammals and dated it using OpenTree
-chronograms. They then grafted it to published chronograms from birds, amphibians
-and reptiles into a single dated synthetic tree of 837 vertebrate species to study
-the evolution of metabolic energetic scaling in order to improve macroecological predictions.
-% branch lengths are proportional to time; they tested a model of trait evolution.
 
-\citep{fisher2017evolution} used a subtree of 89 species including insects, plants,
+\citep{fisher2017evolution} used an OpenTree subtree of 89 species including insects, plants,
 fungi, molluscs, arachnids and worms, to study the evolution of host-symbiont
 dependence across the tree of life.
-% cited 117 times; used Bayesian phylogenetic mixed model to account for phylogenetic effects, seems like tree has no branch lengths, but data available upon request :/
+% cited 117 times; used Bayesian phylogenetic mixed model to account for phylogenetic effects,
+% seems like tree has no branch lengths, but data available upon request :/
 
 \citep{kunc2019effects} got OpenTree synthetic subtrees for arthropods, molluscs,
 amphibians, mammals, fish and birds to test the effect of anthropogenic noise on
@@ -365,44 +366,70 @@ animal behavior. They found all groups display alterations to their behavior, me
 that anthropogenoc noise is not affecting any taxonomic groups selectively.
 % cited 21 times; obtained branch lengths using Grafen's method, too
 
-Community ecology studies often require phylogenetic context for thousands of
+Community ecology and comparative studies often require phylogenetic context for thousands of
 species belonging to distantly related taxonomic groups across the tree of life \citep{}.
 Researchers have used subtrees derived from OpenTree's synthetic tree encompassing species present
 in specific ecological communities to use as backbone to estimate branch lengths
-based on genetic data \citep{}, or using age data from chronograms in the OpenTree database \citep{}.
+based on genetic data \citep{allen2019spatial, smith2018constructing}, or using
+age data from dated phylogenies in the OpenTree database \citep{uyeda2017evolution, geffroy2020evolutionary}.
+
+\citep{uyeda2017evolution} used an OpenTree subtree of mammals and dated it using OpenTree
+chronograms. They then grafted it to published chronograms from birds, amphibians
+and reptiles into a single dated synthetic tree of 837 vertebrate species to study
+the evolution of metabolic energetic scaling in order to improve macroecological predictions.
+% branch lengths are proportional to time; they tested a model of trait evolution.
+
+\citep{geffroy2020evolutionary} dated an OpenTree synthetic subtree gathering age data
+from dated phylogenies stored in OpenTree's Phylesystem database. They found that
+increased interactions with humans (indiced by captivity, urbanization, or domestication)
+reduce the overall mean of antipredator traits over time in a sample of 102 species
+of mammals, birds, reptiles, fish, amphibians, arthropods, and mollusks.
+% has been cited 6 times; used OpenTree synthetic tree and dated it using chronograms in Phylesystem.
+
+
 
 Sometimes, constructing a tree from available genetic data from GenBank for a group
-to the sampling level required for a study is not possible.
-\citep{owen2015synthetic} generated a 387 tip phylogeny of freshwater crayfish using DNA sequence
+is not enough to address the goals of a study.
+Phylogenies generated with genetic data only are usually incomplete.
+Broad taxon sampling coverage is important to correctly estimate phylogenetic
+diversity \citep{jantzen2019effects, park2018taxon}
+% in \citep{bitomsky2020clade}
+
+\citep{owen2015synthetic} generated a 387 tip phylogeny of freshwater crayfish using DNA sequences
 data mined from GenBank with PHLAWD \citep{smith2009mega}. Then, they used OpenTree's phylogeny
-curation application to add that and 19 previously published phylogenies of freshwater crayfish
-with diverse taxon sampling sizes, to obtain an OpenTree synthetic tree for all 590 species
+curation application to standradize that and 19 previously published phylogenies of freshwater crayfish
+with diverse taxon sampling sizes to Opentree's taxonomy, to generate an OpenTree synthetic tree for all 590 species
 of freshwater crayfish and 129 additional subspecies.
 % It would be superfun to know how many of these branches are supported by phylogenetic
 % data and how many by taxonomy, so maybe we can say that sometimes mining sequence data
-% from GenBank is not enough to get the most complete phylogeny of a group, when genetic
+% from GenBank is not enough to get the most phylogenetic data of a group, when genetic
 % data is not released on GenBank, for example.
 % owen et al. 2015 has been cited 32 times
-they used this synthetic subtree to map IUCN endangered species status in crayfish
-and test for associations with phylogenetic clades and taxonomy, to improve conservation
-strategies in the group.
+With the synthetic subtree they were able to fully map IUCN endangered species
+status in crayfish, test for associations with clades and taxonomy, and improve conservation
+strategies in the group. They wouldn't have been able to do this with the DNA based phylogeny
+because it has incomplete sampling.
 They also used the conflict application in the curator app to detect conflict between
 taxonomy and their phylogenetic estimates based on genetic data, allowing them to
 discuss and identify regions that require more sequencing effort.
 
-\citep{brown2017development} created an OpenTree synthetic subtree of birds using
-290 available bird phylogenies, some of them
+\citep{brown2017development} gathered 290 published bird phylogenies based on genetic
+data, some of them with broad but incomplete taxonomic sampling (Jetz et al.????),
+to use as input to generate an OpenTree synthetic subtree of birds.
 They then used OpenTree's conflict application to evaluate node concordance and
-conflict across 290 bird phylogenies. Early diverging nodes in
- birds as a whole seem to have the more conflict, allowing the field to focus sequencing
- efforts to resolve those areas of the bird phylogeny.
+conflict across the input phylogenies and the synthetic tree. They found that early diverging nodes
+ seem to have the more conflict, informing future research sequencing efforts to
+ focus on getting markers to resolve those areas of the bird phylogeny.
 
 
-%%% In the absence of branch length data, phylogenies with arbitrary branch lengths
-%%% are a useful phylogenetic background to take into account phylogenetic structure
-%%% \citep{garland1992procedures}.
-%%% I probably need a more recent citation besides garland 1992.
-
+In the absence of branch length data, phylogenies with arbitrary branch lengths
+are a useful phylogenetic background to take into account phylogenetic structure
+\citep{garland1992procedures}.
+% I probably need a more recent citation besides garland 1992.
+\citep{jantzen2019effects} suggests that using OpenTree's synthetic subtree with
+branch lengths inferred from additional genetic data or time calibrating them directly
+will facilitate many more ecological community phylogenetic analyses, as it co-opts existing
+phylogenetic knowledge and can represent phylogenetic relationships of distantly related organisms.
 
 
 I also wanna say that Phylomatic \citep{webb2005phylomatic} is a tool that came before
@@ -411,7 +438,7 @@ studies (has been cited more than 1000 times).
 Phylomatic is still being used (cited more than 100 times since 2020) for mammals
 and plants because it is the only taxa available in there now.
 Studies have used Phylomatic trees as backbone and then dated them. One study used
-age data from chronograms in OpenTree to date a Phylomatic tree.
+age data from chronograms in OpenTree to date a Phylomatic tree \citep{}.
 OpenTree can be used for bacterial and fungal community ecology studies.
 
 
