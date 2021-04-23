@@ -33,7 +33,7 @@ Mark T. Holder,$^{3}$\\[4pt]
 % First field is the short list of authors
 {McTavish, Sanchez-Reyes, Holder}
 % Second field is the short title of the paper
-{opentree python package}
+{opentree Python package}
 % This should be shortened version of the title and no greater than 50 characters
 
 \maketitle
@@ -41,7 +41,7 @@ Mark T. Holder,$^{3}$\\[4pt]
 \begin{abstract}
 {The Open Tree of Life project constructs a comprehensive, dynamic and digitally-available tree of life by synthesizing published phylogenetic trees along with taxonomic data.
 Open Tree of Life provides web-service application programming interfaces (APIs) to make the tree estimate, unified taxonomy, and input phylogenetic data available to anyone.
-Here, we describe the python package \texttt{opentree}, which provides a user friendly python wrapper for these APIs and a set of scripts and tutorials for straightforward downstream data analyses.
+Here, we describe the Python package \texttt{opentree}, which provides a user friendly Python wrapper for these APIs and a set of scripts and tutorials for straightforward downstream data analyses.
 We demonstrate the utility of these tools by generating an estimate of the phylogenetic relationships of all bird families, and by capturing a phylogenetic estimate for all taxa  observed at the University of California Merced Vernal Pools and Grassland Reserve.
 }
 
@@ -49,10 +49,10 @@ We demonstrate the utility of these tools by generating an estimate of the phylo
 \end{abstract}
 \newline
 
-Evolutionary history provides a framework to link all life on earth. However, it is not easy to access accurate, up-to-date phylogenetic relationships for arbitrary sets of taxa of interest, even if phylogenetic estimates for those taxa have been made and published \citep{drew_lost_2013, mctavish_how_2017}. Individual phylogenetic estimates are not comprehensive, and therefore seldom contain all taxa of interest. Taxonomic relationships, while comprehensive, provide a coarse, and often outdated, picture of shared ancestry. 
-The Open Tree of Life project (OpenTree) provides a reproducible framework for accessing up-to-date evolutionary relationships for arbitrary sets of taxa across the entire tree of life.
-All data in OpenTree is freely available via API's.
-The package \texttt{opentree} provides a user friendly python interface to access these data. In addition \texttt{opentree} is packaged with a set of tutorials and scripts to make common downstream analyses straightforward.
+Evolutionary history provides a framework to link all life on earth. However, it is not easy to access accurate, up-to-date phylogenetic relationships for arbitrary sets of taxa of interest, even if phylogenetic estimates for those taxa have been made and published \citep{drew_lost_2013, mctavish_how_2017}. Individual phylogenetic estimates are not comprehensive, and therefore seldom contain all taxa of interest. Taxonomic relationships, while comprehensive, provide a coarse, and often outdated, picture of shared ancestry.
+The Open Tree of Life project (OpenTree) provides a reproducible framework for accessing up-to-date and expert-knowledge-based evolutionary relationships for arbitrary sets of taxa across the entire tree of life.
+All data in OpenTree is freely available via application programming interfaces (API's).
+The package \texttt{opentree} provides a user friendly Python interface to access these data. In addition \texttt{opentree} is packaged with a set of tutorials and scripts to make common downstream analyses straightforward.
 
 \bigskip
 % Each important word in the heading level 1 should begin with a capital letter; no heading for the introduction
@@ -67,27 +67,26 @@ Most of the tips of the tree represent species, but some are infraspecific taxa.
 The framework of this tree is provided by a unified taxonomy \citep{opentreeoflife_open_2019-1, rees_automated_2017}.
 This taxonomy links unique identifiers across many online taxonomic resources, including NCBI \citep{federhen_ncbi_2012}, GBIF \citep{gbif_secretariat_gbif_2019}, as well as user contributed taxonomic amendments contained in [https://github.com/OpenTreeOfLife/amendments-1].
 These taxonomic relationships are refined by evolutionary estimates from 1,216 published papers including 87,000 tip taxa \citep{opentreeoflife_open_2019, redelings_supertree_2017}.
-The Open Tree data store, `Phylesystem' \citep{mctavish_phylesystem_2015} contains 4,500 published studies, including those incorporated in the tree. 
-Each tree has mappings between the tips in these published studies and unique taxonomic identifiers.
+The Open Tree data store, `Phylesystem' \citep{mctavish_phylesystem_2015} contains 4,500 published studies, including those incorporated in the latest version of OpenTree's synthetic tree.
+Phylogenies in the Phylesystem database have mappings between their tip names and unique OpenTree taxonomic identifiers.
 There are several reasons trees are included in the `Phylesystem' data store but not the synthetic tree.
 The complete curation of trees requires human intervention and confirmation at several steps, including vetting taxonomic name resolution service matches and correctly rooting trees, as many output files are shared as unrooted trees.
-In addition, some of the trees in Phylesystem descibe gene tree level or within species relationships, which are not appropriate for the species (and named subspecies) level relationships captured in the synthetic tree.
+In addition, some of the trees in Phylesystem describe gene tree level or within species relationships, which are not appropriate for the species (and named subspecies) level relationships captured in the synthetic tree.
 There is also lag between study upload, which makes studies immediately available via the API, and the time to re-build the entire synthetic tree, which is released in versioned increments (current version, 12.3)
-The number of input studies increases in each successive syntis tree realease.
-
+The number of input studies increases in each successive synthesis tree release.
 
 All of these data are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
-\texttt{opentree}  provides an user-friendly wrapper for calling these APIs.
+\texttt{opentree} provides a user-friendly wrapper for calling these APIs from the command line or in Python.
 In addition, it converts these data between commonly used file formats and data types.
-This package allows allows users to generate to data objects in DendroPy, a phylogenetic computing library \citep{sukumaran_dendropy_2010}.
+This package allows users to generate data objects to use in DendroPy, a widely cited Python phylogenetic computing library \citep{sukumaran_dendropy_2010}.
 
 
-\texttt{opentree} incorporates in python the functionality available in rotl, an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl_2016}, as well as additional downstream analysis and interoperability tools.
+\texttt{opentree} incorporates in Python the functionality available in rotl, an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl_2016}, as well as additional downstream analysis and interoperability tools.
 \texttt{rotl} has been already been cited 132 times in the 4 years since its publication, demonstrating a demand for accessible user access to these data.
-By providing a python package to interact with these data, we make it straightforward for python users to access and analyze these data.
-A python wrapper for Open Tree of Life also makes linking these data with the stable of other Python biodiversity informatics tools straightforward.
+By providing a Python package to interact with these data, we make it straightforward for Python users to access and analyze these data.
+A Python wrapper for Open Tree of Life also makes linking these data with the stable of other Python biodiversity informatics tools straightforward.
 
-In addition, \texttt{opentree} expands the toolset available for working with the OpenTree unified taxonomy \citep{rees_automated_2017}.
+Finally, \texttt{opentree} expands the toolset available for working with OpenTree's unified taxonomy \citep{rees_automated_2017}.
 
 
 \bigskip
@@ -95,20 +94,20 @@ In addition, \texttt{opentree} expands the toolset available for working with th
 \label{sec3}
 
 
-The OpenTree APIs are divided into three main categories, synthetic tree,  taxonomy and taxonomic name resolution, and study search.
-Many analyses integrate calls to each of these subcomponents. 
+The OpenTree APIs are divided into three main categories: synthetic tree, taxonomy and taxonomic name resolution, and study search.
+Many analyses integrate calls to each of these subcomponents.
 The \texttt{opentree} package links across these services to make common API calls easier.
 Some example calls are described here, but all methods and scripts are fully documented, including examples and return formats at \url{https://opentree.readthedocs.io}.
 
 \subsubsection{Synthetic tree.---} The OpenTree synthetic tree contains all 2.4 million taxa in the OpenTree taxonomy, with relationships for 87,000 taxa informed by 1,216 studies.
 Each branch in the tree is informed by published phylogenetic relationships, where they are present in the curated data store, or by taxonomic relationships where no phylogenetic data is available.
 For each node in the synthetic tree, the API returns identifiers for
-all the trees in the synthesis pipeline which support or conflict with that node.
+all the phylogenies in the synthesis pipeline which support or conflict with that node.
 Each node is uniquely labeled.
 If the descendants of a node align with named taxonomic group, the taxon identifier is applied to the node.
-If the node does not correspond a taxon named in the OpenTree taxonomy, the node is labeled using a phyloreference \citep{parr_evolutionary_2012} describing that node as the most recent common ancestor of two identified taxa.
+If the node does not correspond to a taxon named in the OpenTree taxonomy, the node is labeled using a phyloreference \citep{parr_evolutionary_2012}, a unique name identifying that node as the most recent common ancestor of two named taxa.
 \texttt{opentree} users can easily access evolutionary estimates for arbitrary sets of taxa.
-The web-service response also includes the published phylogenetics estimates which underlie those inferences.
+The web-service response also includes the published phylogenetic estimates which underlie those inferences.
 The \texttt{opentree} wrapper captures and formats these citations to make providing appropriate credit for these synthetic induced subtree estimates straightforward.
 Users can also access full synthetic subtrees subtending any individual node.
 
@@ -120,22 +119,22 @@ Thus, demanding exact matching of names from different sources can be too string
 However, different names can be very close in spelling to one another.
 So, tolerating misspellings makes it easy to accidentally match names that should refer to two distinct taxa.
 The OpenTree taxonomy \citep{rees_automated_2017, opentreeoflife_open_2019-1} provides a link between the unique identifiers generated by several large scale online taxonomic resources [GBIF, NCBI, Silva, Worms], as well as all known name synonomies provided by those resources.
-The OpenTree taxonomic name resolution service (TNRS) searches this full taxonomy and returns exact or fuzzy matches from input names string to taxa and their unique identifiers.
+The OpenTree taxonomic name resolution service (TNRS) searches this full taxonomy and returns exact or fuzzy matches from input names string to taxa and their unique taxonomic identifiers.
 This TNRS forms a link between human readable name strings, and rigorous unique identifiers.
 
 \texttt{opentree} wraps the OpenTree taxonomy and TNRS APIs for ease of integrating taxonomy and TNRS queries with downstream analyses. In addition, \texttt{opentree} provides helpers for quickly searching the text download of the taxonomy, which can be more efficient for bulk queries.
 
 
-\subsubsection{Study search.---} The OpenTree datastore contains 4,468 published phylogenetic studies, including 9,395 phylogenetic trees (as of Dec 4, 2020).
-These studies and trees are indexed on a number of properties including author name, curator name, and publication information. 
-In addition, the tips of these trees are mapped to the unified Open Tree taxonomy making comparisons among estimates of relationships and searching for taxa of interest straightforward.
+\subsubsection{Study search.---} The OpenTree datastore contains 4,468 published phylogenetic studies, including 9,395 phylogenies (as of Dec 4, 2020).
+These studies and phylogenies are indexed on a number of properties including author name, curator name, and publication information.
+In addition, the tips of these trees are mapped to the unified OpenTree taxonomy making comparisons among estimates of relationships and searching for taxa of interest straightforward.
 This allows searching of studies based on taxa contained in the study.
-Importantly, this search does not rely on string-matching of what the taxonomic name was at the time of publication - rather it leverages the full suite of synonomies gathered across the input taxonomies to find equivalent taxa across studies, even if the canonical name has changed between publications.
-The indexing of these trees is taxonomically explicit.
-So, for example, a search for `canidae' will find trees with taxa contained in the taxonomic group \textit{canidae}, even if the term `canidae' does not itself appear in the tree or tips.
+Importantly, this search does not rely on string-matching of what the taxonomic name was at the time of publication -- rather, it leverages the full suite of synonomies gathered across the input taxonomies to find equivalent taxa across studies, even if the canonical name has changed between publications.
+The indexing of these phylogenies is taxonomically explicit.
+So, for example, a search for `canidae' will find phylogenies with taxa contained in the taxonomic group Canidae, even if the term `canidae' does not itself appear in the phylogeny or tips.
 Based on the results of these searches, studies can be viewed in a browser on the OpenTree curator site, or the phylogenies themselves can be downloaded for comparisons or other downstream use.
 
-In addition, as the tips of each study are mapped by curators to identifiers in the OpenTree taxonomy, comparing the relationships represented in input trees to taxonomic relationships and to taxonomy is straightforward. The browser based tree viewer has a graphical visualization of this concordance and conflict. \texttt{opentree} provides a wrapper for this conflict functionality, which makes it straightforward to assess what taxon definitions and evolutionary relationships a tree estimate agrees with and conflicts with. This functionality can also be applied to local phylogenies for which the tips have been matched to taxonomy. This allows users to assess concordance and conflict with previous inferences in pre-publication trees, even without sharing them to the publicly available OpenTree data store \citep{reyes_physcraper_2020, mctavish_phylesystem_2015}.
+In addition, as the tips of each study are mapped by curators to taxonomic identifiers in the OpenTree taxonomy, comparing the relationships represented in input phylogenies to taxonomic relationships and to taxonomy is straightforward. The browser based tree viewer has a graphical visualization of this concordance and conflict. \texttt{opentree} provides a wrapper for this conflict functionality, which makes it straightforward to assess what taxon definitions and evolutionary relationships a phylogenetic estimate agrees with and conflicts with. This functionality can also be applied to local phylogenies for which the tips have been matched to taxonomy. This allows users to assess concordance and conflict with previous inferences in pre-publication phylogenies, even without sharing them to the publicly available OpenTree database \citep{reyes_physcraper_2020, mctavish_phylesystem_2015}.
 
 
 
@@ -149,88 +148,121 @@ We highlight two examples based on user queries.
 
 
 \subsection{A phylogeny of all bird families}
-A full Jupyter notebook tutorial demonstrating how to access a tree of all bird families is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/TreeOfBirdGenera.ipynb}.
+A full Jupyter notebook tutorial demonstrating how to access a synthetic tree of all bird families is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/TreeOfBirdGenera.ipynb}.
 Capturing evolutionary information at large scales is often simplified by using arbitrary taxonomic cutoffs.
 While the OpenTree taxonomy is not rank focused, it does track rank information from component taxonomies.
 By searching the OpenTree taxonomy for families in birds, we find that there are 390 listed bird families, 196 of which are included in the synthetic tree.
-Groups that are excluded from the synthetic tree for a few potential reasons, the most common of which is that all members of the group are extinct, and we have no curated published studies providing information about the correct evolutionary relationships.
+Groups are excluded from the synthetic tree for a few potential reasons, the most common of which is that all members of the group are extinct, and we have no curated published studies providing information about the correct evolutionary relationships.
 Placements of fossil taxa based only on taxonomy tend to be unstable, and the OpenTree synthesis procedure excludes taxa if the taxon is not present in at least one  phylogenetic input.
-These families can be included in later synthetic trees if data is added to the study corpus providing information on their relationships.
-Other taxa are excluded from synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy, or because the name was judged to be invalid by the OpenTree taxonomy merging software\citep{rees_automated_2017}.
+These families can be included in later synthetic trees if new studies or phylogenies are added to the Phylesystem database, providing information on their relationships.
+Other taxa are excluded from synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy, or because the name was judged to be invalid by the OpenTree taxonomy merging software \citep{rees_automated_2017}.
 
-If we request an induced subtree from the synthesis for these 164 taxa, we get back a tree that has 150 tips. The return value also includes a list of non-monophyletic taxa.
-Some of the non-monophyletic taxa map to internal nodes on our output tree. In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the shows the topology of the 130 monophyletic bird families plus MRCA's of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output tree.
+If we request an induced subtree from OpenTree's synthetic tree for these 164 taxa, we get back an output subtree that has 150 tips. The return value also includes a list of non-monophyletic taxa.
+Some of the non-monophyletic taxa map to internal nodes on our output subtree. In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the topology of 130 monophyletic bird families plus MRCA's of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output subtree.
 
 
 \begin{figure}[!h]
-\centering\includegraphics[width=\textwidth]{bird_fam_fig}
+\centering\includegraphics[width=\textwidth]{bird_fam_fig_rev}
 
-\caption{Relationships of 150 bird families, showing the number of published phylogenetic studies which support and and conflict with each branch in the tree. For families which are not monophyletic according to published phylogenies, tips for those families are labelled with 'MRCA of taxa in Family name'. Heat maps show the number of tip taxa descendants from each tip, in log scale on left, and in exact numbers on left. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the super tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
+\caption{Phylogenetic relationships of 150 bird families based on the latest OpenTree synthetic tree (v12.3). For families which are not monophyletic according to published phylogenies, tips for those families are labeled with 'MRCA of taxa in X family name'. Heat maps show the number of tip taxa descendants in OpenTree within each tip. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the synthetic tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this subtree (citations in supplemental information). Figure created using the interactive Tree Of Life (iTOL) v4 \citep{letunic_interactive_2019}}
 \label{birdfams}
 \end{figure}
 
 These families contain from 1 to 920 total descendant tip taxa (species and subspecies).
-Across all 150 families, 10,357 descendent tip taxa  are captured by the relationships shown in this tree.
-Figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendents on the right.
-This display demonstrates that `families' is not a very even way to break up biodiversity across birds.
+Across all 150 families, 10,357 descendents tip taxa are captured by the relationships shown in this subtree.
+Figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of descendants on the right.
+This display demonstrates that the use of `families' is not a very even way to break up biodiversity across birds.
 
-Based on the phylogenetic synthesis algorithm, each branch in the tree is supported by either taxonomy alone, where there are no input studies that traverse that branch, or by one or more input phylogenetic studies. 
-The support for each node in the tree can be interrogated using an \texttt{opentree.synth\_node\_info} call.
-While each branch must be supported by taxonomy or at least one input study from phylesystem, where multiple inputs traverse a branch, there can be conflict among studies.
-The synthesis algorithm is greedy, and the output tree will display the branch supported by the highest ranked study included in synthesis.
-The node info call will return not only which studies support that branch, but also which studies have relationships which conflict with that branch.
-In figure \ref{birdfams} support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this tree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this tree, 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships. 
+Following OpenTree's phylogenetic synthesis algorithm \citep{redelings_supertree_2017}, each branch in the synthetic tree is supported
+by either taxonomy alone (where there are no input phylogenetic studies that traverse that branch), or by one or more input phylogenetic studies.
+The source of support for each node in the synthetic tree can be interrogated using a \texttt{synth\_node\_info} function call from the \texttt{OpenTree} class in the package here presented.
+While each branch must be supported by taxonomy or at least one input study from Phylesystem, where multiple inputs traverse a branch, there can be conflict among studies.
+OpenTree's synthesis algorithm is greedy, and the synthetic tree will display the branch supported by the highest ranked study included in synthesis.
+The \texttt{synth\_node\_info} function will return not only which studies support any branch, but also which studies have relationships which conflict with that branch.
+In figure \ref{birdfams}, support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this subtree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this subtree, 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships.
 
-This tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies  in the phylesystem corpus.
+It is important to note that OpenTree's synthetic tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies in the Phylesystem database.
 
 \subsection{Linking data from the Global Biodiversity Information Facility (GBIF) with phylogenetic information from Open Tree of Life}
 
 \bigskip
 
-The University of California, Merced has a natural reserve directly adjacent to campus, which contains several vernal pools. These vernal pools create a unique habitat which allows native species to thrive, and the proximity to campus allows undergraduate classes to experience this ecosystem on field trips which can be accomplished during class time. 
-A species list for the reserve and adjacent campus areas is available through Global Biodiversity Information Facility (GBIF) website \citep{gbif_secretariat_gbif_2019}. GBIF provides a repository for species occurrence data tracked in a variety of data stores, including bird observations from eBird \citep{sullivan_ebird_2009}, community science observations from iNaturalist (\url{www.inaturalist.org}), and several other resources. A full tutorial demonstrating how to access a tree for a GBIF data download is packaged with the software at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/gbif/GBIF_to_OpenTree.ipynb}.
+The University of California (UC), Merced has a natural reserve directly adjacent to campus, which contains several vernal pools. These vernal pools create a unique habitat which allows native species to thrive, and the proximity to campus allows undergraduate classes to experience this ecosystem on field trips which can be accomplished during class time.
+A species list for the reserve and adjacent campus areas is available through the Global Biodiversity Information Facility (GBIF) website \citep{gbif_secretariat_gbif_2019}. GBIF provides a repository for species occurrence data tracked in a variety of data stores, including bird observations from eBird \citep{sullivan_ebird_2009}, community science observations from iNaturalist (\url{www.inaturalist.org}), and several other resources. A full tutorial demonstrating how to access a subtree for a GBIF data download is included with this package at \url{https://github.com/OpenTreeOfLife/python-opentree/blob/main/docs/notebooks/gbif/GBIF_to_OpenTree.ipynb}.
 
 We downloaded the full list of animal observations from the UC Merced Vernal pools reserve from GBIF \citep{gbif_secretariat_gbif_2019}. This data download comprised 6,709 records from 223 species. Using the GBIF unique taxon identifiers, 201 of these species could be directly matched to taxa in the OpenTree taxonomy using \texttt{opentree.taxon\_info(source\_id = {gbif unique identifier})}. This direct matching captures exact one to one relationships between these taxonomies, and avoids slow and potentially error prone string matching. Nineteen taxa had updated identifiers in GBIF since the most recent reconciliation between the GBIF taxonomy and the OpenTree taxonomy, and were assigned OpenTree taxon identifiers based on exact string matches. There were two taxa ``\textit{P. abortivum} St.'' and ``\textit{Ichneumon cupitus} Cresson 1877'', which were not found in the OpenTree taxonomy, and were dropped from the analysis.
 
 
-Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for these taxa can be downloaded (Figure \ref{vernalanimals}). This synthetic tree is supported by 160 individual published trees (Citations in supplemental information)).
+Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for these taxa can be downloaded (Figure \ref{vernalanimals}). This synthetic tree is supported by 160 individual published trees (citations in supplemental information).
 
 \begin{figure}[!h]
 \centering\includegraphics[width=\textwidth]{vernal_animals}
-\caption{Evolutionary relationships between all animal taxon records in the UC Merced Vernal Pools and Grassland Reserve. Branch lengths are arbitrary. A total of 160 published phylogenies underlie the relationships in this tree (Citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
+\caption{Evolutionary relationships between all animal taxon records in the UC Merced Vernal Pools and Grassland Reserve. Branch lengths are arbitrary. A total of 160 published phylogenies underlie the relationships in this tree (citations in supplemental information). Figure created using \citep{letunic_interactive_2019}}
 \label{vernalanimals}
 \end{figure}
 
 
 
-For researchers, working in the vernal pools reserve, this tree also provides the necessary information for community phylogenetic analyses. \citet{li_for_2019} demonstrated that synthetic phylogenies from the OpenTree project perform well in community phylogenetic studies. By providing ready access to these estimates, based on 160 previously published trees, \texttt{opentree} makes basing ecological analyses in an accurate evolutionary framework straightforward.
+For researchers, working in the vernal pools reserve, this subtree also provides the necessary information for community phylogenetic analyses. \citet{li_for_2019} demonstrated that synthetic phylogenies from the OpenTree project perform well in community phylogenetic studies. By providing ready access to these estimates, based on 160 previously published phylogenies, \texttt{opentree} makes basing ecological analyses in an accurate evolutionary framework straightforward.
 
 
-The ability to build a phylogeny of local taxa is also a valuable pedagogical tool. One of us (EJM) used this phylogeny to discuss the diversity of life of animal life as part of a class exercise on vernal pools ecology and evolution, in an undergraduate evolution class. 
-Students visited the UC Merced Vernal Pools and Grassland Reserve, and then explored the evolutionary tree of all the animal species recorded as observed in the reserve. 
-There are several threatened and endangered species on the vernal pools reserve, including two species of fairy shrimp, \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered). 
-By building a phylogenetic tree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this tree (Figure \ref{vernalanimals}) shows that the genus \textit{Anas} does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get students to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this tree, and labelling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
+The ability to build a phylogeny of local taxa is also a valuable pedagogical tool. One of us (EJM) used this phylogeny to discuss the diversity of life of animal life as part of a class exercise on vernal pools ecology and evolution, in an undergraduate evolution class.
+Students visited the UC Merced Vernal Pools and Grassland Reserve, and then explored the evolutionary relationships of all the animal species recorded as observed in the reserve.
+There are several threatened and endangered species on the vernal pools reserve, including two species of fairy shrimp, \textit{Branchinecta lynchii} (threatened) and \textit{Branchinecta mesovallensis} (endangered).
+By working with a subtree of taxa found on and around campus, tree thinking examples in class can have a direct connection for students. For example, this subtree (Figure \ref{vernalanimals}) shows that the genus of dabbling ducks, \textit{Anas}, does not form a monophyletic group. Walking the tree of life has been demonstrated to be an effective way to get students to understand the connections among different lineages of life on earth \citep{ballen_walking_2017}. Walking through this subtree, and labeling major animal groups allows students to connect to the diversity of animal life based on the actual species surrounding them, rather than arbitrary textbook examples.
 
-Together, this toolkit provides easy access to evolutionary infomration across the entire tree of life.
+\bigskip
+\section{Discussion}
+\label{sec5}
 
+The OpenTree project makes available thousands of expert-based-knowledge peer-reviewed and published phylogenies that that can be reused for applications
+from scientific discovery to education, conservation and
+outreach \citep{stoltzfus2013phylotastic, mctavish_phylesystem_2015, rosindell2012onezoom, wong2020dynamic}.
+
+While several useful tools can generate phylogenies from DNA sequence data mined from the GenBank genetic database e.g. \citep{smith2009mega, sanderson2008phylota, antonelli2014supersmart, reyes_physcraper_2020}, for regions of the tree where phylogenetic estimates already exist, relying on published peer-reviewed inferences of relationships is more efficient and accurate than generating new estimates \citep{smith2018constructing, owen2015synthetic, brown2017development, ewers2019towards}.
+Broad taxon sampling coverage is key to correctly estimate phylogenetic
+diversity \citep{jantzen2019effects, park2018taxon}, and genetic data is usually not available for all taxa in a community or a biological group of study.
+Several studies have used OpenTree resources to consolidate evolutionary estimates across a taxon (freshwater crayfish \citep{owen2015synthetic}; birds \citep{brown2017development}; barnacles \citep{ewers2019towards, ewers2019testing}, mammals \citep{uyeda2017evolution})
+
+Many researchers have applied the OpenTree synthetic tree and data stores to answering their research questions across the breadth of both the tree of life, and the breadth of biological research domains.
+In contrast to existing phylogenetic data stores, \citep{piel2000treebase}, the links across studies provided by OpenTree and the synthesis algorithm make it possible to extract inferences for an arbitrary subset of taxa, and combine inferences from trees with few or no overlapping tips.
+These synthetic phylogenies provide the opportunity to study the evolution and phylogenetic distribution of life history traits at large scales  \citep{tarka2018sex, healy2019animal, capdevila2020longevity}.
+Other large scale trait evolution anayses on OpenTree synthesis trees include antipredator behavior associations with human interactions, \citep{geffroy2020evolutionary}, effect of anthropogenic noise on
+animal behavior  \citep{kunc2019effects}, phylogenetic patterns of global wildlife trade,  \citep{fukushima2020global},  miniaturization in insects \citep{polilov2017scaling},
+shoot flammability evolution \citep{cui2020shoot}, and host symbiont dependence \citep{fisher2017evolution}.
+
+
+For downstream analyses requiring branch lengths, users have scaled topologies inferred from OpenTree using a variety of external data types and rate-smoothing approaches e.g. \citep{smith2018constructing, smith2019pyphlawd, eastman2013congruification, allen2019spatial, li2019common, uyeda2017evolution, geffroy2020evolutionary, jantzen2019effects}.
+
+OpenTree's synthetic tree provides a phylogentic backbone for commuity phylpogenetics analyses \citep{li2019common, jantzen2019effects}.
+In molecular biology, \citep{boeckmann2015quest} used a phylogentic estimate across prokaryotes and eukaryotes to understand the evolution
+of gene families and taxa to improve orthology prediction for phylogenetic applications.
+\citep{herrera2015predicting} used an OpenTree's synthetic subtree of 434 species
+including fungi, metazoans and plants to predict RAD-seq marker cleavage site numbers
+across the eukaryotic tree of life to guide the design of genome-wide genotypic and
+sequencing projects.
+\citep{miller2020codonpairs} found that codon pairing biases are conserved across the diversity and can  be used for phylogenomic analyses.
+
+
+This \texttt{opentree} python toolkit expands user access to the OpenTree API's, and provides tutorials on how to easily access up to date evolutionary information across the entire tree of life, which will continue to facilitate biological research and outreach.
 
 
 \section{Availability}
-\label{sec5}
+\label{sec6}
 
-\texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. The code is packaged with an automated test suite which is maintained to cover at minimum 75\% of the code. Testing reports are generated on \url{travis.io} and posted to {codecov.io} and reflected on the GitHub readme with each commit. Documentation and tutorials are available with the code, and is posted to \url{https://opentree.readthedocs.io}.
+\texttt{opentree} is fully open source with a CC0 license. It is available on GitHub \url{ https://github.com/OpenTreeOfLife/python-opentree}. It can be installed from PyPi using \texttt{pip install opentree}. The code is packaged with an automated test suite which is maintained to cover at minimum 75\% of the code. Testing reports are generated on \url{travis.io} and posted to {codecov.io} and reflected on the GitHub readme with each commit. Documentation and tutorials are available with the code, and are posted to \url{https://opentree.readthedocs.io}.
 
 
 \section{Conflict of Interest}
 None
 
 \section{Funding}
-Funding for this project was provided by NSF ABI 1759846 and NSF ABI 1759838. 
+Funding for this project was provided by NSF ABI 1759846 and NSF ABI 1759838.
 
 %If you have any acknowledgements, please include them here.
-\section{Acknowledgements}
+\section{Acknowledgments}
 This package relies on the OpenTree API's and the team that continues to develop and improve them, currently Jim Allman, Karen Cranston, Ben Redelings, and the authors of this package. We acknowledge logistical support provided by the UC Merced Vernal Pools and Grassland Reserve.
-Thank you to Emily Sessa and the organizers of the Society of Systematic Biologists SSB 2020 meeting for supporting the workshop where we tested and demonstrated this package. 
+Thank you to Emily Sessa and the organizers of the Society of Systematic Biologists SSB 2020 meeting for supporting the workshop where we tested and demonstrated this package.
 
 %If your paper has accompanying supplementary data, please include the below statement in your PDF.
 %\section{Supplementary Material}
@@ -265,7 +297,7 @@ Thank you to Emily Sessa and the organizers of the Society of Systematic Biologi
 %{\tabcolsep=4.25pt
 %\begin{tabular}{@{}cccccccccc@{}}
 %\tblhead{Heading & Heading & Heading & Heading & Heading}
-%Value & Value & Value & Value & Value 
+%Value & Value & Value & Value & Value
 %\lastline
 %\end{tabular}}
 %\end{table}
