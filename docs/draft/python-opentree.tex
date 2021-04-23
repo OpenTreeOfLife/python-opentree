@@ -181,7 +181,7 @@ OpenTree's synthesis algorithm is greedy, and the synthetic tree will display th
 The \texttt{synth\_node\_info} function will return not only which studies support any branch, but also which studies have relationships which conflict with that branch.
 In figure \ref{birdfams}, support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this subtree are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this subtree, 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships.
 
-It is important to note that OpenTree's synthetic tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. However, estimates of node ages can be gathered using downstream tools such as DateLife \citep{sanchez-reyes_datelife_2019} which gathers and synthesizes node date information from studies in the Phylesystem database.
+It is important to note that OpenTree's synthetic tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. For downstream analyses requiring branch lengths, users have scaled topologies inferred from OpenTree using a variety of data types and rate-smoothing approaches e.g. \citep{smith2018constructing, smith2019pyphlawd, eastman2013congruification, allen2019spatial, li2019common, uyeda2017evolution, geffroy2020evolutionary, jantzen2019effects, sanchez-reyes_datelife_2019}.
 
 \subsection{Linking data from the Global Biodiversity Information Facility (GBIF) with phylogenetic information from Open Tree of Life}
 
@@ -215,30 +215,24 @@ By working with a subtree of taxa found on and around campus, tree thinking exam
 \section{Discussion}
 \label{sec5}
 
-The OpenTree project makes available thousands of expert-based-knowledge peer-reviewed and published phylogenies that that can be reused for applications
+The OpenTree project makes available a synthetic tree across 2.4 million taxa, as well as thousands of peer-reviewed and published phylogenies that together can be reused for applications
 from scientific discovery to education, conservation and
 outreach \citep{stoltzfus2013phylotastic, mctavish_phylesystem_2015, rosindell2012onezoom, wong2020dynamic}.
-
-While several useful tools can generate phylogenies from DNA sequence data mined from the GenBank genetic database e.g. \citep{smith2009mega, sanderson2008phylota, antonelli2014supersmart, reyes_physcraper_2020}, for regions of the tree where phylogenetic estimates already exist, relying on published peer-reviewed inferences of relationships is more efficient and accurate than generating new estimates \citep{smith2018constructing, owen2015synthetic, brown2017development, ewers2019towards}.
+While several tools can generate phylogenies from DNA sequence data mined from the GenBank genetic database e.g. \citep{smith2009mega, sanderson2008phylota, antonelli2014supersmart, reyes_physcraper_2020}, for regions of the tree where phylogenetic estimates already exist, relying on published peer-reviewed inferences of relationships is more efficient and accurate than generating new estimates \citep{smith2018constructing, owen2015synthetic, brown2017development, ewers2019towards}.
 Broad taxon sampling coverage is key to correctly estimate phylogenetic
 diversity \citep{jantzen2019effects, park2018taxon}, and genetic data is usually not available for all taxa in a community or a biological group of study.
-Several studies have used OpenTree resources to consolidate evolutionary estimates across a taxon (freshwater crayfish \citep{owen2015synthetic}; birds \citep{brown2017development}; barnacles \citep{ewers2019towards, ewers2019testing}, mammals \citep{uyeda2017evolution})
 
 Many researchers have applied the OpenTree synthetic tree and data stores to answering their research questions across the breadth of both the tree of life, and the breadth of biological research domains.
 In contrast to existing phylogenetic data stores, \citep{piel2000treebase}, the links across studies provided by OpenTree and the synthesis algorithm make it possible to extract inferences for an arbitrary subset of taxa, and combine inferences from trees with few or no overlapping tips.
-These synthetic phylogenies provide the opportunity to study the evolution and phylogenetic distribution of life history traits at large scales  \citep{tarka2018sex, healy2019animal, capdevila2020longevity}.
-Other large scale trait evolution anayses on OpenTree synthesis trees include antipredator behavior associations with human interactions, \citep{geffroy2020evolutionary}, effect of anthropogenic noise on
+Several studies have used OpenTree resources to consolidate evolutionary estimates across a taxon (freshwater crayfish \citep{owen2015synthetic}; birds \citep{brown2017development}; barnacles \citep{ewers2019towards, ewers2019testing}, mammals \citep{uyeda2017evolution}).
+Large scale synthetic phylogenies provide the opportunity to study the evolution and phylogenetic distribution of life history traits at large scales  \citep{tarka2018sex, healy2019animal, capdevila2020longevity}.
+Other trait evolution anayses on OpenTree synthesis subtrees include antipredator behavior associations with human interactions, \citep{geffroy2020evolutionary}, effects of anthropogenic noise on
 animal behavior  \citep{kunc2019effects}, phylogenetic patterns of global wildlife trade,  \citep{fukushima2020global},  miniaturization in insects \citep{polilov2017scaling},
-shoot flammability evolution \citep{cui2020shoot}, and host symbiont dependence \citep{fisher2017evolution}.
-
-
-For downstream analyses requiring branch lengths, users have scaled topologies inferred from OpenTree using a variety of external data types and rate-smoothing approaches e.g. \citep{smith2018constructing, smith2019pyphlawd, eastman2013congruification, allen2019spatial, li2019common, uyeda2017evolution, geffroy2020evolutionary, jantzen2019effects}.
-
+shoot flammability evolution \citep{cui2020shoot}, and host symbiont dependence \citep{fisher2017evolution}. 
 OpenTree's synthetic tree provides a phylogentic backbone for commuity phylpogenetics analyses \citep{li2019common, jantzen2019effects}.
 In molecular biology, \citep{boeckmann2015quest} used a phylogentic estimate across prokaryotes and eukaryotes to understand the evolution
 of gene families and taxa to improve orthology prediction for phylogenetic applications.
-\citep{herrera2015predicting} used an OpenTree's synthetic subtree of 434 species
-including fungi, metazoans and plants to predict RAD-seq marker cleavage site numbers
+\citep{herrera2015predicting} used an OpenTree's synthetic subtree to predict RAD-seq marker cleavage site numbers
 across the eukaryotic tree of life to guide the design of genome-wide genotypic and
 sequencing projects.
 \citep{miller2020codonpairs} found that codon pairing biases are conserved across the diversity and can  be used for phylogenomic analyses.
