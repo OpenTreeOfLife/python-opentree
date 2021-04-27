@@ -75,18 +75,21 @@ In addition, some of the trees in Phylesystem describe gene tree level or within
 There is also lag between study upload, which makes studies immediately available via the API, and the time to re-build the entire synthetic tree, which is released in versioned increments (current version, 12.3)
 The number of input studies increases in each successive synthesis tree release.
 
-All of these data are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
-\texttt{opentree} provides a user-friendly wrapper for calling these APIs from the command line or in Python.
-In addition, it converts these data between commonly used file formats and data types.
-This package allows users to generate data objects to use in DendroPy, a widely cited Python phylogenetic computing library \citep{sukumaran_dendropy_2010}.
+All of these data and tools are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
+\texttt{opentree} provides a user-friendly wrapper for calling these APIs from the command line or from a Python interactive session.
+In addition, it converts OpenTree data between commonly used file formats and data types.
+This package allows users to generate data objects for use in DendroPy, a widely cited Python phylogenetic computing library \citep{sukumaran_dendropy_2010}.
 
 
-\texttt{opentree} incorporates in Python the functionality available in rotl, an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl_2016}, as well as additional downstream analysis and interoperability tools.
-\texttt{rotl} has been already been cited 132 times in the 4 years since its publication, demonstrating a demand for accessible user access to these data.
-By providing a Python package to interact with these data, we make it straightforward for Python users to access and analyze these data.
-A Python wrapper for Open Tree of Life also makes linking these data with the stable of other Python biodiversity informatics tools straightforward.
+\texttt{opentree} incorporates in Python the functionality available in rotl, an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl_2016}.
+Additionally, \texttt{opentree} expands the toolset available for working with OpenTree's unified taxonomy \citep{rees_automated_2017}, as well as additional downstream analysis and interoperability tools.
 
-Finally, \texttt{opentree} expands the toolset available for working with OpenTree's unified taxonomy \citep{rees_automated_2017}.
+\texttt{rotl} has already been cited 132 times in the 4 years since its publication, demonstrating a demand for accessible user access to OpenTree data and tools.
+By providing a Python package to interact with OpenTree's data and services, we make it straightforward for Python users to access and analyze these data,
+generally improving the accessibility of OpenTree.
+
+The \texttt{opentree} Python package for OpenTree facilitates linking all these data with the stable of other Python biodiversity informatics tools.
+
 
 
 \bigskip
@@ -228,7 +231,7 @@ Several studies have used OpenTree resources to consolidate evolutionary estimat
 Large scale synthetic phylogenies provide the opportunity to study the evolution and phylogenetic distribution of life history traits at large scales  \citep{tarka2018sex, healy2019animal, capdevila2020longevity}.
 Other trait evolution anayses on OpenTree synthesis subtrees include antipredator behavior associations with human interactions, \citep{geffroy2020evolutionary}, effects of anthropogenic noise on
 animal behavior  \citep{kunc2019effects}, phylogenetic patterns of global wildlife trade,  \citep{fukushima2020global},  miniaturization in insects \citep{polilov2017scaling},
-shoot flammability evolution \citep{cui2020shoot}, and host symbiont dependence \citep{fisher2017evolution}. 
+shoot flammability evolution \citep{cui2020shoot}, and host symbiont dependence \citep{fisher2017evolution}.
 OpenTree's synthetic tree provides a phylogentic backbone for community phylogenetic analyses \citep{li2019common, jantzen2019effects}.
 In molecular biology, \citet{boeckmann2015quest} used a phylogentic estimate across prokaryotes and eukaryotes to understand the evolution
 of gene families and taxa to improve orthology prediction for phylogenetic applications.
