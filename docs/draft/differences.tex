@@ -1,7 +1,7 @@
 \documentclass[oupdraft]{sysbio_sse}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL python-opentree_orig_sub.tex   Thu Apr  8 13:21:18 2021
-%DIF ADD python-opentree.tex            Fri Apr 23 14:03:49 2021
+%DIF ADD python-opentree.tex            Tue Apr 27 09:14:38 2021
 %\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
 \usepackage{url}
 \usepackage{indentfirst}
@@ -117,18 +117,33 @@ There is also lag between study upload, which makes studies immediately availabl
 The number of input studies increases in each successive synthesis tree release.
 }\DIFaddend 
 
-All of these data are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
-\texttt{opentree} provides \DIFdelbegin \DIFdel{an }\DIFdelend \DIFaddbegin \DIFadd{a }\DIFaddend user-friendly wrapper for calling these APIs \DIFaddbegin \DIFadd{from the command line or in Python}\DIFaddend .
-In addition, it converts these data between commonly used file formats and data types.
-This package allows \DIFdelbegin \DIFdel{allows }\DIFdelend users to generate \DIFdelbegin \DIFdel{to data objects }\DIFdelend \DIFaddbegin \DIFadd{data objects to use }\DIFaddend in DendroPy, a \DIFaddbegin \DIFadd{widely cited Python }\DIFaddend phylogenetic computing library \citep{sukumaran_dendropy_2010}.
+All of these data \DIFaddbegin \DIFadd{and tools }\DIFaddend are freely accessible via API calls, documented at \url{https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs}.
+\texttt{opentree} provides \DIFdelbegin \DIFdel{an }\DIFdelend \DIFaddbegin \DIFadd{a }\DIFaddend user-friendly wrapper for calling these APIs \DIFaddbegin \DIFadd{from the command line or from a Python interactive session}\DIFaddend .
+In addition, it converts \DIFdelbegin \DIFdel{these }\DIFdelend \DIFaddbegin \DIFadd{OpenTree }\DIFaddend data between commonly used file formats and data types.
+This package allows \DIFdelbegin \DIFdel{allows }\DIFdelend users to generate \DIFdelbegin \DIFdel{to data objects }\DIFdelend \DIFaddbegin \DIFadd{data objects for use }\DIFaddend in DendroPy, a \DIFaddbegin \DIFadd{widely cited Python }\DIFaddend phylogenetic computing library \citep{sukumaran_dendropy_2010}.
 
 
-\texttt{opentree} incorporates in \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFaddend the functionality available in rotl, an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl_2016}, as well as additional downstream analysis and interoperability tools.
-\texttt{rotl} has been already been cited 132 times in the 4 years since its publication, demonstrating a demand for accessible user access to these data.
-By providing a \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFaddend package to interact with these data, we make it straightforward for \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFaddend users to access and analyze these data.
-A \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFaddend wrapper for Open Tree of Life also makes linking these data with the stable of other Python biodiversity informatics tools straightforward.
+\texttt{opentree} incorporates in \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFaddend the functionality available in rotl, an {R} package to interact with the Open Tree of Life data \citep{michonneau_rotl_2016}\DIFaddbegin \DIFadd{.
+Additionally, }\texttt{\DIFadd{opentree}} \DIFadd{expands the toolset available for working with OpenTree's unified taxonomy \mbox{%DIFAUXCMD
+\citep{rees_automated_2017}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend , as well as additional downstream analysis and interoperability tools.
+\DIFaddbegin 
 
-\DIFdelbegin \DIFdel{In addition}\DIFdelend \DIFaddbegin \DIFadd{Finally}\DIFaddend , \texttt{opentree} expands the toolset available for working with \DIFdelbegin \DIFdel{the OpenTree}\DIFdelend \DIFaddbegin \DIFadd{OpenTree's }\DIFaddend unified taxonomy \citep{rees_automated_2017}.
+\DIFaddend \texttt{rotl} has \DIFdelbegin \DIFdel{been }\DIFdelend already been cited 132 times in the 4 years since its publication, demonstrating a demand for accessible user access to \DIFdelbegin \DIFdel{these data }\DIFdelend \DIFaddbegin \DIFadd{OpenTree data and tools}\DIFaddend .
+By providing a \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFaddend package to interact with \DIFdelbegin \DIFdel{these data }\DIFdelend \DIFaddbegin \DIFadd{OpenTree's data and services}\DIFaddend , we make it straightforward for \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFaddend users to access and analyze these data\DIFdelbegin \DIFdel{.
+A python wrapper for Open Tree of Life also makes linking }\DIFdelend \DIFaddbegin \DIFadd{,
+generally improving the accessibility of OpenTree.
+}
+
+\DIFadd{The }\texttt{\DIFadd{opentree}} \DIFadd{Python package for OpenTree facilitates linking all }\DIFaddend these data with the stable of other Python biodiversity informatics tools\DIFdelbegin \DIFdel{straightforward.
+}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{In addition, }\texttt{\DIFdel{opentree}} %DIFAUXCMD
+\DIFdel{expands the toolset available for working with the OpenTree unified taxonomy \mbox{%DIFAUXCMD
+\citep{rees_automated_2017}}\hspace{0pt}%DIFAUXCMD
+}\DIFdelend .
+
 
 
 \bigskip
@@ -136,10 +151,10 @@ A \DIFdelbegin \DIFdel{python }\DIFdelend \DIFaddbegin \DIFadd{Python }\DIFadden
 \label{sec3}
 
 
-The OpenTree APIs are divided into three main categories\DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{: }\DIFaddend synthetic tree, taxonomy and taxonomic name resolution, and study search.
-Many analyses integrate calls to each of these subcomponents.
-The \texttt{opentree} package links across these services to make common API calls easier.
-Some example calls are described here, but all methods and scripts are fully documented, including examples and return formats at \url{https://opentree.readthedocs.io}.
+\DIFdelbegin \DIFdel{The }\DIFdelend OpenTree APIs are divided into three main categories\DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{: }\DIFaddend synthetic tree, taxonomy and taxonomic name resolution, and study search.
+Many analyses integrate calls \DIFdelbegin \DIFdel{to }\DIFdelend \DIFaddbegin \DIFadd{from }\DIFaddend each of these \DIFdelbegin \DIFdel{subcomponents}\DIFdelend \DIFaddbegin \DIFadd{categories}\DIFaddend .
+The \texttt{opentree} package links across these services to \DIFdelbegin \DIFdel{make common API calls easier}\DIFdelend \DIFaddbegin \DIFadd{facilitate calls to commonly used OpenTree APIs}\DIFaddend .
+Some example calls are described here, but all methods and scripts are fully documented, including examples and return formats\DIFaddbegin \DIFadd{, }\DIFaddend at \url{https://opentree.readthedocs.io}.
 
 \subsubsection{Synthetic tree.---} The OpenTree synthetic tree contains all 2.4 million taxa in the OpenTree taxonomy, with relationships for 87,000 taxa informed by 1,216 studies.
 Each branch in the tree is informed by published phylogenetic relationships, where they are present in the curated data store, or by taxonomic relationships where no phylogenetic data is available.
@@ -201,7 +216,7 @@ These families can be included in later synthetic trees if \DIFdelbegin \DIFdel{
 Other taxa are excluded from synthesis if issues have been raised about their taxonomic validity, such as if the name corresponds to a family that is `barren', i.e. it contains no species in the OpenTree taxonomy, or because the name was judged to be invalid by the OpenTree taxonomy merging software \citep{rees_automated_2017}.
 
 If we request an induced subtree from \DIFdelbegin \DIFdel{the synthesis }\DIFdelend \DIFaddbegin \DIFadd{OpenTree's synthetic tree }\DIFaddend for these 164 taxa, we get back \DIFdelbegin \DIFdel{a tree }\DIFdelend \DIFaddbegin \DIFadd{an output subtree }\DIFaddend that has 150 tips. The return value also includes a list of non-monophyletic taxa.
-Some of the non-monophyletic taxa map to internal nodes on our output \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend . In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the \DIFdelbegin \DIFdel{shows the topology of the }\DIFdelend \DIFaddbegin \DIFadd{topology of }\DIFaddend 130 monophyletic bird families plus MRCA's of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend .
+Some of the non-monophyletic taxa map to internal nodes on our output \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend . In those cases, input phylogenies are telling us that these `families' are paraphyletic with respect to other families. Which studies contest the monophyly of a taxonomic clade can be easily accessed through the browser (e.g. https://tree.opentreeoflife.org/opentree/argus/ottol@603925) or via the \texttt{opentree} wrapper using queries to \texttt{opentree.synth\_subtree}. Figure \ref{birdfams} shows the \DIFdelbegin \DIFdel{shows the topology of the }\DIFdelend \DIFaddbegin \DIFadd{topology of }\DIFaddend 130 monophyletic bird families plus \DIFaddbegin \DIFadd{most recent common ancestors (}\DIFaddend MRCA's\DIFaddbegin \DIFadd{) }\DIFaddend of 20 additional non-monophyletic families as tips. The other 14 taxa are non-monophyletic families for which the MRCA is an internal node on the output \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend .
 
 
 \begin{figure}[!h]
@@ -215,11 +230,11 @@ Some of the non-monophyletic taxa map to internal nodes on our output \DIFdelbeg
 \end{figure}
 
 These families contain from 1 to 920 total descendant tip taxa (species and subspecies).
-Across all 150 families, 10,357 \DIFdelbegin \DIFdel{descendent }\DIFdelend \DIFaddbegin \DIFadd{descendents }\DIFaddend tip taxa are captured by the relationships shown in this \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend .
+Across all 150 families, 10,357 \DIFdelbegin \DIFdel{descendent }\DIFdelend \DIFaddbegin \DIFadd{descendant }\DIFaddend tip taxa are captured by the relationships shown in this \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend .
 Figure \ref{birdfams} displays the number of descendant taxa in each family as a heat map, with log of the number of descendants displayed on the left, and the actual number of \DIFdelbegin \DIFdel{descendents }\DIFdelend \DIFaddbegin \DIFadd{descendants }\DIFaddend on the right.
 This display demonstrates that \DIFaddbegin \DIFadd{the use of }\DIFaddend `families' is not a very even way to break up biodiversity across birds.
 
-\DIFdelbegin \DIFdel{Based on the }\DIFdelend \DIFaddbegin \DIFadd{Following OpenTree's }\DIFaddend phylogenetic synthesis algorithm \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+Based on \DIFdelbegin \DIFdel{the }\DIFdelend \DIFaddbegin \DIFadd{OpenTree's }\DIFaddend phylogenetic synthesis algorithm \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
 \citep{redelings_supertree_2017}}\hspace{0pt}%DIFAUXCMD
 }\DIFaddend , each branch in the \DIFaddbegin \DIFadd{synthetic }\DIFaddend tree is supported
 by either taxonomy alone \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{(}\DIFaddend where there are no input \DIFaddbegin \DIFadd{phylogenetic }\DIFaddend studies that traverse that branch\DIFaddbegin \DIFadd{)}\DIFaddend , or by one or more input phylogenetic studies.
@@ -227,8 +242,8 @@ The \DIFaddbegin \DIFadd{source of }\DIFaddend support for each node in the \DIF
 \DIFdel{call }\DIFdelend \DIFaddbegin } \DIFadd{function call from the }\texttt{\DIFadd{OpenTree}} \DIFadd{class in the package here presented}\DIFaddend .
 While each branch must be supported by taxonomy or at least one input study from \DIFdelbegin \DIFdel{phylesystem}\DIFdelend \DIFaddbegin \DIFadd{Phylesystem}\DIFaddend , where multiple inputs traverse a branch, there can be conflict among studies.
 \DIFdelbegin \DIFdel{The }\DIFdelend \DIFaddbegin \DIFadd{OpenTree's }\DIFaddend synthesis algorithm is greedy, and the \DIFdelbegin \DIFdel{output }\DIFdelend \DIFaddbegin \DIFadd{synthetic }\DIFaddend tree will display the branch supported by the highest ranked study included in synthesis.
-The \DIFdelbegin \DIFdel{node info call }\DIFdelend \DIFaddbegin \texttt{\DIFadd{synth\_node\_info}} \DIFadd{function }\DIFaddend will return not only which studies support \DIFdelbegin \DIFdel{that }\DIFdelend \DIFaddbegin \DIFadd{any }\DIFaddend branch, but also which studies have relationships which conflict with that branch.
-In figure \ref{birdfams}\DIFaddbegin \DIFadd{, }\DIFaddend support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this \DIFdelbegin \DIFdel{tree }\DIFdelend \DIFaddbegin \DIFadd{subtree }\DIFaddend are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend , 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships.
+The \DIFdelbegin \DIFdel{node info call }\DIFdelend \DIFaddbegin \texttt{\DIFadd{synth\_node\_info}} \DIFadd{function }\DIFaddend will return not only which studies support \DIFdelbegin \DIFdel{that }\DIFdelend \DIFaddbegin \DIFadd{a }\DIFaddend branch, but also which studies have relationships which conflict with that branch.
+In figure \ref{birdfams} support or conflict for each branch is displayed by the intensity of green and red coloration, respectively. Some branches in this \DIFdelbegin \DIFdel{tree }\DIFdelend \DIFaddbegin \DIFadd{subtree }\DIFaddend are supported by 20 studies, and a few show conflict with up to 17 other studies. Of the 443 branches in this \DIFdelbegin \DIFdel{tree}\DIFdelend \DIFaddbegin \DIFadd{subtree}\DIFaddend , 422 are supported by at least one input phylogenetic study, and the other 21 are based on taxonomic relationships.
 
 \DIFdelbegin \DIFdel{This }\DIFdelend \DIFaddbegin \DIFadd{It is important to note that OpenTree's synthetic }\DIFaddend tree shows only topology. When combining taxonomy, and phylogenetic branches from across studies with vastly different data types, merging branch lengths is not meaningful. \DIFdelbegin \DIFdel{However, estimates of node ages can be gathered using downstream tools such as DateLife \mbox{%DIFAUXCMD
 \citep{sanchez-reyes_datelife_2019} }\hspace{0pt}%DIFAUXCMD
@@ -250,7 +265,7 @@ Using this set of 223 OpenTree unique identifiers, an induced synthetic tree for
 
 \begin{figure}[!h]
 \centering\includegraphics[width=\textwidth]{vernal_animals}
-\caption{Evolutionary relationships between all animal taxon records in the UC Merced Vernal Pools and Grassland Reserve. Branch lengths are arbitrary. A total of 160 published phylogenies underlie the relationships in this tree (\DIFdelbeginFL \DIFdelFL{Citations }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{citations }\DIFaddendFL in supplemental information). Figure created using \citep{letunic_interactive_2019}}
+\caption{Evolutionary relationships between all animal taxon records in the UC Merced Vernal Pools and Grassland Reserve. Branch lengths are arbitrary. A total of 160 published phylogenies underlie the relationships in this tree (\DIFdelbeginFL \DIFdelFL{Citations }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{citations }\DIFaddendFL in supplemental information). Figure created using \DIFaddbeginFL \DIFaddFL{using iTOL v4 }\DIFaddendFL \citep{letunic_interactive_2019}\DIFaddbeginFL \DIFaddFL{.}\DIFaddendFL }
 \label{vernalanimals}
 \end{figure}
 
@@ -284,11 +299,11 @@ diversity \mbox{%DIFAUXCMD
 , and genetic data is usually not available for all taxa in a community or a biological group of study.
 }
 
-\DIFadd{Many researchers have applied the OpenTree synthetic tree and data stores to answering their research questions across the breadth of both the tree of life, and the breadth of biological research domains.
-In contrast to existing phylogenetic data stores, \mbox{%DIFAUXCMD
+\DIFadd{Many researchers have used the OpenTree's synthetic tree and its phylogenetic and taxonomic databases to answer their research questions across the breadth of both the tree of life, and of biological research domains.
+In contrast to existing phylogenetic databases, \mbox{%DIFAUXCMD
 \citep{piel2000treebase}}\hspace{0pt}%DIFAUXCMD
-, the links across studies provided by OpenTree and the synthesis algorithm make it possible to extract inferences for an arbitrary subset of taxa, and combine inferences from trees with few or no overlapping tips.
-Several studies have used OpenTree resources to consolidate evolutionary estimates across a taxon (freshwater crayfish \mbox{%DIFAUXCMD
+, the links across studies provided by OpenTree and its synthesis algorithm make it possible to extract inferences for an arbitrary subset of taxa, and combine inferences from trees with few or no overlapping tips.
+OpenTree services have been used to consolidate evolutionary estimates across taxa (freshwater crayfish \mbox{%DIFAUXCMD
 \citep{owen2015synthetic}}\hspace{0pt}%DIFAUXCMD
 ; birds \mbox{%DIFAUXCMD
 \citep{brown2017development}}\hspace{0pt}%DIFAUXCMD
@@ -297,10 +312,11 @@ Several studies have used OpenTree resources to consolidate evolutionary estimat
 , mammals \mbox{%DIFAUXCMD
 \citep{uyeda2017evolution}}\hspace{0pt}%DIFAUXCMD
 ).
-Large scale synthetic phylogenies provide the opportunity to study the evolution and phylogenetic distribution of life history traits at large scales  \mbox{%DIFAUXCMD
+OpenTree's large scale synthetic subtrees have provide the opportunity to study
+a variety of trait evolution topics such as the phylogenetic distribution of organism's life history traits at large scales \mbox{%DIFAUXCMD
 \citep{tarka2018sex, healy2019animal, capdevila2020longevity}}\hspace{0pt}%DIFAUXCMD
 .
-Other trait evolution anayses on OpenTree synthesis subtrees include antipredator behavior associations with human interactions, \mbox{%DIFAUXCMD
+antipredator behavior associations with human interactions, \mbox{%DIFAUXCMD
 \citep{geffroy2020evolutionary}}\hspace{0pt}%DIFAUXCMD
 , effects of anthropogenic noise on
 animal behavior  \mbox{%DIFAUXCMD
@@ -312,28 +328,37 @@ animal behavior  \mbox{%DIFAUXCMD
 ,
 shoot flammability evolution \mbox{%DIFAUXCMD
 \citep{cui2020shoot}}\hspace{0pt}%DIFAUXCMD
-, and host symbiont dependence \mbox{%DIFAUXCMD
+, and host-symbiont dependence \mbox{%DIFAUXCMD
 \citep{fisher2017evolution}}\hspace{0pt}%DIFAUXCMD
-. 
-OpenTree's synthetic tree provides a phylogentic backbone for commuity phylpogenetics analyses \mbox{%DIFAUXCMD
-\citep{li2019common, jantzen2019effects}}\hspace{0pt}%DIFAUXCMD
 .
-In molecular biology, \mbox{%DIFAUXCMD
-\citep{boeckmann2015quest} }\hspace{0pt}%DIFAUXCMD
-used a phylogentic estimate across prokaryotes and eukaryotes to understand the evolution
-of gene families and taxa to improve orthology prediction for phylogenetic applications.
-\mbox{%DIFAUXCMD
-\citep{herrera2015predicting} }\hspace{0pt}%DIFAUXCMD
-used an OpenTree's synthetic subtree to predict RAD-seq marker cleavage site numbers
-across the eukaryotic tree of life to guide the design of genome-wide genotypic and
-sequencing projects.
-\mbox{%DIFAUXCMD
-\citep{miller2020codonpairs} }\hspace{0pt}%DIFAUXCMD
-found that codon pairing biases are conserved across the diversity and can  be used for phylogenomic analyses.
 }
 
+\DIFadd{In molecular biology, OpenTree's large scale synthetic subtrees
+have been used to understand the evolution of gene families and taxa across prokaryotes and eukaryotes, to improve orthology prediction for phylogenetic applications  \mbox{%DIFAUXCMD
+\citet{boeckmann2015quest}}\hspace{0pt}%DIFAUXCMD
+.
+\mbox{%DIFAUXCMD
+\citet{herrera2015predicting} }\hspace{0pt}%DIFAUXCMD
+used an OpenTree's synthetic subtree to predict RAD-seq marker cleavage site numbers
+across the eukaryotic tree of life to guide the design of genome-wide genotypic and
+sequencing projects. \mbox{%DIFAUXCMD
+\citet{miller2020codonpairs} }\hspace{0pt}%DIFAUXCMD
+found that codon pairing biases are conserved across the diversity of the tree of life and can be used for phylogenomic analyses.
+}
 
-\DIFadd{This }\texttt{\DIFadd{opentree}} \DIFadd{python toolkit expands user access to the OpenTree API's, and provides tutorials on how to easily access up to date evolutionary information across the entire tree of life, which will continue to facilitate biological research and outreach.
+\DIFadd{OpenTree's synthetic tree has been proved to provide a useful phylogenetic backbone for community phylogenetic analyses \mbox{%DIFAUXCMD
+\citep{li2019common, jantzen2019effects}}\hspace{0pt}%DIFAUXCMD
+.
+%DIF >  who incorporated it to ecological Software?
+}
+
+%DIF >  four outreach and education: onezoom and phylotastic
+
+%DIF >  other services for outreach and education: DateLife
+
+%DIF >  things that it can't do: topology search
+
+\DIFadd{This }\texttt{\DIFadd{opentree}} \DIFadd{Python toolkit expands user access to the OpenTree API's, and provides tutorials on how to easily access up-to-date evolutionary information across the entire tree of life, which will continue to facilitate biological research and outreach.
 }
 
 
@@ -350,9 +375,12 @@ None
 Funding for this project was provided by NSF ABI 1759846 and NSF ABI 1759838.
 
 %If you have any acknowledgements, please include them here.
-\section{\DIFdelbegin \DIFdel{Acknowledgements}\DIFdelend \DIFaddbegin \DIFadd{Acknowledgments}\DIFaddend }
+\section{Acknowledgements}
 This package relies on the OpenTree API's and the team that continues to develop and improve them, currently Jim Allman, Karen Cranston, Ben Redelings, and the authors of this package. We acknowledge logistical support provided by the UC Merced Vernal Pools and Grassland Reserve.
 Thank you to Emily Sessa and the organizers of the Society of Systematic Biologists SSB 2020 meeting for supporting the workshop where we tested and demonstrated this package.
+\DIFaddbegin \DIFadd{We also appreciate the valuable comments of James Rosindell,
+and an anonymous reviewer that greatly improved an earlier version of this manuscript.
+}\DIFaddend 
 
 %If your paper has accompanying supplementary data, please include the below statement in your PDF.
 %\section{Supplementary Material}
@@ -368,8 +396,8 @@ Thank you to Emily Sessa and the organizers of the Society of Systematic Biologi
 
 %DIFDELCMD < %%%
 %DIF <  The best way to enter references is to use BibTeX.
-\DIFdelend \bibliographystyle{plainnat}
-\DIFdelbegin %DIFDELCMD < \begin{thebibliography}{18}
+%DIFDELCMD < \bibliographystyle{plainnat}
+%DIFDELCMD < \begin{thebibliography}{18}
 %DIFDELCMD < \providecommand{\natexlab}[1]{#1}
 %DIFDELCMD < \providecommand{\url}[1]{\texttt{#1}}
 %DIFDELCMD < \expandafter\ifx\csname %%%
@@ -851,7 +879,8 @@ Thank you to Emily Sessa and the organizers of the Society of Systematic Biologi
 
 %DIFDELCMD < \end{thebibliography}
 %DIFDELCMD < %%%
-\DIFdelend \DIFaddbegin \bibliography{paper}
+\DIFdelend \DIFaddbegin \bibliographystyle{sysbio}
+\bibliography{paper}
 \DIFaddend % 1. All authors should be listed i.e. no use of et al.
 % 2. Dashes should not be used to replace author names in repeat entries
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

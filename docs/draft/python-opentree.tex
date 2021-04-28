@@ -167,7 +167,7 @@ Some of the non-monophyletic taxa map to internal nodes on our output subtree. I
 \begin{figure}[!h]
 \centering\includegraphics[width=\textwidth]{bird_fam_fig_rev}
 
-\caption{Phylogenetic relationships of 150 bird families based on the latest OpenTree synthetic tree (v12.3). For families which are not monophyletic according to published phylogenies, tips for those families are labeled with 'MRCA of taxa in X family name'. Heat maps show the number of tip taxa descendants in OpenTree within each tip. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the synthetic tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this subtree (citations in supplemental information). Figure created using the interactive Tree Of Life (iTOL) v4 \citep{letunic_interactive_2019}}
+\caption{Phylogenetic relationships of 150 bird families based on the latest OpenTree synthetic tree (v12.3). For families which are not monophyletic according to published phylogenies, tips for those families are labeled with `MRCA of taxa in X family name'. Heat maps show the number of tip taxa descendants in OpenTree within each tip. Branch colors show the number of input studies which support (left, green) or conflict with (right, red) each inferred branch in the synthetic tree. Branch lengths are arbitrary. A total of 64 published phylogenies underlie the relationships in this subtree (citations in supplemental information). Figure created using the interactive Tree Of Life (iTOL) v4 \citep{letunic_interactive_2019}}
 \label{birdfams}
 \end{figure}
 
@@ -234,9 +234,8 @@ antipredator behavior associations with human interactions, \citep{geffroy2020ev
 animal behavior  \citep{kunc2019effects}, phylogenetic patterns of global wildlife trade,  \citep{fukushima2020global},  miniaturization in insects \citep{polilov2017scaling},
 shoot flammability evolution \citep{cui2020shoot}, and host-symbiont dependence \citep{fisher2017evolution}.
 
-In molecular biology, OpenTree's large scale synthetic subtrees \citet{boeckmann2015quest}
-have been used to understand the evolution
-of gene families and taxa across prokaryotes and eukaryotes, to improve orthology prediction for phylogenetic applications.
+In molecular biology, OpenTree's large scale synthetic subtrees
+have been used to understand the evolution of gene families and taxa across prokaryotes and eukaryotes, to improve orthology prediction for phylogenetic applications  \citet{boeckmann2015quest}.
 \citet{herrera2015predicting} used an OpenTree's synthetic subtree to predict RAD-seq marker cleavage site numbers
 across the eukaryotic tree of life to guide the design of genome-wide genotypic and
 sequencing projects. \citet{miller2020codonpairs} found that codon pairing biases are conserved across the diversity of the tree of life and can be used for phylogenomic analyses.
@@ -269,7 +268,7 @@ Funding for this project was provided by NSF ABI 1759846 and NSF ABI 1759838.
 \section{Acknowledgements}
 This package relies on the OpenTree API's and the team that continues to develop and improve them, currently Jim Allman, Karen Cranston, Ben Redelings, and the authors of this package. We acknowledge logistical support provided by the UC Merced Vernal Pools and Grassland Reserve.
 Thank you to Emily Sessa and the organizers of the Society of Systematic Biologists SSB 2020 meeting for supporting the workshop where we tested and demonstrated this package.
-We also thank the valuable comments of Luke Harmon, James Rosindell,
+We also appreciate the valuable comments of James Rosindell,
 and an anonymous reviewer that greatly improved an earlier version of this manuscript.
 
 %If your paper has accompanying supplementary data, please include the below statement in your PDF.
@@ -282,8 +281,346 @@ and an anonymous reviewer that greatly improved an earlier version of this manus
 \bigskip\bigskip
 
 %%%%%%%%%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%%%%
-\bibliographystyle{sysbio}
-\bibliography{paper}
+\begin{thebibliography}{49}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\selectlanguage}[1]{\relax}
+\providecommand{\bibAnnoteFile}[1]{%
+  \IfFileExists{#1}{\begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ \input{#1}\end{quotation}}{}}
+\providecommand{\bibAnnote}[2]{%
+  \begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ #2\end{quotation}}
+
+\bibitem[{Allen et~al.(2019)Allen, Germain-Aubrey, Barve, Neubig, Majure,
+  Laffan, Mishler, Owens, Smith, Whitten et~al.}]{allen2019spatial}
+Allen, J.~M., C.~C. Germain-Aubrey, N.~Barve, K.~M. Neubig, L.~C. Majure, S.~W.
+  Laffan, B.~D. Mishler, H.~L. Owens, S.~A. Smith, W.~M. Whitten, et~al. 2019.
+  Spatial phylogenetics of florida vascular plants: The effects of calibration
+  and uncertainty on diversity estimates. IScience 11:57--70.
+\bibAnnoteFile{allen2019spatial}
+
+\bibitem[{Antonelli et~al.(2017)Antonelli, Hettling, Condamine, Vos, Nilsson,
+  Sanderson, Sauquet, Scharn, Silvestro, Töpel, Bacon, Oxelman, and
+  Vos}]{antonelli2014supersmart}
+Antonelli, A., H.~Hettling, F.~L. Condamine, K.~Vos, R.~H. Nilsson, M.~J.
+  Sanderson, H.~Sauquet, R.~Scharn, D.~Silvestro, M.~Töpel, C.~D. Bacon,
+  B.~Oxelman, and R.~A. Vos. 2017. Toward a {Self}-{Updating} {Platform} for
+  {Estimating} {Rates} of {Speciation} and {Migration}, {Ages}, and
+  {Relationships} of {Taxa}. Systematic Biology 66:152--166.
+\bibAnnoteFile{antonelli2014supersmart}
+
+\bibitem[{Ballen and Greene(2017)}]{ballen_walking_2017}
+Ballen, C.~J. and H.~W. Greene. 2017. Walking and talking the tree of life:
+  {Why} and how to teach about biodiversity. PLOS Biology 15:e2001630.
+\bibAnnoteFile{ballen_walking_2017}
+
+\bibitem[{Boeckmann et~al.(2015)Boeckmann, Marcet-Houben, Rees, Forslund,
+  Huerta-Cepas, Muffato, Yilmaz, Xenarios, Bork, Lewis
+  et~al.}]{boeckmann2015quest}
+Boeckmann, B., M.~Marcet-Houben, J.~A. Rees, K.~Forslund, J.~Huerta-Cepas,
+  M.~Muffato, P.~Yilmaz, I.~Xenarios, P.~Bork, S.~E. Lewis, et~al. 2015. Quest
+  for orthologs entails quest for tree of life: in search of the gene stream.
+  Genome biology and evolution 7:1988--1999.
+\bibAnnoteFile{boeckmann2015quest}
+
+\bibitem[{Brown et~al.(2017)Brown, Wang, and Smith}]{brown2017development}
+Brown, J.~W., N.~Wang, and S.~A. Smith. 2017. The development of scientific
+  consensus: Analyzing conflict and concordance among avian phylogenies.
+  Molecular phylogenetics and evolution 116:69--77.
+\bibAnnoteFile{brown2017development}
+
+\bibitem[{Capdevila et~al.(2020)Capdevila, Beger, Blomberg, Hereu, Linares, and
+  Salguero-G{\'o}mez}]{capdevila2020longevity}
+Capdevila, P., M.~Beger, S.~P. Blomberg, B.~Hereu, C.~Linares, and
+  R.~Salguero-G{\'o}mez. 2020. Longevity, body dimension and reproductive mode
+  drive differences in aquatic versus terrestrial life-history strategies.
+  Functional Ecology 34:1613--1625.
+\bibAnnoteFile{capdevila2020longevity}
+
+\bibitem[{Cui et~al.(2020)Cui, Paterson, Wyse, Alam, Maurin, Pieper, Cubino,
+  O’Connell, Donkers, Br{\'e}da et~al.}]{cui2020shoot}
+Cui, X., A.~M. Paterson, S.~V. Wyse, M.~A. Alam, K.~J. Maurin, R.~Pieper, J.~P.
+  Cubino, D.~M. O’Connell, D.~Donkers, J.~Br{\'e}da, et~al. 2020. Shoot
+  flammability of vascular plants is phylogenetically conserved and related to
+  habitat fire-proneness and growth form. Nature plants 6:355--359.
+\bibAnnoteFile{cui2020shoot}
+
+\bibitem[{Drew et~al.(2013)Drew, Gazis, Cabezas, Swithers, Deng, Rodriguez,
+  Katz, Crandall, Hibbett, and Soltis}]{drew_lost_2013}
+Drew, B.~T., R.~Gazis, P.~Cabezas, K.~S. Swithers, J.~Deng, R.~Rodriguez, L.~A.
+  Katz, K.~A. Crandall, D.~S. Hibbett, and D.~E. Soltis. 2013. Lost branches on
+  the tree of life. PLOS Biol 11:e1001636.
+\bibAnnoteFile{drew_lost_2013}
+
+\bibitem[{Eastman et~al.(2013)Eastman, Harmon, and
+  Tank}]{eastman2013congruification}
+Eastman, J.~M., L.~J. Harmon, and D.~C. Tank. 2013. {Congruification: Support
+  for time scaling large phylogenetic trees}. Methods in Ecology and Evolution
+  4:688--691.
+\bibAnnoteFile{eastman2013congruification}
+
+\bibitem[{Ewers-Saucedo et~al.(2019)Ewers-Saucedo, Owen, P{\'e}rez-Losada,
+  H{\o}eg, Glenner, Chan, and Crandall}]{ewers2019towards}
+Ewers-Saucedo, C., C.~L. Owen, M.~P{\'e}rez-Losada, J.~T. H{\o}eg, H.~Glenner,
+  B.~K. Chan, and K.~A. Crandall. 2019. Towards a barnacle tree of life:
+  integrating diverse phylogenetic efforts into a comprehensive hypothesis of
+  thecostracan evolution. PeerJ 7:e7387.
+\bibAnnoteFile{ewers2019towards}
+
+\bibitem[{Ewers-Saucedo and Pappalardo(2019)}]{ewers2019testing}
+Ewers-Saucedo, C. and P.~Pappalardo. 2019. Testing adaptive hypotheses on the
+  evolution of larval life history in acorn and stalked barnacles. Ecology and
+  evolution 9:11434--11447.
+\bibAnnoteFile{ewers2019testing}
+
+\bibitem[{Federhen(2012)}]{federhen_ncbi_2012}
+Federhen, S. 2012. The {NCBI} {Taxonomy} database. Nucleic Acids Research
+  40:D136--D143.
+\bibAnnoteFile{federhen_ncbi_2012}
+
+\bibitem[{Fisher et~al.(2017)Fisher, Henry, Cornwallis, Kiers, and
+  West}]{fisher2017evolution}
+Fisher, R.~M., L.~M. Henry, C.~K. Cornwallis, E.~T. Kiers, and S.~A. West.
+  2017. The evolution of host-symbiont dependence. Nature Communications
+  8:1--8.
+\bibAnnoteFile{fisher2017evolution}
+
+\bibitem[{Fukushima et~al.(2020)Fukushima, Mammola, and
+  Cardoso}]{fukushima2020global}
+Fukushima, C.~S., S.~Mammola, and P.~Cardoso. 2020. Global wildlife trade
+  permeates the tree of life. Biological Conservation 247:108503.
+\bibAnnoteFile{fukushima2020global}
+
+\bibitem[{GBIF Secretariat(2019)}]{gbif_secretariat_gbif_2019}
+GBIF Secretariat. 2019. {GBIF} occurence download. \url{https://doi.org/10.15468/dl.9bigak}
+\bibAnnoteFile{gbif_secretariat_gbif_2019}
+
+\bibitem[{Geffroy et~al.(2020)Geffroy, Sadoul, Putman, Berger-Tal, Garamszegi,
+  M{\o}ller, and Blumstein}]{geffroy2020evolutionary}
+Geffroy, B., B.~Sadoul, B.~J. Putman, O.~Berger-Tal, L.~Z. Garamszegi, A.~P.
+  M{\o}ller, and D.~T. Blumstein. 2020. Evolutionary dynamics in the
+  anthropocene: Life history and intensity of human contact shape antipredator
+  responses. PLoS biology 18:e3000818.
+\bibAnnoteFile{geffroy2020evolutionary}
+
+\bibitem[{Healy et~al.(2019)Healy, Ezard, Jones, Salguero-G{\'o}mez, and
+  Buckley}]{healy2019animal}
+Healy, K., T.~H. Ezard, O.~R. Jones, R.~Salguero-G{\'o}mez, and Y.~M. Buckley.
+  2019. Animal life history is shaped by the pace of life and the distribution
+  of age-specific mortality and reproduction. Nature Ecology \& Evolution
+  3:1217--1224.
+\bibAnnoteFile{healy2019animal}
+
+\bibitem[{Herrera et~al.(2015)Herrera, Reyes-Herrera, and
+  Shank}]{herrera2015predicting}
+Herrera, S., P.~H. Reyes-Herrera, and T.~M. Shank. 2015. {Predicting RAD-seq
+  marker numbers across the eukaryotic tree of life}. Genome biology and
+  evolution 7:3207--3225.
+\bibAnnoteFile{herrera2015predicting}
+
+\bibitem[{Jantzen et~al.(2019)Jantzen, Whitten, Neubig, Majure, Soltis, and
+  Soltis}]{jantzen2019effects}
+Jantzen, J.~R., W.~M. Whitten, K.~M. Neubig, L.~C. Majure, D.~E. Soltis, and
+  P.~S. Soltis. 2019. Effects of taxon sampling and tree reconstruction methods
+  on phylodiversity metrics. Ecology and evolution 9:9479--9499.
+\bibAnnoteFile{jantzen2019effects}
+
+\bibitem[{Kunc and Schmidt(2019)}]{kunc2019effects}
+Kunc, H.~P. and R.~Schmidt. 2019. The effects of anthropogenic noise on
+  animals: a meta-analysis. Biology letters 15:20190649.
+\bibAnnoteFile{kunc2019effects}
+
+\bibitem[{Letunic and Bork(2019)}]{letunic_interactive_2019}
+Letunic, I. and P.~Bork. 2019. Interactive {Tree} {Of} {Life} ({iTOL}) v4:
+  recent updates and new developments. Nucleic Acids Research 47:W256--W259.
+\bibAnnoteFile{letunic_interactive_2019}
+
+\bibitem[{Li et~al.(2019{\natexlab{a}})Li, Trotta, Marx, Allen, Sun, Soltis,
+  Soltis, Guralnick, and Baiser}]{li2019common}
+Li, D., L.~Trotta, H.~E. Marx, J.~M. Allen, M.~Sun, D.~E. Soltis, P.~S. Soltis,
+  R.~P. Guralnick, and B.~Baiser. 2019{\natexlab{a}}. For common community
+  phylogenetic analyses, go ahead and use synthesis phylogenies. Ecology
+  100:e02788.
+\bibAnnoteFile{li2019common}
+
+\bibitem[{Li et~al.(2019{\natexlab{b}})Li, Trotta, Marx, Allen, Sun, Soltis,
+  Soltis, Guralnick, and Baiser}]{li_for_2019}
+Li, D., L.~Trotta, H.~E. Marx, J.~M. Allen, M.~Sun, D.~E. Soltis, P.~S. Soltis,
+  R.~P. Guralnick, and B.~Baiser. 2019{\natexlab{b}}. For common community
+  phylogenetic analyses, go ahead and use synthesis phylogenies. Ecology
+  100:e02788.
+\bibAnnoteFile{li_for_2019}
+
+\bibitem[{McTavish et~al.(2017)McTavish, Drew, Redelings, and
+  Cranston}]{mctavish_how_2017}
+McTavish, E.~J., B.~T. Drew, B.~Redelings, and K.~A. Cranston. 2017. How and
+  {Why} to {Build} a {Unified} {Tree} of {Life}. BioEssays 39.
+\bibAnnoteFile{mctavish_how_2017}
+
+\bibitem[{McTavish et~al.(2015)McTavish, Hinchliff, Allman, Brown, Cranston,
+  Holder, Rees, and Smith}]{mctavish_phylesystem_2015}
+McTavish, E.~J., C.~E. Hinchliff, J.~F. Allman, J.~W. Brown, K.~A. Cranston,
+  M.~T. Holder, J.~A. Rees, and S.~A. Smith. 2015. Phylesystem: a git-based
+  data store for community-curated phylogenetic estimates. Bioinformatics
+  31:2794--2800.
+\bibAnnoteFile{mctavish_phylesystem_2015}
+
+\bibitem[{Michonneau et~al.(2016)Michonneau, Brown, and
+  Winter}]{michonneau_rotl_2016}
+Michonneau, F., J.~W. Brown, and D.~J. Winter. 2016. rotl: an {R} package to
+  interact with the {Open} {Tree} of {Life} data. Methods in Ecology and
+  Evolution 7:1476--1481.
+\bibAnnoteFile{michonneau_rotl_2016}
+
+\bibitem[{Miller et~al.(2020)Miller, McKinnon, Whiting, Kauwe, and
+  Ridge}]{miller2020codonpairs}
+Miller, J.~B., L.~M. McKinnon, M.~F. Whiting, J.~S. Kauwe, and P.~G. Ridge.
+  2020. Codon pairs are phylogenetically conserved: A comprehensive analysis of
+  codon pairing conservation across the tree of life. PloS one 15:e0232260.
+\bibAnnoteFile{miller2020codonpairs}
+
+\bibitem[{{OpenTreeOfLife} et~al.(2019){OpenTreeOfLife}, {Benjamin Redelings},
+  {Luna Luisa Sanchez Reyes}, {Karen A. Cranston}, {Jim Allman}, {Mark T.
+  Holder}, and {Emily Jane McTavish}}]{opentreeoflife_open_2019}
+{OpenTreeOfLife}, {Benjamin Redelings}, {Luna Luisa Sanchez Reyes}, {Karen A.
+  Cranston}, {Jim Allman}, {Mark T. Holder}, and {Emily Jane McTavish}. 2019.
+  Open {Tree} of {Life} {Synthetic} {Tree} .
+\bibAnnoteFile{opentreeoflife_open_2019}
+
+\bibitem[{{OpenTreeofLife} et~al.(2019){OpenTreeofLife}, {Karen A. Cranston},
+  {Benjamin Redelings}, {Luna Luisa Sanchez Reyes}, {Jim Allman}, {Emily Jane
+  McTavish}, and {Mark T. Holder}}]{opentreeoflife_open_2019-1}
+{OpenTreeofLife}, {Karen A. Cranston}, {Benjamin Redelings}, {Luna Luisa
+  Sanchez Reyes}, {Jim Allman}, {Emily Jane McTavish}, and {Mark T. Holder}.
+  2019. Open {Tree} of {Life} {Taxonomy} .
+\bibAnnoteFile{opentreeoflife_open_2019-1}
+
+\bibitem[{Owen et~al.(2015)Owen, Bracken-Grissom, Stern, and
+  Crandall}]{owen2015synthetic}
+Owen, C.~L., H.~Bracken-Grissom, D.~Stern, and K.~A. Crandall. 2015. A
+  synthetic phylogeny of freshwater crayfish: insights for conservation.
+  Philosophical Transactions of the Royal Society B: Biological Sciences
+  370:20140009.
+\bibAnnoteFile{owen2015synthetic}
+
+\bibitem[{Park et~al.(2018)Park, Worthington, and Xi}]{park2018taxon}
+Park, D.~S., S.~Worthington, and Z.~Xi. 2018. Taxon sampling effects on the
+  quantification and comparison of community phylogenetic diversity. Molecular
+  ecology 27:1296--1308.
+\bibAnnoteFile{park2018taxon}
+
+\bibitem[{Parr et~al.(2012)Parr, Guralnick, Cellinese, and
+  Page}]{parr_evolutionary_2012}
+Parr, C.~S., R.~Guralnick, N.~Cellinese, and R.~D.~M. Page. 2012. Evolutionary
+  informatics: unifying knowledge about the diversity of life. Trends in
+  Ecology \& Evolution 27:94--103.
+\bibAnnoteFile{parr_evolutionary_2012}
+
+\bibitem[{Piel et~al.(2000)Piel, Donoghue, Sanderson, and
+  Netherlands}]{piel2000treebase}
+Piel, W.~H., M.~Donoghue, M.~Sanderson, and L.~Netherlands. 2000. Treebase: a
+  database of phylogenetic information. \emph{in} Proceedings of the 2nd
+  International Workshop of Species vol. 2000.
+\bibAnnoteFile{piel2000treebase}
+
+\bibitem[{Polilov and Makarova(2017)}]{polilov2017scaling}
+Polilov, A.~A. and A.~A. Makarova. 2017. The scaling and allometry of organ
+  size associated with miniaturization in insects: A case study for coleoptera
+  and hymenoptera. Scientific reports 7:1--7.
+\bibAnnoteFile{polilov2017scaling}
+
+\bibitem[{Redelings and Holder(2017)}]{redelings_supertree_2017}
+Redelings, B.~D. and M.~T. Holder. 2017. A supertree pipeline for summarizing
+  phylogenetic and taxonomic information for millions of species. PeerJ
+  5:e3058.
+\bibAnnoteFile{redelings_supertree_2017}
+
+\bibitem[{Rees and Cranston(2017)}]{rees_automated_2017}
+Rees, J.~A. and K.~Cranston. 2017. Automated assembly of a reference taxonomy
+  for phylogenetic data synthesis. Biodiversity Data Journal .
+\bibAnnoteFile{rees_automated_2017}
+
+\bibitem[{Rosindell and Harmon(2012)}]{rosindell2012onezoom}
+Rosindell, J. and L.~J. Harmon. 2012. Onezoom: a fractal explorer for the tree
+  of life. PLoS Biol 10:e1001406.
+\bibAnnoteFile{rosindell2012onezoom}
+
+\bibitem[{Sanchez~Reyes et~al.(2020)Sanchez~Reyes, Kandziora, and
+  McTavish}]{reyes_physcraper_2020}
+Sanchez~Reyes, L.~L., M.~Kandziora, and E.~J. McTavish. 2020. Physcraper: a
+  python package for continual update of evolutionary estimates using the
+  {Open} {Tree} of {Life}. bioRxiv Page~2020.09.15.299156.
+\bibAnnoteFile{reyes_physcraper_2020}
+
+\bibitem[{Sanderson et~al.(2008)Sanderson, Boss, Chen, Cranston, and
+  Wehe}]{sanderson2008phylota}
+Sanderson, M.~J., D.~Boss, D.~Chen, K.~A. Cranston, and A.~Wehe. 2008. The
+  phylota browser: processing genbank for molecular phylogenetics research.
+  Systematic Biology 57:335--346.
+\bibAnnoteFile{sanderson2008phylota}
+
+\bibitem[{Smith et~al.(2009)Smith, Beaulieu, and Donoghue}]{smith2009mega}
+Smith, S.~A., J.~M. Beaulieu, and M.~J. Donoghue. 2009. Mega-phylogeny approach
+  for comparative biology: an alternative to supertree and supermatrix
+  approaches. BMC evolutionary biology 9:1--12.
+\bibAnnoteFile{smith2009mega}
+
+\bibitem[{Smith and Brown(2018)}]{smith2018constructing}
+Smith, S.~A. and J.~W. Brown. 2018. Constructing a broadly inclusive seed plant
+  phylogeny. American journal of botany 105:302--314.
+\bibAnnoteFile{smith2018constructing}
+
+\bibitem[{Smith and Walker(2019)}]{smith2019pyphlawd}
+Smith, S.~A. and J.~F. Walker. 2019. Pyphlawd: A python tool for phylogenetic
+  dataset construction. Methods in Ecology and Evolution 10:104--108.
+\bibAnnoteFile{smith2019pyphlawd}
+
+\bibitem[{Stoltzfus et~al.(2013)Stoltzfus, Lapp, Matasci, Deus, Sidlauskas,
+  Zmasek, Vaidya, Pontelli, Cranston, Vos et~al.}]{stoltzfus2013phylotastic}
+Stoltzfus, A., H.~Lapp, N.~Matasci, H.~Deus, B.~Sidlauskas, C.~M. Zmasek,
+  G.~Vaidya, E.~Pontelli, K.~Cranston, R.~Vos, et~al. 2013. {Phylotastic!
+  Making tree-of-life knowledge accessible, reusable and convenient}. BMC
+  bioinformatics 14:1--17.
+\bibAnnoteFile{stoltzfus2013phylotastic}
+
+\bibitem[{Sukumaran and Holder(2010)}]{sukumaran_dendropy_2010}
+Sukumaran, J. and M.~T. Holder. 2010. {DendroPy}: a {Python} library for
+  phylogenetic computing. Bioinformatics 26:1569--1571.
+\bibAnnoteFile{sukumaran_dendropy_2010}
+
+\bibitem[{Sullivan et~al.(2009)Sullivan, Wood, Iliff, Bonney, Fink, and
+  Kelling}]{sullivan_ebird_2009}
+Sullivan, B.~L., C.~L. Wood, M.~J. Iliff, R.~E. Bonney, D.~Fink, and
+  S.~Kelling. 2009. {eBird}: {A} citizen-based bird observation network in the
+  biological sciences. Biological Conservation 142:2282--2292.
+\bibAnnoteFile{sullivan_ebird_2009}
+
+\bibitem[{Sánchez-Reyes and O’Meara(2019)}]{sanchez-reyes_datelife_2019}
+Sánchez-Reyes, L.~L. and B.~C. O’Meara. 2019. {DateLife}: {Leveraging}
+  databases and analytical tools to reveal the dated {Tree} of {Life}. bioRxiv
+  Page~782094.
+\bibAnnoteFile{sanchez-reyes_datelife_2019}
+
+\bibitem[{Tarka et~al.(2018)Tarka, Guenther, Niemel{\"a}, Nakagawa, and
+  Noble}]{tarka2018sex}
+Tarka, M., A.~Guenther, P.~T. Niemel{\"a}, S.~Nakagawa, and D.~W. Noble. 2018.
+  Sex differences in life history, behavior, and physiology along a slow-fast
+  continuum: a meta-analysis. Behavioral ecology and sociobiology 72:1--13.
+\bibAnnoteFile{tarka2018sex}
+
+\bibitem[{Uyeda et~al.(2017)Uyeda, Pennell, Miller, Maia, and
+  McClain}]{uyeda2017evolution}
+Uyeda, J.~C., M.~W. Pennell, E.~T. Miller, R.~Maia, and C.~R. McClain. 2017.
+  The evolution of energetic scaling across the vertebrate tree of life. The
+  American Naturalist 190:185--199.
+\bibAnnoteFile{uyeda2017evolution}
+
+\bibitem[{Wong and Rosindell(2020)}]{wong2020dynamic}
+Wong, Y. and J.~Rosindell. 2020. Dynamic visualisation of million-tip trees:
+  the onezoom project. bioRxiv .
+\bibAnnoteFile{wong2020dynamic}
+
+\end{thebibliography}
 % 1. All authors should be listed i.e. no use of et al.
 % 2. Dashes should not be used to replace author names in repeat entries
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
