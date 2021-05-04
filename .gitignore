@@ -13,3 +13,4 @@ docs/draft/python-opentree.log
 venv*
 ott*.tgz
 ott*\.*
+post-to-pypi.sh

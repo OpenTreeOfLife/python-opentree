@@ -72,7 +72,7 @@ else:
 
 setup(
     name='opentree',
-    version='0.0.3',  # sync with __version__ in opentree/__init__.py
+    version='0.0.4',  # sync with __version__ in opentree/__init__.py
     description='Library for interacting with Open Tree of Life resources',
     long_description=(open('README.md').read()),
     url='https://github.com/OpenTreeOfLife/python-opentree',
