@@ -32,6 +32,13 @@ def _decorate_taxa_in_taxon_namespace_by_parsing_labels(tree):
             if not hasattr(taxon, 'ott_id'):
                 taxon.ott_id = int(m.group(2))
 
+class NewlineSeparatedToList(object):
+    def __init__(self):
+        pass
+
+    def __call__(self, response_object):
+        content = response_object.text
+        return [i.strip() for i in content.split('\n') if i.strip()]
 
 # noinspection PyMethodMayBeStatic
 class DendropyConvert(object):

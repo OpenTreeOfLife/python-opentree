@@ -32,6 +32,7 @@ def ott_str_as_int(o):
 
 def _create_link_from_node_info_conf_key_value_pair(key, value):
     """Takes the key value pairs contained in the ToL/node_info call and returns a URL for the node"""
+    print(key, value)
     if key.lower().startswith('ott'):
         value = ott_str_as_int(value)
         return "https://tree.opentreeoflife.org/taxonomy/browse?id={}".format(value)

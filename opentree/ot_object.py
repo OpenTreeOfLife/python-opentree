@@ -6,6 +6,7 @@ from .ws_wrapper import (OTWebServicesError,
                          WebServiceRunMode,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
+from .object_conversion import NewlineSeparatedToList
 
 # from .nexson_helpers import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
 
@@ -40,6 +41,13 @@ class FilesServerWrapper(OTWebServiceWrapper):
     def get_subproblem_trees(self, synth_id, ott_id):
         url_frag = 'synthesis/{s}/{s}/subproblems/ott{o}.tre'.format(s=synth_id, o=ott_id)
         return self._call_api(url_frag, http_method='GET', headers='text')
+
+    def get_subproblem_tree_names(self, synth_id, ott_id):
+        url_frag = 'synthesis/{s}/{s}/subproblems/ott{o}-tree-names.txt'.format(s=synth_id, o=ott_id)
+        r = self._call_api(url_frag, http_method='GET', headers='text')
+        if r is not None:
+            r.to_object_converter = NewlineSeparatedToList()
+        return r
 
 
 _default_api_endpoint = None
@@ -97,15 +105,18 @@ class OpenTree(object):
     def get_subproblem_trees(self, synth_id, ott_id):
         return self.files_server.get_subproblem_trees(synth_id, ott_id)
 
+    def get_subproblem_tree_names(self, synth_id, ott_id):
+        return self.files_server.get_subproblem_tree_names(synth_id, ott_id)
+
     def get_reversed_subproblem_solution(self, synth_id, ott_id):
         return self.files_server.get_reversed_subproblem_solution(synth_id, ott_id)
 
-    def about(self):
+    def about(self, include_source_list=False):
         """
         Get information about the Open Tree of Life taxonomy and the synthetic tree.
         """
         tax_about = self.ws.taxonomy_about()
-        tree_about = self.ws.tree_of_life_about()
+        tree_about = self.ws.tree_of_life_about(include_source_list=include_source_list)
         return {'taxonomy_about': tax_about.response_dict,
                 'synth_tree_about': tree_about.response_dict
                 }

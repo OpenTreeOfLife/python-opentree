@@ -120,8 +120,9 @@ class OTWebServiceWrapper(WebServiceWrapper):
             d['context_name'] = str(context_name)
         return self._call_api('tnrs/match_names', data=d, demand_success=False)
 
-    def tree_of_life_about(self):
-        return self._call_api('tree_of_life/about')
+    def tree_of_life_about(self, include_source_list=False):
+        d = {"include_source_list":bool(include_source_list)}
+        return self._call_api('tree_of_life/about', data=d)
 
     def tree_of_life_induced_subtree(self, node_ids=None, ott_ids=None, label_format="name_and_id"):
         d = {"label_format": label_format.lower().strip()}

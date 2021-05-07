@@ -75,10 +75,19 @@ class WebServiceCallRecord(object):
         self._node_ref = None
         self._taxon_ref = None
         self._tree_from_response_extractor = None
+        self._response_decoded = None
         try:
             self._to_object_converter = service_wrapper.to_object_converter
         except:
             self._to_object_converter = None
+
+    @property
+    def to_object_converter(self):
+        return self._to_object_converter
+    
+    @to_object_converter.setter
+    def to_object_converter(self, toc):
+        self._to_object_converter = toc
 
     # noinspection PyPep8
     @property
@@ -143,6 +152,18 @@ class WebServiceCallRecord(object):
             # TODO make this not fail on Newick/NEXUS responses
         return self._response_dict
 
+    @property
+    def response_decoded(self):
+        if self._response_decoded is None:
+            ro = self._response_obj
+            if ro is None:
+                return None
+            if self._to_object_converter is None:
+                return None
+            o = self._to_object_converter(ro)
+            self._response_decoded = o
+        return self._response_decoded
+    
     def __bool__(self):
         """Returns True if call completed with an HTTP status of 200"""
         sc = self.status_code
