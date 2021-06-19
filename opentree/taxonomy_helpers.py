@@ -24,7 +24,7 @@ def download_taxonomy_file(version, loc):
         return path
     if os.path.exists(path + '.tgz') == False: #Download the file if you don't have it
         os.system('wget "http://files.opentreeoflife.org/ott/ott{}/ott{}.tgz" -P {}'.format(version, version, loc))
-    os.system("tar -xzvf {}/ott3.2.tgz -C {}".format(loc, loc))
+    os.system("tar -xzvf {}/ott{}.tgz -C {}".format(loc, version, loc))
     assert os.path.exists(path + '/' + 'taxonomy.tsv')
     return path
 
@@ -71,11 +71,11 @@ def get_ott_ids_for_rank(rank, taxonomy_file, synth_only = True):
         # clean taxonomy file
 #        os.system('grep -a "' + rank + '" ' + taxonomy_file + ' | egrep -v "Incertae" | egrep -v "no rank" | egrep -v "major_rank_conflict" | egrep -v "uncultured" | egrep -v "barren" | egrep -v "extinct" | egrep -v "incertae" | egrep -v "unplaced" | egrep -v "hidden" | egrep -v "inconsistent"  | egrep -v "synonym" | egrep -v "in ' + rank + '" | egrep -v "species" | egrep -v "genus" | egrep -v "super' + rank + '" | egrep -v "sub' + rank + '" > {}'.format(output_path))
     # extract ott ids from taxonomy reduced file
-    fi = open(output_path).readlines()
-    ott_ids = []
-    for lin in fi:
-        lii = lin.split('\t')
-        ott_ids.append(lii[0])
+    with open(output_path, "r") as inp:
+        ott_ids = []
+        for lin in inp:
+            lii = lin.split('\t')
+            ott_ids.append(lii[0])
     if synth_only == True:
         nodes = ['ott' + idn for idn in ott_ids]
         resp = OT.synth_node_info(node_ids = nodes)
