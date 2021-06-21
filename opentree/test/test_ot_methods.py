@@ -14,7 +14,6 @@ class TestOT(unittest.TestCase):
         scaff_tree = OT.get_subproblem_scaffold_tree('opentree12.3')
         sub_size = OT.get_subproblem_size_info('opentree12.3')
 
-
     def test_subproblems_fail(self):
         with self.assertRaises(OTWebServicesError):
             ## Bos is not in the synth tree
