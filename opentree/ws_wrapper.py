@@ -9,6 +9,7 @@ import json
 import logging
 import sys
 import re
+import os
 from enum import Enum
 from .node_reference import SynthNodeReference, OTTaxonRef
 
@@ -201,6 +202,8 @@ class WebServiceWrapper(object):
         self._run_mode = run_mode
         self._generate_curl = run_mode in [WebServiceRunMode.CURL, WebServiceRunMode.CURL_ON_EXIT]
         self._perform_ws_calls = run_mode != WebServiceRunMode.CURL
+        if api_endpoint == 'production':
+            api_endpoint = os.environ.get('OVERRIDE_OT_PRODUCTION_API_ENDPOINT', 'production')
         self._api_endpoint = api_endpoint
         self._api_version = 'v3'
         self._store_responses = False

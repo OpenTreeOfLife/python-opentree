@@ -1,7 +1,7 @@
 """OT object. High level wrapper for OpenTree calls"""
 #!/usr/bin/env python3
 import sys
-
+import os
 from .ws_wrapper import (OTWebServicesError,
                          WebServiceRunMode,
                          )
@@ -49,7 +49,7 @@ _default_run_mode = None
 def default_open_tree_obj():
     global _default_api_endpoint, _default_run_mode
     if _default_api_endpoint is None:
-        _default_api_endpoint = 'production'
+        _default_api_endpoint = os.environ.get('DEFAULT_OT_API_ENDPOINT', 'production')
         _default_run_mode = WebServiceRunMode.RUN
     return OpenTree(api_endpoint=_default_api_endpoint,
                     run_mode=_default_run_mode)
