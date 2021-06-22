@@ -41,8 +41,9 @@ You can deactivate the virtual environment by running:
 
     deactivate
 
+## Install to run the example Jupyter notebooks
 
-If you plan to run the example jupyter notebooks, install [Jupyter](https://jupyter.org/) within the virtual environment as well.
+If you plan to run the example Jupyter notebooks, install [Jupyter](https://jupyter.org/) within the virtual environment as well.
 
 Create (if you haven't yet) and activate the virtual environment as shown above:
 
