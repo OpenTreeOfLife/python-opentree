@@ -19,7 +19,9 @@ class TestTaxonomyHelpers(unittest.TestCase):
         cfi = taxonomy_helpers.clean_taxonomy_file(taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
     def test_get_by_rank(self):
         ids = taxonomy_helpers.get_ott_ids_for_rank(rank="family", taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path), synth_only = False)
-        assert len(ids) == 21979, len(ids)
+        assert type(ids) is list
+        assert type(ids[0]) is str
+        assert int(ids[0]) is int        
     def test_get_by_group(self):
         aves = taxonomy_helpers.get_ott_ids_for_group(group_ott_id=81461)
         # assert len(aves) == 27465, len(aves) # I would remove this test, it will fail everytime there is an update to the taxonomy or tree that modifies the number of taxa in aves.
@@ -31,7 +33,7 @@ class TestTaxonomyHelpers(unittest.TestCase):
         assert type(aves_synth) is list
         assert type(aves_synth[0]) is str
         assert int(aves_synth[0]) is int
-        assert len(aves) >= len(aves_synth)         
+        assert len(aves) >= len(aves_synth)
     def test_rank_in_taxon(self):
         bird_families = taxonomy_helpers.get_ott_ids_group_and_rank(group_ott_id=81461, rank='family', synth_only = False, taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
         assert len(bird_families) == 390, len(bird_families)
