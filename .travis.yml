@@ -9,8 +9,8 @@ install:
   - pip install codecov
 # command to run tests
 script:
-  - wget "http://files.opentreeoflife.org/ott/ott3.2/ott3.2.tgz"
-  - tar -xzvf ott3.2.tgz
+  - wget "http://files.opentreeoflife.org/ott/ott3.3/ott3.3.tgz"
+  - tar -xzvf ott3.3.tgz
   - ./run_tests.sh
 
 after_success:
