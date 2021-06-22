@@ -1,18 +1,17 @@
 Installation
 ============
 
-## Installing the package from the PyPI repository
+## From the PyPI repository
 
-`python-opentree` is available from the [Python Package Index (PyPI)](https://pypi.org/)
-If you don't need the latest version you can simply use:
+If you don't need the development version of the `python-opentree` package you can install the version available from the [Python Package Index (PyPI)](https://pypi.org/) with:
 
     pip install opentree
 
-## Installing a local copy of the package
+## From the GitHub repository
 
-If you want the latest version of `python-opentree` or if you are developer who wants to install multiple times, you probably want to clone the code from its [GitHub repository](https://github.com/OpenTreeOfLife/python-opentree) locally, and install it in a virtual environment.
+If you want/need the latest version of `python-opentree` or if you are a developer who wants to install multiple times, you probably want to clone the code from its [GitHub repository](https://github.com/OpenTreeOfLife/python-opentree), and install it locally in a virtual environment.
 
-To do so, first clone the code to your machine:
+To do so, first clone the code from GitHub to your machine:
 
     git clone https://github.com/OpenTreeOfLife/python-opentree.git
 
@@ -43,20 +42,19 @@ You can deactivate the virtual environment by running:
 
 ## Install to run the example Jupyter notebooks
 
-If you plan to run the example Jupyter notebooks, install [Jupyter](https://jupyter.org/) within the virtual environment as well.
+If you plan to run the example Jupyter notebooks, you will need to install [Jupyter](https://jupyter.org/) within the virtual environment as well.
 
-Create (if you haven't yet) and activate the virtual environment as shown above:
+Make sure to first create the virtual environment and activate it as shown above.
 
-    source env/bin/activate
+Now you can install a kernel:
 
-Install the kernel:
     pip install ipykernel
 	  python -m ipykernel install --user --name=opentree
 
-Install `jupyter`:
+Install `jupyter` from PyPI:
 
 	  pip install jupyter
 
-Open the example notebooks:
+Open the example notebooks with:
 
 	  jupyter notebook docs/notebooks/
