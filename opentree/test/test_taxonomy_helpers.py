@@ -21,18 +21,18 @@ class TestTaxonomyHelpers(unittest.TestCase):
         ids = taxonomy_helpers.get_ott_ids_for_rank(rank="family", taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path), synth_only = False)
         assert type(ids) is list
         assert type(ids[0]) is str
-        assert int(ids[0]) is int        
+        assert ids[0].isdigit()       
     def test_get_by_group(self):
         aves = taxonomy_helpers.get_ott_ids_for_group(group_ott_id=81461)
         # assert len(aves) == 27465, len(aves) # I would remove this test, it will fail everytime there is an update to the taxonomy or tree that modifies the number of taxa in aves.
         # The following test that the result has the correct structure
         assert type(aves) is list
         assert type(aves[0]) is str
-        assert int(aves[0]) is int
+        assert aves[0].isdigit()
         aves_synth = taxonomy_helpers.get_ott_ids_for_group(group_ott_id=81461, synth_only = True)
         assert type(aves_synth) is list
         assert type(aves_synth[0]) is str
-        assert int(aves_synth[0]) is int
+        assert aves_synth[0].isdigit()
         assert len(aves) >= len(aves_synth)
     def test_rank_in_taxon(self):
         bird_families = taxonomy_helpers.get_ott_ids_group_and_rank(group_ott_id=81461, rank='family', synth_only = False, taxonomy_file="{}/taxonomy.tsv".format(corr_tax_path))
