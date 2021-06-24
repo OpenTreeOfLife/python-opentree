@@ -19,7 +19,7 @@ Change to its directory:
 
     cd python-opentree
 
-Create a Python virtual environment named `env` (you only need to ever run this once):
+Create a Python 3 virtual environment named `env` (you only need to ever run this once):
 
     python3 -m venv env
 
@@ -42,11 +42,11 @@ You can deactivate the virtual environment by running:
 
 ## To Run the example Jupyter notebooks
 
-If you plan to run the [`python-opentree` example Jupyter notebooks](https://github.com/OpenTreeOfLife/python-opentree/tree/main/docs/notebooks), you will also need to install [Jupyter](https://jupyter.org/) within a Python virtual environment.
+If you plan to run the `python-opentree` [example Jupyter notebooks](https://github.com/OpenTreeOfLife/python-opentree/tree/main/docs/notebooks), you will also need to install [Jupyter](https://jupyter.org/) within a Python virtual environment.
 
 First, create a Python virtual environment and activate it, as shown above.
 
-Now, install a Jupyter kernel:
+Now, install a `jupyter` kernel:
 
     pip install ipykernel
     python -m ipykernel install --user --name=opentree
