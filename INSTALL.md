@@ -3,7 +3,7 @@ Installation
 
 ## From the PyPI repository
 
-If you don't need the development version of the `python-opentree` package you can install the version available from the [Python Package Index (PyPI)](https://pypi.org/) with:
+If you don't need the development version of the `python-opentree` package you can install the version available from the [Python Package Index (PyPI)](https://pypi.org/project/opentree/) using `pip`:
 
     pip install opentree
 
@@ -11,11 +11,11 @@ If you don't need the development version of the `python-opentree` package you c
 
 If you want/need the latest version of `python-opentree` or if you are a developer who wants to install multiple times, you probably want to clone the code from its [GitHub repository](https://github.com/OpenTreeOfLife/python-opentree), and install it locally in a virtual environment.
 
-To instal `python-opentree` from its GitHub repository, first clone the code from GitHub to your machine:
+To do this, first `git clone` the code from GitHub to your machine:
 
     git clone https://github.com/OpenTreeOfLife/python-opentree.git
 
-Change to its directory:
+Change to its directory with `cd`:
 
     cd python-opentree
 
@@ -46,17 +46,17 @@ If you plan to run the `python-opentree` [example Jupyter notebooks](https://git
 
 First, create a Python virtual environment and activate it, as shown above.
 
-Now, install a `jupyter` kernel:
+Now, install a [Jupyter](https://jupyter.org/) kernel:
 
     pip install ipykernel
     python -m ipykernel install --user --name=opentree
 
-Install `jupyter` from PyPI:
+Install [Jupyter](https://jupyter.org/) from [PyPI](https://pypi.org/jupyter/) using `pip`:
 
 	  pip install jupyter
 
-Finally, open the example notebooks with:
+Finally, open the `python-opentree` [example Jupyter notebooks](https://github.com/OpenTreeOfLife/python-opentree/tree/main/docs/notebooks) with:
 
 	  jupyter notebook docs/notebooks/
 
-You can then install `python-opentree` from PyPI or GitHub following the instructions above.
+You can then install `python-opentree` within the virtual environment from [PyPI](#from-the-pypi) or [GitHub](#from-the-github), following the instructions above.
