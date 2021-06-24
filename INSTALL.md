@@ -11,7 +11,7 @@ If you don't need the development version of the `python-opentree` package you c
 
 If you want/need the latest version of `python-opentree` or if you are a developer who wants to install multiple times, you probably want to clone the code from its [GitHub repository](https://github.com/OpenTreeOfLife/python-opentree), and install it locally in a virtual environment.
 
-To do so, first clone the code from GitHub to your machine:
+To instal `python-opentree` from its GitHub repository, first clone the code from GitHub to your machine:
 
     git clone https://github.com/OpenTreeOfLife/python-opentree.git
 
@@ -19,11 +19,11 @@ Change to its directory:
 
     cd python-opentree
 
-Create a virtual environment named `env` (you only need to ever run this once):
+Create a Python virtual environment named `env` (you only need to ever run this once):
 
     python3 -m venv env
 
-Activate the virtual environment (you will want to do this each time you are using the package)
+Activate the virtual environment named `env` (you will want to do this each time you are using the package):
 
     source env/bin/activate
 
@@ -40,21 +40,23 @@ You can deactivate the virtual environment by running:
 
     deactivate
 
-## Install to run the example Jupyter notebooks
+## To Run the example Jupyter notebooks
 
-If you plan to run the example Jupyter notebooks, you will need to install [Jupyter](https://jupyter.org/) within the virtual environment as well.
+If you plan to run the [`python-opentree` example Jupyter notebooks](https://github.com/OpenTreeOfLife/python-opentree/tree/main/docs/notebooks), you will also need to install [Jupyter](https://jupyter.org/) within a Python virtual environment.
 
-Make sure to first create the virtual environment and activate it as shown above.
+First, create a Python virtual environment and activate it, as shown above.
 
-Now you can install a kernel:
+Now, install a Jupyter kernel:
 
     pip install ipykernel
-	  python -m ipykernel install --user --name=opentree
+    python -m ipykernel install --user --name=opentree
 
 Install `jupyter` from PyPI:
 
 	  pip install jupyter
 
-Open the example notebooks with:
+Finally, open the example notebooks with:
 
 	  jupyter notebook docs/notebooks/
+
+You can then install `python-opentree` from PyPI or GitHub following the instructions above.
