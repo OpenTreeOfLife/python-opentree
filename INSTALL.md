@@ -59,4 +59,4 @@ Finally, open the `python-opentree` [example Jupyter notebooks](https://github.c
 
 	  jupyter notebook docs/notebooks/
 
-You can then install `python-opentree` within the virtual environment from [PyPI](#from-the-pypi) or [GitHub](#from-the-github), following the instructions above.
+You can then install `python-opentree` within the virtual environment from [PyPI](#from-the-pypi-repository) or [GitHub](#from-the-github-repository), following the instructions above.
