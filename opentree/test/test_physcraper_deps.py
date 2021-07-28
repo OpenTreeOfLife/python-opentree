@@ -1,6 +1,7 @@
 import unittest
 
 from opentree import OT
+import dendropy
 
 bad_study_id = "pg_873"
 study_id = "ot_350"
@@ -27,11 +28,12 @@ class TestPhyscraperDeps(unittest.TestCase):
     def test_synth_induced(self):
         tre = OT.synth_induced_tree(ott_ids=synth_spp).tree
         leaves = [leaf.taxon.label for leaf in OT.synth_induced_tree(ott_ids=synth_spp).tree.leaf_nodes()]
-        assert leaves == expected_tips
+        assert leaves.sort() == expected_tips.sort()
+        assert isinstance(tre, dendropy.datamodel.treemodel.Tree)
 
     def test_taxon_subtree(self):
         resp = OT.taxon_subtree(tax_mrca)
-        taxleaves = [leaf.taxon.label for leaf in resp.tree.leaf_nodes()] 
+        taxleaves = [leaf.taxon.label for leaf in resp.tree.leaf_nodes()]
         assert len(taxleaves) == 585
 
 
@@ -58,7 +60,7 @@ class TestPhyscraperDeps(unittest.TestCase):
     def test_conflict_str(self):
         resp = OT.conflict_str(conf_newick_str, 'ott').response_dict
         assert resp['nd3']['status'] == 'conflicts_with'
-    
+
     def test_find_trees(self):
         phylesystem_studies_resp = OT.find_trees(bg_tax, search_property ='ot:ottId')
         matches = [study['ot:studyId'] for study in phylesystem_studies_resp.response_dict['matched_studies']]
