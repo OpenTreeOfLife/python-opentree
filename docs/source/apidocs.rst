@@ -24,3 +24,6 @@ API Documentation
 
 .. automodule:: opentree.ws_wrapper
    :members:
+
+.. automodule:: opentree.taxonomy_helpers
+   :members:
