@@ -215,6 +215,23 @@ def _gather_unknown_taxa_info(unknown_ids):
             unknown_dict[unk] = tax_inf
     return unknown_dict
 
+def generate_source_lookup(source_name, taxonomy_file):
+    assert source_name in ['ncbi', 'gbif', 'worms', 'if', 'irmng']
+    assert os.path.exists(taxonomy_file)
+    lookup = {}
+    for lin in taxonomy_file:
+        lii = lin.split()
+        ott_id = lii[0].strip()
+        sources = lii[4].strip().split(',')
+        match = []
+        for source in sources:
+            if source.startswith(source_name):
+                sid = source.split(":")[1]
+                match.append(sid)
+        lookup[ott_id] = match
+    return lookup
+
+
 def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=False, standardize=True):
     """Interpreting node ids from a search on taxa can be challenging.
     This relabels MRCA based tips with what broken taxa they were replacing.
