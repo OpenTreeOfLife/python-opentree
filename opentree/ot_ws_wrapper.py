@@ -158,10 +158,13 @@ class OTWebServiceWrapper(WebServiceWrapper):
 
     def tree_of_life_subtree(self, node_id=None, ott_id=None,
                              tree_format="newick", label_format="name_and_id",
-                             height_limit=None):
+                             height_limit=None,
+                             include_all_node_labels=None):
         d = {"format": str(tree_format), "label_format": str(label_format)}
         if height_limit is not None:
             d["height_limit"] = int(height_limit)
+        if include_all_node_labels is not None:
+            d["include_all_node_labels"] = bool(include_all_node_labels)
         if node_id is not None:
             d['node_id'] = str(node_id)
         elif ott_id is not None:
