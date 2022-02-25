@@ -276,7 +276,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
             assert taxon.label in relabel
             for brok_taxon in relabel_ott_ids[taxon.label]:
                 broken_dict[brok_taxon]['is_tip'] = True
-            taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
+            taxon.label = 'MRCA of taxa in '+' and '.join(relabel[taxon.label])
             label_matches[orig] = taxon.label
         else:
             orig = taxon.label
@@ -290,7 +290,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
             else:
                 new_label = ott
             if ott in relabel:
-                added_taxa = ' and MRCA of taxa in '+' '.join(relabel[ott])
+                added_taxa = ' and MRCA of taxa in '+' and '.join(relabel[ott])
                 taxon.label = new_label + added_taxa
                 for brok_taxon in relabel_ott_ids[ott]:
                     broken_dict[brok_taxon]['is_tip'] = False
@@ -308,7 +308,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
                     if node.label in relabel:
                         for brok_taxon in relabel_ott_ids[node.label]:
                             broken_dict[brok_taxon]['is_tip'] = False
-                        node.label = 'MRCA of taxa in '+' '.join(relabel[node.label])
+                        node.label = 'MRCA of taxa in '+' and '.join(relabel[node.label])
                         label_matches[orig] = node.label
                     elif inc_unlabelled_mrca:
                         label_matches[orig] = node.label
@@ -328,7 +328,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
                     else:
                         new_label = ott
                     if ott in relabel:
-                        added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
+                        added_taxa = 'MRCA of taxa in '+' and '.join(relabel[ott])
                         node.label = new_label + added_taxa
                         for brok_taxon in relabel_ott_ids[ott]:
                             broken_dict[brok_taxon]['is_tip'] = False

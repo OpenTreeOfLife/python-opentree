@@ -4,13 +4,11 @@ import json
 import dendropy
 
 
-
 from opentree import OT
-from Bio import Entrez
+
 
 #Entrez.email = "ejmctavish@ucmerced.edu"
 
-from pygbif import occurrences as occ
 
 
 _DEBUG = 1
@@ -71,7 +69,6 @@ def generate_synth_node_annotation(tree):
 
 
 
-
 def get_tips_for_nodes(node_list):
     node_tips = {}
     for node in node_list:
@@ -82,6 +79,7 @@ def get_tips_for_nodes(node_list):
     
 
 def get_ncbi_records(ncbi_id):
+    from Bio import Entrez
     handle = Entrez.egquery(retmax=50, term="txid{}[Organism]".format(ncbi_id), idtype="acc")
     gen_record = Entrez.read(handle)
     eq_results = {}
@@ -95,8 +93,17 @@ def get_ncbi_records(ncbi_id):
     return(eq_results)
 
 
+def generate_all_tax_dict(taxonomy_file):
+    all_tax_dict = {}
+    header = ['ottid', 'parent_ottid', 'name','rank','source','uniqname','flags']
+    for lin in open(taxonomy_file):
+        lii=lin.split('\t|\t')
+        all_tax_dict[lii[0]]=dict(zip(header, lii))
+    return all_tax_dict
 
-def get_tip_info(ott_id, all_tax_dict):
+
+def get_gbif_ncbi_tip_info(ott_id, all_tax_dict):
+    from pygbif import occurrences as occ
     """For an ott_id and a dictionary with taxon info, 
     call ncbi and GBIF apis and return mini_dict"""
     tmp_dict = all_tax_dict[ott_id.strip('ott')]
@@ -117,7 +124,7 @@ def get_tip_info(ott_id, all_tax_dict):
     return tmp_dict    
 
 
-def generate_node_annotations(nodes, node_tips, tip_dict):
+def generate_gbif_ncbi_node_annotations(nodes, node_tips, tip_dict):
     """Generate an annotations dictionary for a set of nodes.
     nodes_tip = a dictionary with keys that are node_ids listing all the tips descending from that node
     tip_dict = a dcitionary with infomration about each tip"""
@@ -259,4 +266,124 @@ def write_itol_heatmap(filename, title, unit, node_annotation, param):
     for node in node_annotation:
         desc = node_annotation[node][param]
         fi.write("{} {}\n".format(node, desc))    
+    fi.close()
+
+
+
+
+def write_itol_support(node_annotation, max_support=5, filename='support_anno.txt', param='studies'):
+    """Write out an itol branch support file to filename, with title and units label.
+    annot dict must have keys which are node ids in tree on itol (may require underscore space subs..)
+    param should be key of annot_dict[node_ids] = {}"""
+    fi = open(filename, 'w')
+    startstr = """DATASET_STYLE
+    SEPARATOR TAB
+
+    #label is used in the legend table (can be changed later)
+    DATASET_LABEL\t{}
+
+    #dataset color (can be changed later)
+    COLOR\t#ffff00
+
+    DATA\n""".format("Support")
+    fi.write(startstr)
+    for node in node_annotation:
+        if node_annotation[node][param]:
+            relsupport = node_annotation[node][param]/max_support
+            r = 0
+            g = 255*relsupport
+            b = 0
+            color = "rgba({}, {}, {}, {})".format(r, g, b, 0.25+relsupport)
+            fi.write("{}\tbranch\tclade\t{}\t1\tnormal\n".format(node,color))
+        else:
+            color = "rgba(0, 0, 0, 0.25)"
+            fi.write("{}\tbranch\tclade\t{}\t1\tnormal\n".format(node,color))
+    fi.close()
+
+
+
+
+def write_itol_conflict(node_annotation, max_conflict=5, filename='conflict_anno.txt', param='conflict'):
+    """Write out an itol branch support file to filename, with title and units label.
+    annot dict must have keys which are node ids in tree on itol (may require underscore space subs..)
+    param should be key of annot_dict[node_ids] = {}"""
+    fi = open(filename, 'w')
+    startstr = """DATASET_STYLE
+    SEPARATOR TAB
+
+    #label is used in the legend table (can be changed later)
+    DATASET_LABEL\t{}
+
+    #dataset color (can be changed later)
+    COLOR\t#ffff00
+
+    DATA\n""".format("conflict")
+    fi.write(startstr)
+    for node in node_annotation:
+        relconf = node_annotation[node][param]/max_conflict
+        r = 255*relconf
+        g = 0
+        b = 0
+        color = "rgba({}, {}, {}, {})".format(r, g, b, 0.25+relconf)
+        fi.write("{}\tbranch\tclade\t{}\t1\tnormal\n".format(node,color))            
+    fi.close()
+
+
+
+
+
+def write_itol_conflict(node_annotation, max_conflict=5, filename='conflict_anno.txt', param='conflict'):
+    """Write out an itol branch support file to filename, with title and units label.
+    annot dict must have keys which are node ids in tree on itol (may require underscore space subs..)
+    param should be key of annot_dict[node_ids] = {}"""
+    fi = open(filename, 'w')
+    startstr = """DATASET_STYLE
+    SEPARATOR TAB
+
+    #label is used in the legend table (can be changed later)
+    DATASET_LABEL\t{}
+
+    #dataset color (can be changed later)
+    COLOR\t#ffff00
+
+    DATA\n""".format("conflict")
+    fi.write(startstr)
+    for node in node_annotation:
+        relconf = node_annotation[node][param]/max_conflict
+        r = 255*relconf
+        g = 0
+        b = 0
+        color = "rgba({}, {}, {}, {})".format(r, g, b, 0.25+relconf)
+        fi.write("{}\tbranch\tclade\t{}\t1\tnormal\n".format(node,color))
+            
+    fi.close()
+
+
+def write_itol_relabel(translation_dict, filename):
+    """Keys in translation dict should be current labels, values new labels"""
+    fi = open(filename, 'w')
+    startstr = """LABELS
+    #use this template to change the leaf labels, or define/change the internal node names (displayed in mouseover popups)
+
+    #lines starting with a hash are comments and ignored during parsing
+
+    #=================================================================#
+    #                    MANDATORY SETTINGS                           #
+    #=================================================================#
+    #select the separator which is used to delimit the data below (TAB,SPACE or COMMA).This separator must be used throughout this file (except in the SEPARATOR line, which uses space).
+
+    #SEPARATOR TAB
+    #SEPARATOR SPACE
+    SEPARATOR COMMA
+
+    #Internal tree nodes can be specified using IDs directly, or using the 'last common ancestor' method described in iTOL help pages
+    #=================================================================#
+    #       Actual data follows after the "DATA" keyword              #
+    #=================================================================#
+    DATA
+    #NODE_ID,LABEL\n"""
+    fi.write(startstr)
+
+    for current_label in translation_dict:
+        fi.write("{},{}\n".format(current_label, translation_dict[current_label]))
     fi.close()
