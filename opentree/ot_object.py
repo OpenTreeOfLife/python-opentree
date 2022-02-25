@@ -388,7 +388,7 @@ class OpenTree(object):
                 message = call_record.response_dict['message']
                 raise OTWebServicesError(msgtemplate.format(message))
             self._cull_unknown_ids_from_args(call_record, node_ids, ott_ids)
-            if not ott_ids or node_ids:
+            if not ott_ids and not node_ids:
                 msgtemplate = 'Call to tree_of_life/mrca failed as all ids were pruned'
                 raise OTWebServicesError(msgtemplate)
 
