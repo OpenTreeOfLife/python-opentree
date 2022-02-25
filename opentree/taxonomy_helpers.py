@@ -344,3 +344,57 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
             'non-monophyletic_taxa':broken_dict,
             'supporting_studies': call_record.response_dict["supporting_studies"],
             'label_map':label_matches}
+
+
+
+def generate_node_annotation(tree):
+    """inputs:
+    tree
+    Tree in dendropy format. must be labelled with ott_ids
+    outputs:
+    dictionary with keys node_labels
+
+    """
+    node_annotation = {}
+    for node in tree:
+        if node.label:
+            node_annotation[node.label] = {}
+        elif node.taxon:
+            if node.taxon.label:
+                node_annotation[node.taxon.label] = {}
+    for node_label in node_annotation:
+        assert node_label.startswith('ott') or node_label.startswith('mrca')
+        node_annotation[node_label] = {}
+        node_annotation[node_label]['families'] = []
+        node_annotation[node_label]['studies'] = []
+        node_annotation[node_label]['strict_support'] = []
+        node_annotation[node_label]['support'] = []
+        node_annotation[node_label]['conflict'] = []
+    node_ids = node_annotation.keys()
+    resp = OT.synth_node_info(node_ids).response_dict
+    node_id_resp = {}
+    for node_info in resp:
+        node_id_resp[node_info['node_id']] = node_info
+    for node in node_annotation:
+        supporting = node_id_resp[node].get('source_id_map')
+        strict_support = node_id_resp[node].get('supported_by', {})
+        ppo = node_id_resp[node].get('partial_path_of', {})
+        conflict = node_id_resp[node].get('conflicts_with', [])
+        if supporting.keys() == set(['ott3.2draft9']):
+            node_annotation[node]['studies'] = 0
+        else:
+            node_annotation[node]['studies'] = len(supporting.keys())
+        if strict_support.keys() == set(['ott3.2draft9']):
+            node_annotation[node]['strict_support'] = 0
+        else:
+            node_annotation[node]['strict_support'] = len(strict_support.keys())
+        gen_support = set(list(strict_support.keys()) + list(ppo.keys()))
+        if 'ott3.2draft9' in gen_support:
+            gen_support.remove('ott3.2draft9')
+        node_annotation[node]['support'] = len(gen_support)
+        node_annotation[node]['conflict'] = len(conflict)
+    return node_annotation
+
+
+
+#def write_itol_annotation():
