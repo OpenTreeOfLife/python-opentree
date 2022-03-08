@@ -397,4 +397,20 @@ def generate_node_annotation(tree):
 
 
 
+def conflict_tree_str(inputtree):
+    """Write out a tree string with labels that work for the OpenTree Conflict API
+    """
+    tmp_tree = copy.deepcopy(inputtree)
+    i = 1
+    for node in tmp_tree:
+        i += 1
+        if node.taxon:
+            ottid = node.taxon.label
+            new_label = "_nd{}_{}".format(i, ottid)
+            node.taxon.label = new_label
+        else:
+            node.label = "_nd{}_".format(i)
+    return tmp_tree.as_string(schema="newick")
+
+    
 #def write_itol_annotation():
