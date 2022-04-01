@@ -19,6 +19,42 @@ def debug(msg):
         print(msg)
 
 
+def generate_custom_synth_node_annotation(tree, custom_synth_dir, study = "All"):
+    """inputs:
+    tree
+    Tree in dendropy format. must be labelled with ott_ids, and internal node labels
+    outputs:
+    dictionary with keys node_labels
+
+    """
+    node_annotation = {}
+    for node in tree:
+        if node.label:
+            node_annotation[node.label] = {}
+        elif node.taxon:
+            if node.taxon.label:
+                node_annotation[node.taxon.label] = {}
+    for node_label in node_annotation:
+        assert node_label.startswith('ott') or node_label.startswith('mrca')
+        node_annotation[node_label] = {}
+        node_annotation[node_label]['studies'] = []
+        node_annotation[node_label]['strict_support'] = []
+        node_annotation[node_label]['support'] = []
+        node_annotation[node_label]['conflict'] = []
+    node_ids = node_annotation.keys()
+    annot = json.load(open("{}/annotated_supertree/annotations.json".format(custom_synth_dir)))
+    node_id_resp = annot['nodes']
+    for node in node_annotation:
+        node_info = node_id_resp.get(node,{})
+        strict_support = node_info.get('supported_by', {})
+        ppo = node_info.get('partial_path_of', {})
+        conflict = node_info.get('conflicts_with', [])
+        node_annotation[node]['strict_support'] = len(strict_support.keys())
+        gen_support = set(list(strict_support.keys()) + list(ppo.keys()))
+        node_annotation[node]['support'] = len(gen_support)
+        node_annotation[node]['conflict'] = len(conflict)
+    return node_annotation
+
 def generate_synth_node_annotation(tree):
     """inputs:
     tree

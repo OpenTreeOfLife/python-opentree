@@ -354,7 +354,7 @@ class OpenTree(object):
 
     def synth_induced_tree(self, node_ids=None,
                            ott_ids=None, label_format="name_and_id",
-                           ignore_unknown_ids=False):
+                           ignore_unknown_ids=False, include_all_node_labels=False):
         """Get an induced subtree
         """
         while True:

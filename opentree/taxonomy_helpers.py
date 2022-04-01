@@ -395,6 +395,24 @@ def generate_node_annotation(tree):
         node_annotation[node]['conflict'] = len(conflict)
     return node_annotation
 
+def generate_tip_translation(subtree, taxonomy_file):
+    """inputs:
+    tree
+    Tree in dendropy format. must be labelled with ott_ids
+    outputs:
+    dictionary mapping labels to names
+
+    """
+    assert os.path.exists(taxonomy_file)
+    tip_translation = {}
+    for tip in subtree.leaf_node_iter():
+        tip_translation[tip.taxon.label] = ''
+    for lin in open(taxonomy_file).readlines():
+        lii = lin.split('\t|\t')
+        if 'ott'+lii[0] in tip_translation:
+            tip_translation['ott'+lii[0]] = lii[2]
+
+
 
 
 def conflict_tree_str(inputtree):
