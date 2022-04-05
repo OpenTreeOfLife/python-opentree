@@ -57,7 +57,7 @@ class OTWebServiceWrapper(WebServiceWrapper):
         return self._call_api(url, http_method='GET', demand_success=demand_success)
 
     def conflict_from_newick(self, input_newick, compare_to, demand_success=False):
-        assert(compare_to in ['synth', 'ott'])
+#        assert(compare_to in ['synth', 'ott'])
         d = {"tree1newick": input_newick,
              "tree2": compare_to }
         return self._call_api('conflict/conflict-status', data=d, demand_success=demand_success)
