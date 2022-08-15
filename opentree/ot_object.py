@@ -400,6 +400,8 @@ class OpenTree(object):
         unknown_ids = call_record.response_dict['unknown']
         sys.stderr.write("\nUnknown/unrecognized query ids (skipped):\n {} \n".format("\n".join(unknown_ids)))
         for u in unknown_ids:
+#            if node_ids:
+#                assert(node_ids)#check type
             if node_ids and u in node_ids:
                 node_ids.remove(u)
             else:
