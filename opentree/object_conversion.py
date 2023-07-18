@@ -85,6 +85,8 @@ class DendropyConvert(object):
         taxon_attr = to_taxon_attr[label_format.lower()]
         nexml = nexson['nexml']
         trees_sets_by_id = nexml.get('treesById', {})
+        if not trees_sets_by_id:
+            raise KeyError('No trees found in NexSON')
         otu_set_id, tree_obj = None, None
         for tree_set_id, tree_set in trees_sets_by_id.items():
             otu_set_id = tree_set.get('@otus')
