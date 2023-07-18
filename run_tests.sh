@@ -1,7 +1,7 @@
 #!/bin/bash
 arg="${1}"
 if test -z $arg ; then
-    nosetests opentree --with-coverage --cover-branches --cover-package=opentree
+    nose2 opentree --coverage opentree
 else
     hd=$(dirname $0)
     rhd=$(realpath "${hd}")
@@ -11,7 +11,7 @@ else
         exit 1
     else
         export PYTHON_OPENTREE_DIR="${rhd}"
-        nosetests opentree testopentree --with-coverage --cover-branches --cover-package=opentree
+        nose2 opentree testopentree opentree --coverage opentree
     fi
 fi
 
