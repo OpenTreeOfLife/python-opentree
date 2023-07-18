@@ -282,7 +282,10 @@ class WebServiceWrapper(object):
                 sys.stderr.write('{}\n'.format(self.curl_strings[-1]))
             return rec
         if data:
-            resp = requests.request(http_method, url, headers=headers, data=json.dumps(data), allow_redirects=True)
+            if http_method == 'GET':
+                resp = requests.get(url, headers=headers, params=data, allow_redirects=True)
+            else:
+                resp = requests.request(http_method, url, headers=headers, data=json.dumps(data), allow_redirects=True)
         else:
             resp = requests.request(http_method, url, headers=headers, allow_redirects=True)
         rec._response_obj = resp
