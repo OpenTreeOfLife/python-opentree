@@ -5,14 +5,13 @@ if test -z $arg ; then
 else
     hd=$(dirname $0)
     rhd=$(realpath "${hd}")
-    echo "rhd=${rhd}"
     if ! test -d "${arg}/opentree" ; then
         echo "directory ${arg}/opentree does not exist"
         exit 1
     else
         shift
         export PYTHON_OPENTREE_DIR="${rhd}"
-        nose2 opentree testopentree opentree --coverage opentree $@
+        nose2 -s "${rhd}" --coverage opentree $@
     fi
 fi
 
