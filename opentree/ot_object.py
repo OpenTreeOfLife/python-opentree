@@ -6,6 +6,7 @@ from .ws_wrapper import (OTWebServicesError,
                          WebServiceRunMode,
                          )
 from .ot_ws_wrapper import OTWebServiceWrapper
+import logging
 
 # from .nexson_helpers import extract_tree_nexson, extract_otu_nexson, detect_nexson_version
 
@@ -397,7 +398,7 @@ class OpenTree(object):
         """
         assert ('unknown' in call_record.response_dict), call_record.response_dict
         unknown_ids = call_record.response_dict['unknown']
-        sys.stderr.write("\nUnknown/unrecognized query ids (skipped):\n {} \n".format("\n".join(unknown_ids)))
+        logging.debug("\nUnknown/unrecognized query ids (skipped):\n {} \n".format("\n".join(unknown_ids)))
         for u in unknown_ids:
             if node_ids and u in node_ids:
                 node_ids.remove(u)

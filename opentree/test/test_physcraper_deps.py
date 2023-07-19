@@ -19,7 +19,7 @@ class TestPhyscraperDeps(unittest.TestCase):
 
     def test_get_study_fail(self):
         study = OT.get_study(bad_study_id)
-        assert study.response_dict == {'description': 'Study #{} GET failure'.format(bad_study_id), 'error': 1}
+        self.assertEqual(study.status_code, 404)
 
     def test_get_study(self):
         study = OT.get_study(study_id)
