@@ -15,11 +15,10 @@ class TestOT(unittest.TestCase):
         sub_size = OT.get_subproblem_size_info('opentree12.3')
 
     def test_subproblems_fail(self):
-        with self.assertRaises(OTWebServicesError):
-            ## Bos is not in the synth tree
-            sol = OT.get_subproblem_solution('opentree12.3', bos)
-            sol_trees = OT.get_subproblem_trees('opentree12.3', bos)
-            rev_sol = OT.get_reversed_subproblem_solution('opentree12.3', bos)
+        ## Bos is not in the synth tree
+        self.assertRaises(OTWebServicesError, OT.get_subproblem_solution, 'opentree12.3', bos)
+        self.assertRaises(OTWebServicesError, OT.get_subproblem_trees, 'opentree12.3', bos)
+        self.assertRaises(OTWebServicesError, OT.get_reversed_subproblem_solution, 'opentree12.3', bos)
 
     def test_subproblems(self):
         sol = OT.get_subproblem_solution('opentree12.3', homo)
@@ -106,8 +105,8 @@ class TestOT(unittest.TestCase):
 
     def test_matchdict(self):
         matches, failed = OT.get_matchdict_from_taxlist(['Homo', 'Bos', 'Meep'])
-        assert matches['Bos'] == 'ott{}'.format(bos)
-        assert 'Meep' in failed
+        self.assertEqual(matches['Bos'], 'ott{}'.format(bos))
+        self.assertIn('Meep', failed)
 
 
 if __name__ == '__main__':

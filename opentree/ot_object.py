@@ -458,10 +458,10 @@ class OpenTree(object):
                 ott_id = int(tax.get('ott_id'))
                 return ott_id
             else:
-                sys.stderr.write("Exact match to name {} not found in taxonomy.\n".format(spp_name))
-                sys.stderr.write("""Try using `resp = OT.tnrs_match(["{}"], do_approximate_matching=True)`\n
-                                                   resp.response_dict \n
-                                        to find fuzzy matches\n""".format(spp_name))
+                # sys.stderr.write("Exact match to name {} not found in taxonomy.\n".format(spp_name))
+                # sys.stderr.write("""Try using `resp = OT.tnrs_match(["{}"], do_approximate_matching=True)`\n
+                #                                    resp.response_dict \n
+                #                         to find fuzzy matches\n""".format(spp_name))
                 return None
         msgtemplate = 'Call to tnrs_match failed with the message "{}"'
         message = res.response_dict['message']
