@@ -6,7 +6,7 @@ import gzip
 import shutil
 import copy
 from opentree import OT
-
+import logging
 
 _DEBUG = 1
 def debug(msg):
@@ -87,15 +87,16 @@ def get_ott_ids_for_rank(rank, taxonomy_file, synth_only = True):
 
 def get_ott_ids_for_group(group_ott_id, write_file = 'children_ott_ids.txt', synth_only = False):
     """Returns all descendent ottids of a taxon"""
-    sys.stdout.write('Gathering ott ids from group with ott id {}.\n'.format(group_ott_id))
+    logging.debug('Gathering ott ids from group with ott id {}.\n'.format(group_ott_id))
     #debug(group_ott_id)
     subtree = OT.taxon_subtree(ott_id = group_ott_id, label_format='name_and_id')
     if synth_only == True:
         nodes = [taxon.label.split()[-1] for taxon in subtree.tree.taxon_namespace]
         resp = OT.synth_node_info(node_ids = nodes)
+        synth_ids = set(nodes)
         if 'unknown' in resp.response_dict:
-            synth_ids = set(nodes).difference(set(resp.response_dict['unknown']))
-            ott_ids = [nodeid.strip('ott') for nodeid in synth_ids]
+            synth_ids = synth_ids.difference(set(resp.response_dict['unknown']))
+        ott_ids = [nodeid.strip('ott') for nodeid in synth_ids]
     else:
         ott_ids =[taxon.label.split()[-1].strip('ott') for taxon in subtree.tree.taxon_namespace]
     return ott_ids

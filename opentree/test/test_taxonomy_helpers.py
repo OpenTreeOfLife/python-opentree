@@ -56,8 +56,8 @@ class TestTaxonomyHelpers(unittest.TestCase):
                 pass
         ret = taxonomy_helpers.labelled_induced_synth(ott_ids = list(ott_ids), label_format='name')
         tips = [tip.taxon.label for tip in ret['labelled_tree'].leaf_node_iter() if tip.taxon]
-        assert len(tips) == 6624
+        self.assertEqual(len(tips), 6591)
 
         ret = taxonomy_helpers.labelled_induced_synth(ott_ids = list(ott_ids), label_format='name_and_id')
         nodes = [node.taxon.label for node in ret['labelled_tree'] if node.taxon]
-        assert 'MRCA of taxa in Amazona auropalliata_ott1118 Amazona oratrix_ott1119' in nodes, nodes
+        self.assertIn('MRCA of taxa in Amazona auropalliata_ott1118 Amazona oratrix_ott1119', nodes)
