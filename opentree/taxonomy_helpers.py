@@ -216,6 +216,23 @@ def _gather_unknown_taxa_info(unknown_ids):
             unknown_dict[unk] = tax_inf
     return unknown_dict
 
+def generate_source_lookup(source_name, taxonomy_file):
+    assert source_name in ['ncbi', 'gbif', 'worms', 'if', 'irmng']
+    assert os.path.exists(taxonomy_file)
+    lookup = {}
+    for lin in taxonomy_file:
+        lii = lin.split()
+        ott_id = lii[0].strip()
+        sources = lii[4].strip().split(',')
+        match = []
+        for source in sources:
+            if source.startswith(source_name):
+                sid = source.split(":")[1]
+                match.append(sid)
+        lookup[ott_id] = match
+    return lookup
+
+
 def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=False, standardize=True):
     """Interpreting node ids from a search on taxa can be challenging.
     This relabels MRCA based tips with what broken taxa they were replacing.
@@ -260,7 +277,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
             assert taxon.label in relabel
             for brok_taxon in relabel_ott_ids[taxon.label]:
                 broken_dict[brok_taxon]['is_tip'] = True
-            taxon.label = 'MRCA of taxa in '+' '.join(relabel[taxon.label])
+            taxon.label = 'MRCA of taxa in '+' and '.join(relabel[taxon.label])
             label_matches[orig] = taxon.label
         else:
             orig = taxon.label
@@ -274,7 +291,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
             else:
                 new_label = ott
             if ott in relabel:
-                added_taxa = ' and MRCA of taxa in '+' '.join(relabel[ott])
+                added_taxa = ' and MRCA of taxa in '+' and '.join(relabel[ott])
                 taxon.label = new_label + added_taxa
                 for brok_taxon in relabel_ott_ids[ott]:
                     broken_dict[brok_taxon]['is_tip'] = False
@@ -292,7 +309,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
                     if node.label in relabel:
                         for brok_taxon in relabel_ott_ids[node.label]:
                             broken_dict[brok_taxon]['is_tip'] = False
-                        node.label = 'MRCA of taxa in '+' '.join(relabel[node.label])
+                        node.label = 'MRCA of taxa in '+' and '.join(relabel[node.label])
                         label_matches[orig] = node.label
                     elif inc_unlabelled_mrca:
                         label_matches[orig] = node.label
@@ -312,7 +329,7 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
                     else:
                         new_label = ott
                     if ott in relabel:
-                        added_taxa = 'MRCA of taxa in '+' '.join(relabel[ott])
+                        added_taxa = 'MRCA of taxa in '+' and '.join(relabel[ott])
                         node.label = new_label + added_taxa
                         for brok_taxon in relabel_ott_ids[ott]:
                             broken_dict[brok_taxon]['is_tip'] = False
@@ -328,3 +345,91 @@ def labelled_induced_synth(ott_ids, label_format = 'name', inc_unlabelled_mrca=F
             'non-monophyletic_taxa':broken_dict,
             'supporting_studies': call_record.response_dict["supporting_studies"],
             'label_map':label_matches}
+
+
+
+def generate_node_annotation(tree):
+    """inputs:
+    tree
+    Tree in dendropy format. must be labelled with ott_ids
+    outputs:
+    dictionary with keys node_labels
+
+    """
+    node_annotation = {}
+    for node in tree:
+        if node.label:
+            node_annotation[node.label] = {}
+        elif node.taxon:
+            if node.taxon.label:
+                node_annotation[node.taxon.label] = {}
+    for node_label in node_annotation:
+        assert node_label.startswith('ott') or node_label.startswith('mrca')
+        node_annotation[node_label] = {}
+        node_annotation[node_label]['families'] = []
+        node_annotation[node_label]['studies'] = []
+        node_annotation[node_label]['strict_support'] = []
+        node_annotation[node_label]['support'] = []
+        node_annotation[node_label]['conflict'] = []
+    node_ids = node_annotation.keys()
+    resp = OT.synth_node_info(node_ids).response_dict
+    node_id_resp = {}
+    for node_info in resp:
+        node_id_resp[node_info['node_id']] = node_info
+    for node in node_annotation:
+        supporting = node_id_resp[node].get('source_id_map')
+        strict_support = node_id_resp[node].get('supported_by', {})
+        ppo = node_id_resp[node].get('partial_path_of', {})
+        conflict = node_id_resp[node].get('conflicts_with', [])
+        if supporting.keys() == set(['ott3.2draft9']):
+            node_annotation[node]['studies'] = 0
+        else:
+            node_annotation[node]['studies'] = len(supporting.keys())
+        if strict_support.keys() == set(['ott3.2draft9']):
+            node_annotation[node]['strict_support'] = 0
+        else:
+            node_annotation[node]['strict_support'] = len(strict_support.keys())
+        gen_support = set(list(strict_support.keys()) + list(ppo.keys()))
+        if 'ott3.2draft9' in gen_support:
+            gen_support.remove('ott3.2draft9')
+        node_annotation[node]['support'] = len(gen_support)
+        node_annotation[node]['conflict'] = len(conflict)
+    return node_annotation
+
+def generate_tip_translation(subtree, taxonomy_file):
+    """inputs:
+    tree
+    Tree in dendropy format. must be labelled with ott_ids
+    outputs:
+    dictionary mapping labels to names
+
+    """
+    assert os.path.exists(taxonomy_file)
+    tip_translation = {}
+    for tip in subtree.leaf_node_iter():
+        tip_translation[tip.taxon.label] = ''
+    for lin in open(taxonomy_file).readlines():
+        lii = lin.split('\t|\t')
+        if 'ott'+lii[0] in tip_translation:
+            tip_translation['ott'+lii[0]] = lii[2]
+
+
+
+
+def conflict_tree_str(inputtree):
+    """Write out a tree string with labels that work for the OpenTree Conflict API
+    """
+    tmp_tree = copy.deepcopy(inputtree)
+    i = 1
+    for node in tmp_tree:
+        i += 1
+        if node.taxon:
+            ottid = node.taxon.label
+            new_label = "_nd{}_{}".format(i, ottid)
+            node.taxon.label = new_label
+        else:
+            node.label = "_nd{}_".format(i)
+    return tmp_tree.as_string(schema="newick")
+
+    
+#def write_itol_annotation():

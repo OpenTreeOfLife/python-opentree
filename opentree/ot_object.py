@@ -344,17 +344,18 @@ class OpenTree(object):
 
     def synth_subtree(self, node_id=None, ott_id=None,
                       tree_format="newick", label_format="name_and_id",
-                      height_limit=None):
+                      height_limit=None, include_all_node_labels=False):
         """Get a subtree
         """
         return self.ws.tree_of_life_subtree(node_id=node_id, ott_id=ott_id,
                                             tree_format=tree_format,
                                             label_format=label_format,
-                                            height_limit=height_limit)
+                                            height_limit=height_limit,
+                                            include_all_node_labels=include_all_node_labels)
 
     def synth_induced_tree(self, node_ids=None,
                            ott_ids=None, label_format="name_and_id",
-                           ignore_unknown_ids=False):
+                           ignore_unknown_ids=False, include_all_node_labels=False):
         """Get an induced subtree
         """
         while True:
