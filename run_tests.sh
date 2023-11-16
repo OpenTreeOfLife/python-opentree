@@ -1,17 +1,17 @@
 #!/bin/bash
 arg="${1}"
 if test -z $arg ; then
-    nosetests opentree --with-coverage --cover-branches --cover-package=opentree
+    nose2 opentree --coverage opentree
 else
     hd=$(dirname $0)
     rhd=$(realpath "${hd}")
-    echo "rhd=${rhd}"
-    if ! test -d "${arg}/testopentree" ; then
-        echo "directory ${arg}/testopentree does not exist"
+    if ! test -d "${arg}/opentree" ; then
+        echo "directory ${arg}/opentree does not exist"
         exit 1
     else
+        shift
         export PYTHON_OPENTREE_DIR="${rhd}"
-        nosetests opentree testopentree --with-coverage --cover-branches --cover-package=opentree
+        nose2 -s "${rhd}" --coverage opentree $@
     fi
 fi
 
