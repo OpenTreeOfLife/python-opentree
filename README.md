@@ -27,3 +27,4 @@ SSB 2020 workshop curriculum is posted at:
 [Open Tree workshop](https://opentreeoflife.github.io/SSBworkshop)
 at the [2020 SSB Meeting](https://systbiol.github.io/ssb2020/) in Gainesville, FL.
 
+If you use python-opentree, please cite [McTavish et al. 2021, Systematic Biology](https://academic.oup.com/sysbio/article/70/6/1295/6273200)
