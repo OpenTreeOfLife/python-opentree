@@ -199,6 +199,7 @@ class WebServiceRunMode(Enum):
 
 class WebServiceWrapper(object):
     def __init__(self, api_endpoint, run_mode=WebServiceRunMode.RUN):
+        self._session = requests.Session()  # added session 
         self._run_mode = run_mode
         self._generate_curl = run_mode in [WebServiceRunMode.CURL, WebServiceRunMode.CURL_ON_EXIT]
         self._perform_ws_calls = run_mode != WebServiceRunMode.CURL
@@ -281,13 +282,30 @@ class WebServiceWrapper(object):
             if self._run_mode == WebServiceRunMode.CURL:
                 sys.stderr.write('{}\n'.format(self.curl_strings[-1]))
             return rec
-        if data:
-            if http_method == 'GET':
-                resp = requests.get(url, headers=headers, params=data, allow_redirects=True)
+        try:
+            if data:
+                if http_method.upper() == 'GET':
+                    resp = self._session.get(url, headers=headers, params=data, allow_redirects=True)
+                else:
+                    resp = self._session.request(http_method, url, headers=headers, data=json.dumps(data), allow_redirects=True)
             else:
-                resp = requests.request(http_method, url, headers=headers, data=json.dumps(data), allow_redirects=True)
-        else:
-            resp = requests.request(http_method, url, headers=headers, allow_redirects=True)
-        rec._response_obj = resp
-        logging.debug('Sent {v} to {s}'.format(v=http_method, s=resp.url))
-        return rec
+                resp = self._session.request(http_method, url, headers=headers, allow_redirects=True)
+            rec._response_obj = resp
+            logging.debug('Sent {} to {}'.format(http_method, resp.url))
+            return rec
+        except Exception as e:
+            logging.exception("HTTP request error")
+            raise
+
+    def close(self):
+        """Close the persistent HTTP session."""
+        if hasattr(self, '_session'):
+            self._session.close()
+
+    def __del__(self):
+        """Ensure the session is closed upon deletion."""
+        try:
+            self.close()
+        except Exception:
+            pass
+
